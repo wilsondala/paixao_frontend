@@ -1,13 +1,21 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
 
-      {/* rota padrão */}
-      <Route path="*" element={<Navigate to="/login" />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }

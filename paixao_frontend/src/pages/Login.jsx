@@ -1,7 +1,10 @@
 import { useState } from "react";
 import api from "../api/client";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,23 +14,23 @@ export default function Login() {
     setError("");
 
     try {
-      // 👇 OAuth2 exige x-www-form-urlencoded
-      const form = new URLSearchParams();
-      form.append("username", email); // NÃO mudar para email
-      form.append("password", password);
+      const params = new URLSearchParams();
+      params.append("username", email);
+      params.append("password", password);
 
-      const response = await api.post("/auth/login", form, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
+      const response = await api.post(
+        "/auth/login",
+        params,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
 
-      const token = response.data.access_token;
-      localStorage.setItem("token", token);
-
+      login(response.data.access_token);
       alert("Login realizado com sucesso ✅");
     } catch (err) {
-      console.error(err);
       setError("Credenciais inválidas");
     }
   };
