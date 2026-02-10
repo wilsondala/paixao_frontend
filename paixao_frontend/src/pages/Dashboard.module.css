@@ -1,0 +1,57 @@
+/* Container principal do Dashboard */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  width: 95%;      /* 🔹 garante que caiba em telas pequenas */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Cabeçalho com título e botão */
+.header {
+  display: flex;
+  flex-wrap: wrap;  /* 🔹 permite quebrar em telas pequenas */
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Título */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px; /* para telas pequenas */
+}
+
+/* Botão Sair ajustado */
+.logoutButton {
+  padding: 6px 12px;   /* 🔹 menor */
+  font-size: 14px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap; /* evita quebrar texto */
+}
+
+.logoutButton:hover {
+  opacity: 0.9;
+}
+
+/* 🔹 Responsividade */
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+    width: 100%; /* ocupa toda a linha */
+  }
+
+  .logoutButton {
+    width: 100%; /* botão ocupa toda largura */
+    margin-top: 8px;
+  }
+}

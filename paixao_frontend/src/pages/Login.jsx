@@ -1,10 +1,12 @@
 import { useState } from "react";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.css"; // ✅ CSS correto
 
 export default function Login() {
   const { login } = useAuth();
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,28 +20,22 @@ export default function Login() {
       params.append("username", email);
       params.append("password", password);
 
-      const response = await api.post(
-        "/auth/login",
-        params,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+      const response = await api.post("/auth/login", params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
       login(response.data.access_token);
-      alert("Login realizado com sucesso ✅");
-    } catch (err) {
+      navigate("/", { replace: true });
+    } catch {
       setError("Credenciais inválidas");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "100px auto" }}>
+    <div className={styles.container}>
       <h2>Login</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -47,7 +43,6 @@ export default function Login() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ width: "100%", marginBottom: 10 }}
           required
         />
 
@@ -56,7 +51,6 @@ export default function Login() {
           placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", marginBottom: 10 }}
           required
         />
 
