@@ -32,7 +32,7 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles["login-container"]}> {/* 🔹 atualizado */}
       <h2>Login</h2>
 
       {error && <p className={styles.error}>{error}</p>}

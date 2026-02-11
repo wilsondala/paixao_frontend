@@ -12,3 +12,16 @@ export const confirmOrder = async (id) => {
 export const deliverOrder = async (id) => {
   await api.post(`/orders/${id}/delivery`, { payment_method: "entrega" });
 };
+
+export async function getOrderById(id) {
+  const response = await api.get(`/orders/${id}`);
+  return response.data;
+}
+export async function updateItemStatus(itemId, status) {
+  const response = await api.patch(
+    `/orders/items/${itemId}/status`,
+    { status }
+  );
+
+  return response.data;
+}

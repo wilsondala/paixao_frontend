@@ -1,27 +1,26 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
+/* Filtro de status */
 .filter {
-  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .filter select {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
   border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
 }
 
+/* Legenda de cores */
 .legend {
   display: flex;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
 .legendItem {
@@ -31,14 +30,44 @@
 }
 
 .legendColor {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
   display: inline-block;
 }
 
-/* cores iguais ao OrderCard */
-.paid { background-color: #10b981; }
-.confirmed { background-color: #3b82f6; }
-.ready_for_delivery { background-color: #f59e0b; }
-.sent { background-color: #ef4444; }
+/* Cores de status */
+.paid {
+  background-color: #22c55e; /* verde */
+}
+
+.confirmed {
+  background-color: #3b82f6; /* azul */
+}
+
+.ready_for_delivery {
+  background-color: #f59e0b; /* laranja */
+}
+
+.sent {
+  background-color: #ef4444; /* vermelho */
+}
+
+/* Grid de pedidos */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .filter label,
+  .filter select {
+    font-size: 12px;
+  }
+
+  .grid {
+    gap: 12px;
+  }
+}

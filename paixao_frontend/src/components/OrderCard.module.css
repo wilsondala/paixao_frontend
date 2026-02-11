@@ -1,57 +1,71 @@
 .card {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 16px;
   margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
 }
 
+/* Hover suave */
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
+/* Status cores */
 .paid {
-  background-color: #d1fae5;
-  border-color: #10b981;
+  border-left: 6px solid #22c55e;
 }
 
 .confirmed {
-  background-color: #dbeafe;
-  border-color: #3b82f6;
+  border-left: 6px solid #3b82f6;
 }
 
 .ready_for_delivery {
-  background-color: #fef3c7;
-  border-color: #f59e0b;
+  border-left: 6px solid #f59e0b;
 }
 
 .sent {
-  background-color: #fee2e2;
-  border-color: #ef4444;
+  border-left: 6px solid #ef4444;
 }
 
-button {
+/* Texto */
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.card p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* Botões */
+.card button {
+  margin-top: 10px;
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
   font-weight: bold;
-  transition: opacity 0.2s;
-  margin-top: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-button:hover:enabled {
+.card button:hover:enabled {
   opacity: 0.9;
 }
 
-button:disabled {
+.card button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* Botões por status */
 .paid button {
-  background-color: #10b981;
+  background-color: #22c55e;
   color: white;
 }
 
@@ -60,18 +74,9 @@ button:disabled {
   color: white;
 }
 
-.ready_for_delivery button {
-  background-color: #f59e0b;
-  color: white;
-}
-
-.sent button {
-  background-color: #ef4444;
-  color: white;
-}
-
+/* Erro */
 .error {
   color: #dc2626;
   margin-top: 8px;
-  font-size: 14px;
+  font-size: 13px;
 }

@@ -6,10 +6,10 @@
   background-color: #f3f4f6;
 }
 
-/* Container principal */
-.container {
+/* Container principal da tela de login */
+.login-container {
   max-width: 400px;
-  width: 90%; /* 🔹 garante responsividade */
+  width: 90%; /* garante responsividade */
   margin: 50px auto;
   padding: 24px;
   border: 1px solid #ddd;
@@ -19,8 +19,12 @@
   box-sizing: border-box;
 }
 
+.login-container button:hover {
+  opacity: 0.9;
+}
+
 /* Título */
-h2 {
+.login-container h2 {
   text-align: center;
   margin-bottom: 24px;
   color: #111827;
@@ -28,13 +32,13 @@ h2 {
 }
 
 /* Formulário */
-form {
+.login-container form {
   display: flex;
   flex-direction: column;
 }
 
 /* Inputs */
-input {
+.login-container input {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 16px;
@@ -45,14 +49,14 @@ input {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-input:focus {
+.login-container input:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
-/* Botão */
-button {
+/* Botão exclusivo da tela de login */
+.login-container button {
   width: 100%;
   padding: 12px;
   border: none;
@@ -65,32 +69,33 @@ button {
   transition: opacity 0.2s;
 }
 
-button:hover {
+.login-container button:hover {
   opacity: 0.9;
 }
 
 /* Mensagem de erro */
-.error {
+.login-container .error {
   color: #dc2626;
   margin-bottom: 12px;
   text-align: center;
   font-size: 14px;
 }
 
-/* 🔹 Responsividade */
+/* Responsividade */
 
 /* Para telas pequenas */
 @media (max-width: 480px) {
-  .container {
+  .login-container {
     margin: 30px 16px;
     padding: 20px;
   }
 
-  h2 {
+  .login-container h2 {
     font-size: 20px;
   }
 
-  input, button {
+  .login-container input,
+  .login-container button {
     font-size: 14px;
     padding: 10px;
   }
@@ -98,16 +103,17 @@ button:hover {
 
 /* Para telas médias */
 @media (max-width: 768px) {
-  .container {
+  .login-container {
     margin: 40px 24px;
     padding: 22px;
   }
 
-  h2 {
+  .login-container h2 {
     font-size: 22px;
   }
 
-  input, button {
+  .login-container input,
+  .login-container button {
     font-size: 15px;
     padding: 11px;
   }
