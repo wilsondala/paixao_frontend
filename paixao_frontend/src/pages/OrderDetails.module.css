@@ -66,3 +66,111 @@
   color: white;
   cursor: pointer;
 }
+
+/* ===== ITENS ===== */
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.itemRow:last-child {
+  border-bottom: none;
+}
+
+.itemLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.itemInfo {
+  font-size: 14px;
+  color: #555;
+}
+
+.itemStatus {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Status colors */
+.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.preparing {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.delivered {
+  background: #d4edda;
+  color: #155724;
+}
+
+.canceled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.itemActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.itemActions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.itemActions button:hover {
+  opacity: 0.85;
+}
+
+.btnPrepare {
+  background: #007bff;
+  color: white;
+}
+
+.btnDeliver {
+  background: #28a745;
+  color: white;
+}
+
+.btnCancel {
+  background: #dc3545;
+  color: white;
+}
+
+.canceled {
+  background: #6b7280;
+}
+
+.partially_canceled {
+  background: #f97316;
+}
+
+.completed_with_issues {
+  background: #a855f7;
+}

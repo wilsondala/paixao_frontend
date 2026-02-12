@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getOrderById, confirmOrder, deliverOrder } from "../api/orders";
+import { 
+  getOrderById, 
+  confirmOrder, 
+  deliverOrder,
+  updateItemStatus 
+} from "../api/orders";
+
 import styles from "./OrderDetails.module.css";
 
 export default function OrderDetails() {
@@ -29,6 +35,18 @@ export default function OrderDetails() {
     await loadOrder();
     setLoading(false);
   }
+
+  async function handleItemStatusChange(itemId, newStatus) {
+  try {
+    setLoading(true);
+    await updateItemStatus(itemId, newStatus);
+    await loadOrder(); // 🔥 recarrega pedido atualizado
+  } catch (error) {
+    console.error("Erro ao atualizar item:", error);
+  } finally {
+    setLoading(false);
+  }
+}
 
   async function handleDeliver() {
     setLoading(true);
@@ -80,21 +98,71 @@ export default function OrderDetails() {
             {/* ITENS DO PEDIDO */}
       {order.items && order.items.length > 0 && (
         <div className={styles.card}>
-          <h3>Itens do Pedido</h3>
 
-          {order.items.map((item) => (
-            <div key={item.id} style={{ marginBottom: "10px" }}>
-              <p>
-                <strong>Produto:</strong> {item.product?.name}
-              </p>
-              <p>Quantidade: {item.quantity}</p>
-              <p>Preço: R$ {item.price}</p>
-              <p>
-                <strong>Status:</strong> {item.status}
-              </p>
-              <hr />
+       <div className={styles.card}>
+      <h3 style={{ marginBottom: "20px" }}>Itens do Pedido</h3>
+
+        {order.items.map((item) => {
+          const statusClass =
+            item.status === "pending"
+              ? styles.pending
+              : item.status === "preparing"
+              ? styles.preparing
+              : item.status === "delivered"
+              ? styles.delivered
+              : item.status === "canceled"
+              ? styles.canceled
+              : "";
+
+          return (
+            <div key={item.id} className={styles.itemRow}>
+              <div className={styles.itemLeft}>
+                <strong>{item.product?.name}</strong>
+                <div className={styles.itemInfo}>
+                  Quantidade: {item.quantity} <br />
+                  Preço: R$ {item.price}
+                </div>
+              </div>
+
+              <div className={styles.itemRight}>
+                <span className={`${styles.itemStatus} ${statusClass}`}>
+                  {item.status}
+                </span>
+
+                <div className={styles.itemActions}>
+                  <button
+                    className={styles.btnPrepare}
+                    onClick={() =>
+                      handleItemStatusChange(item.id, "preparing")
+                    }
+                  >
+                    Preparar
+                  </button>
+
+                  <button
+                    className={styles.btnDeliver}
+                    onClick={() =>
+                      handleItemStatusChange(item.id, "delivered")
+                    }
+                  >
+                    Entregar
+                  </button>
+
+                  <button
+                    className={styles.btnCancel}
+                    onClick={() =>
+                      handleItemStatusChange(item.id, "canceled")
+                    }
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
             </div>
-          ))}
+          );
+        })}
+      </div>
+
         </div>
       )}
 
