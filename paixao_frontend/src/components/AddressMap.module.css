@@ -1,0 +1,61 @@
+.container {
+  width: 100%;
+}
+
+.searchContainer {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input:focus {
+  border-color: #e91e63;
+  box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.1);
+}
+
+.button {
+  padding: 12px 20px;
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background-color: #c2185b;
+  transform: translateY(-2px);
+}
+
+.resultItem {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.resultItem:hover {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 600px) {
+  .searchContainer {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

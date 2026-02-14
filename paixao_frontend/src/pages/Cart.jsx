@@ -1,21 +1,30 @@
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import styles from "./Cart.module.css";
 
 export default function Cart() {
-  const { cart, removeFromCart, clearCart, total } = useCart();
+  const { cart, removeFromCart, clearCart, total, updateQuantity } = useCart();
   const navigate = useNavigate();
+  const [orderSent, setOrderSent] = useState(false);
+if (cart.length === 0) {
+  return (
+    <div className={styles.empty}>
+      {orderSent ? (
+        <>
+          <h2>✅ Pedido enviado com sucesso pelo vendedor!</h2>
+          <button onClick={() => navigate("/products")}>Voltar para Loja</button>
+        </>
+      ) : (
+        <>
+          <h2>Seu carrinho está vazio 🛒</h2>
+          <button onClick={() => navigate("/products")}>Voltar para Loja</button>
+        </>
+      )}
+    </div>
+  );
+}
 
-  if (cart.length === 0) {
-    return (
-      <div className={styles.empty}>
-        <h2>Seu carrinho está vazio 🛒</h2>
-        <button onClick={() => navigate("/products")}>
-          Voltar para Loja
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>
@@ -26,7 +35,6 @@ export default function Cart() {
         >
           ← Voltar
         </button>
-
         <h1>Seu Carrinho</h1>
       </div>
 
@@ -40,10 +48,25 @@ export default function Cart() {
 
             <div className={styles.info}>
               <h3>{item.name}</h3>
-              <p>
-                {Number(item.price).toLocaleString("pt-AO")} Kz
-              </p>
-              <p>Quantidade: {item.quantity}</p>
+              <p>{Number(item.price).toLocaleString("pt-AO")} Kz</p>
+
+              <div className={styles.quantityControls}>
+                <button
+                  onClick={() => {
+                    const newQty = item.quantity - 1;
+                    if (newQty <= 0) removeFromCart(item.id);
+                    else updateQuantity(item.id, newQty);
+                  }}
+                >
+                  -
+                </button>
+                <span>{item.quantity}</span>
+                <button
+                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             <button
@@ -57,9 +80,7 @@ export default function Cart() {
       </div>
 
       <div className={styles.summary}>
-        <h2>
-          Total: {Number(total).toLocaleString("pt-AO")} Kz
-        </h2>
+        <h2>Total: {Number(total).toLocaleString("pt-AO")} Kz</h2>
 
         <button
           className={styles.checkoutButton}
