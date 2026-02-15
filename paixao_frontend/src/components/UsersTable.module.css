@@ -1,0 +1,101 @@
+.container {
+  margin-top: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.search {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 180px;
+}
+
+.select {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.admin {
+  color: #c00;
+  font-weight: bold;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  background-color: #fee;
+}
+
+.customer {
+  color: #0077cc;
+  font-weight: bold;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  background-color: #eef6ff;
+}
+
+.pagination {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.pagination button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
