@@ -5,6 +5,7 @@ import UsersTable from "../components/UsersTable";
 
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -13,12 +14,20 @@ export default function AdminDashboard() {
         setData(result);
       } catch (error) {
         console.error("Erro ao carregar dashboard", error);
+      } finally {
+        setLoading(false);
       }
     }
     load();
   }, []);
 
-  if (!data) return <p className={styles.loading}>Carregando painel...</p>;
+  if (loading) {
+    return <p className={styles.loading}>Carregando painel...</p>;
+  }
+
+  if (!data) {
+    return <p className={styles.error}>Erro ao carregar dados.</p>;
+  }
 
   return (
     <div className={styles.container}>
@@ -30,30 +39,35 @@ export default function AdminDashboard() {
           <h3>Usuários</h3>
           <p>{data.total_users}</p>
         </div>
+
         <div className={styles.card}>
           <h3>Pedidos</h3>
           <p>{data.total_orders}</p>
         </div>
+
         <div className={styles.card}>
           <h3>Produtos</h3>
           <p>{data.total_products}</p>
         </div>
+
         <div className={styles.card}>
           <h3>Entregues</h3>
           <p>{data.delivered_orders}</p>
         </div>
+
         <div className={styles.card}>
           <h3>Pendentes</h3>
           <p>{data.pending_orders}</p>
         </div>
+
         <div className={styles.card}>
           <h3>Receita Total</h3>
-          <p>R$ {data.total_revenue.toFixed(2)}</p>
+          <p>R$ {Number(data.total_revenue || 0).toFixed(2)}</p>
         </div>
       </div>
 
-      {/* Tabela Premium de Usuários */}
-      <UsersTable />
+      {/* Tabela de Usuários (agora com telefone) */}
+      <UsersTable users={data.users} />
     </div>
   );
 }

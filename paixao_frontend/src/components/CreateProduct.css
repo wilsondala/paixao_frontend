@@ -1,0 +1,64 @@
+.create-product-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.create-product-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+.create-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.create-product-form input,
+.create-product-form textarea {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.create-product-form input:focus,
+.create-product-form textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.create-product-form textarea {
+  resize: none;
+  min-height: 100px;
+}
+
+.create-product-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-product-form button:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+}
+
+.create-product-form button:active {
+  transform: scale(0.98);
+}

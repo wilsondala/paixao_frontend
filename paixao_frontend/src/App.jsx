@@ -8,10 +8,19 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
-import { UserProvider, useUser } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext";
 import jwt_decode from "jwt-decode";
+import EditProduct from "./components/EditProduct";
 
-// Rota protegida para ADMIN
+import CreateProduct from "./components/CreateProduct";
+import AdminLayout from "./layouts/AdminLayout";
+import ProductsAdmin from "./components/ProductsAdmin";
+
+
+
+// ===============================
+// 🔐 ROTA PROTEGIDA ADMIN
+// ===============================
 function PrivateAdminRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -19,30 +28,34 @@ function PrivateAdminRoute({ children }) {
     return <Navigate to="/admin/login" replace />;
   }
 
-  let role = null;
   try {
     const decoded = jwt_decode(token);
-    role = decoded.role; // role do JWT, se o backend enviar
+
+    if (decoded.role !== "ADMIN") {
+      return <Navigate to="/admin/login" replace />;
+    }
+
+    return children;
   } catch (err) {
     console.error("Erro ao decodificar JWT:", err);
     return <Navigate to="/admin/login" replace />;
   }
+}
 
-  // Se não for ADMIN, redireciona
-  if (role && role !== "ADMIN") {
-    return <Navigate to="/admin/login" replace />;
-  }
 
-  return children;
-};
-
+// ===============================
+// 🚀 ROTAS
+// ===============================
 function AppRoutes() {
   return (
     <Routes>
-      {/* Rotas públicas */}
-      <Route path="/login" element={<Login />} />
 
-      {/* Rotas privadas do site */}
+      {/* ================= PUBLICAS ================= */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+
+
+      {/* ================= SITE PRIVADO ================= */}
       <Route
         path="/"
         element={
@@ -51,6 +64,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/products"
         element={
@@ -59,6 +73,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/cart"
         element={
@@ -67,6 +82,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/orders/:id"
         element={
@@ -75,6 +91,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/checkout"
         element={
@@ -84,23 +101,35 @@ function AppRoutes() {
         }
       />
 
-      {/* Rotas do painel administrativo */}
-      <Route path="/admin/login" element={<AdminLogin />} />
+
+      {/* ================= ADMIN PROFISSIONAL ================= */}
+
       <Route
-        path="/admin/dashboard"
+        path="/admin"
         element={
           <PrivateAdminRoute>
-            <AdminDashboard />
+            <AdminLayout />
           </PrivateAdminRoute>
         }
-      />
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="create-product" element={<CreateProduct />} />
+        <Route path="products" element={<ProductsAdmin />} />
+        <Route path="edit-product/:id" element={<EditProduct />} />
+      </Route>
 
-      {/* Redirecionamento padrão */}
+
+      {/* ================= FALLBACK ================= */}
       <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }
 
+
+// ===============================
+// ROOT APP
+// ===============================
 export default function App() {
   return (
     <UserProvider>
