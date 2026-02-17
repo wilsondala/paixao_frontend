@@ -5,6 +5,7 @@ import styles from "./UsersTable.module.css";
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
   const [editingUser, setEditingUser] = useState(null);
 
   async function loadUsers() {
