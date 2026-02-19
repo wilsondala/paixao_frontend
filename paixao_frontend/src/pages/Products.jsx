@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/products";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
 import styles from "./Products.module.css";
 
-const API_URL = "http://localhost:8000";
+const API_BASE = "http://127.0.0.1:8000"; // ajuste se necessário
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -12,49 +11,44 @@ export default function Products() {
   const [selectedImageIndex, setSelectedImageIndex] = useState({});
   const [modalImage, setModalImage] = useState(null);
 
-  const { addToCart, cart } = useCart();
-  const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     async function loadProducts() {
       try {
         const data = await getProducts();
-        setProducts(data);
+        setProducts(data || []);
       } catch (error) {
-        console.error("Erro ao carregar produtos", error);
+        console.error("Erro ao carregar produtos:", error);
       } finally {
         setLoading(false);
       }
     }
+
     loadProducts();
   }, []);
 
-const getFileUrl = (file) => {
-  if (!file) return "/placeholder.png"; // fallback
-  if (file.startsWith("http")) return file; // URL externa
-  // arquivo local na pasta public
-  return `/images/produtos/${file}`;
-};
+  // 🔥 Corrigido para funcionar com backend FastAPI
+  const getFileUrl = (file) => {
+    if (!file) return "/placeholder.png";
 
+    if (file.startsWith("http")) return file;
 
-  const handleNextImage = (productId, imagesLength) => {
+    // caso backend retorne apenas nome do ficheiro
+    return `${API_BASE}/images/produtos/${file}`;
+  };
+
+  const handleNextImage = (productId, length) => {
     setSelectedImageIndex((prev) => {
-      const currentIndex = prev[productId] || 0;
-      return {
-        ...prev,
-        [productId]: (currentIndex + 1) % imagesLength,
-      };
+      const current = prev[productId] || 0;
+      return { ...prev, [productId]: (current + 1) % length };
     });
   };
 
-  const handlePrevImage = (productId, imagesLength) => {
+  const handlePrevImage = (productId, length) => {
     setSelectedImageIndex((prev) => {
-      const currentIndex = prev[productId] || 0;
-      return {
-        ...prev,
-        [productId]:
-          (currentIndex - 1 + imagesLength) % imagesLength,
-      };
+      const current = prev[productId] || 0;
+      return { ...prev, [productId]: (current - 1 + length) % length };
     });
   };
 
@@ -62,40 +56,25 @@ const getFileUrl = (file) => {
     return <div className={styles.loading}>Carregando produtos...</div>;
   }
 
+  if (!products.length) {
+    return (
+      <div className={styles.loading}>
+        Nenhum produto disponível no momento.
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <button
-          className={styles.backButton}
-          onClick={() => navigate(-1)}
-        >
-          ← Voltar
-        </button>
-
-        <h1 className={styles.title}>Paixão Angola 💜</h1>
-
-        <button
-          className={styles.cartButton}
-          onClick={() => navigate("/cart")}
-        >
-          🛒 Carrinho ({cart.length})
-        </button>
-      </div>
-
       <div className={styles.grid}>
         {products.map((product) => {
-          console.log("Produto completo:", product);
-
-          let images = [];
-
-          if (Array.isArray(product.images)) {
-            images = product.images;
-          } else if (product.image) {
-            images = [product.image];
-          }
+          const images = Array.isArray(product.images)
+            ? product.images
+            : product.image
+            ? [product.image]
+            : [];
 
           const currentIndex = selectedImageIndex[product.id] || 0;
-          const videoUrl = product.video_url;
 
           return (
             <div key={product.id} className={styles.card}>
@@ -107,18 +86,15 @@ const getFileUrl = (file) => {
                       alt={product.name}
                       className={styles.image}
                       onClick={() =>
-                        setModalImage(
-                          getFileUrl(images[currentIndex])
-                        )
+                        setModalImage(getFileUrl(images[currentIndex]))
                       }
-                      onError={(e) => {
-                        e.target.src = "/placeholder.png";
-                      }}
+                      onError={(e) => (e.target.src = "/placeholder.png")}
                     />
 
                     {images.length > 1 && (
                       <div className={styles.imageControls}>
                         <button
+                          type="button"
                           onClick={() =>
                             handlePrevImage(product.id, images.length)
                           }
@@ -126,6 +102,7 @@ const getFileUrl = (file) => {
                           ◀
                         </button>
                         <button
+                          type="button"
                           onClick={() =>
                             handleNextImage(product.id, images.length)
                           }
@@ -143,20 +120,19 @@ const getFileUrl = (file) => {
                   />
                 )}
 
-                {/* 🔥 VIDEO EMBED CORRIGIDO */}
-                {videoUrl && (
+                {/* 🔥 Suporte melhorado para vídeo */}
+                {product.video_url && (
                   <div className={styles.videoWrapper}>
                     <iframe
                       src={
-                        videoUrl.includes("streamable.com")
-                          ? videoUrl.replace(
+                        product.video_url.includes("streamable.com")
+                          ? product.video_url.replace(
                               "streamable.com/",
                               "streamable.com/e/"
                             )
-                          : videoUrl
+                          : product.video_url
                       }
-                      title="Video do produto"
-                      frameBorder="0"
+                      title={`Vídeo do produto ${product.name}`}
                       allow="autoplay; fullscreen"
                       allowFullScreen
                     ></iframe>
@@ -183,7 +159,7 @@ const getFileUrl = (file) => {
         })}
       </div>
 
-      {/* 🔥 MODAL DE IMAGEM */}
+      {/* 🔥 Modal melhorado */}
       {modalImage && (
         <div
           className={styles.modal}
@@ -193,6 +169,7 @@ const getFileUrl = (file) => {
             src={modalImage}
             alt="Imagem ampliada"
             className={styles.modalImage}
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       )}

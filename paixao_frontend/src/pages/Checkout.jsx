@@ -43,7 +43,7 @@ export default function Checkout() {
       };
 
       // 🔹 Log completo para debug
-      console.log("💡 Dados que serão enviados para criar pedido:", orderData);
+      //console.log("💡 Dados que serão enviados para criar pedido:", orderData);
 
       const order = await createOrder(orderData);
 

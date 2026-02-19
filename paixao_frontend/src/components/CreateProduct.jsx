@@ -46,7 +46,6 @@ export default function CreateProduct() {
 
       alert("Produto criado com sucesso!");
 
-      // 🔥 limpa formulário
       setForm({
         name: "",
         description: "",
@@ -55,7 +54,6 @@ export default function CreateProduct() {
         images: [""],
         video_url: "",
       });
-
     } catch (err) {
       console.error(err);
       alert("Erro ao criar produto");
@@ -67,7 +65,6 @@ export default function CreateProduct() {
       <h2>Criar Produto</h2>
 
       <form onSubmit={handleSubmit} className="create-product-form">
-
         <input
           name="name"
           placeholder="Nome"
@@ -101,22 +98,20 @@ export default function CreateProduct() {
           required
         />
 
-        <h4>Imagens (URL completa)</h4>
+        <h4>Imagens (URL ou nome do arquivo em public/images/produtos)</h4>
 
         {form.images.map((img, index) => (
           <div key={index} style={{ marginBottom: "10px" }}>
             <input
-              placeholder="https://site.com/imagem.jpg"
+              placeholder="https://site.com/imagem.jpg ou nome.jpg"
               value={img}
-              onChange={(e) =>
-                handleImageChange(index, e.target.value)
-              }
+              onChange={(e) => handleImageChange(index, e.target.value)}
             />
 
             {img && (
               <div style={{ marginTop: "5px" }}>
                 <img
-                  src={img}
+                  src={img.startsWith("http") ? img : `/images/produtos/${img}`}
                   alt="preview"
                   style={{ width: "100px", borderRadius: "6px" }}
                   onError={(e) => (e.target.style.display = "none")}

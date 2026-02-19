@@ -1,5 +1,5 @@
 /* Container principal do Dashboard */
-.dashboard-container {
+.dashboardContainer {
   padding: 24px;
   max-width: 1200px;
   width: 95%;
@@ -13,10 +13,10 @@
 /* Cabeçalho com título e botão */
 .header {
   display: flex;
-  flex-wrap: wrap;        /* permite quebrar em telas pequenas */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;              /* espaço entre título e botão */
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -24,20 +24,20 @@
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;    /* em telas pequenas */
+  margin-bottom: 10px;
 }
 
 /* Botão Sair */
 .logoutButton {
-  padding: 8px 16px;      
+  padding: 8px 16px;
   font-size: 14px;
-  min-width: 100px;       /* não fica muito pequeno */
+  min-width: 100px;
   background-color: #ef4444;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  white-space: nowrap;    /* evita quebrar texto */
+  white-space: nowrap;
   text-align: center;
   transition: opacity 0.2s;
 }
@@ -46,8 +46,7 @@
   opacity: 0.9;
 }
 
-/* Wrapper para scroll horizontal da lista de pedidos */
-.order-wrapper {
+.orderWrapper {
   overflow-x: auto;
 }
 
@@ -64,7 +63,7 @@
 }
 
 @media (max-width: 480px) {
-  .dashboard-container {
+  .dashboardContainer {
     padding: 16px;
   }
 
@@ -79,7 +78,7 @@
   }
 
   .logoutButton {
-    width: 100%;   /* ocupa toda a largura */
+    width: 100%;
     margin-top: 8px;
   }
 }

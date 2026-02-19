@@ -1,73 +1,82 @@
 import { useEffect, useState } from "react";
 import { getDashboard } from "../api/admin";
-import styles from "./AdminDashboard.module.css";
 import UsersTable from "../components/UsersTable";
+import styles from "./AdminDashboard.module.css";
 
 export default function AdminDashboard() {
-  const [data, setData] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
+    async function fetchDashboard() {
       try {
-        const result = await getDashboard();
-        setData(result);
+        const response = await getDashboard();
+        setDashboardData(response);
       } catch (error) {
-        console.error("Erro ao carregar dashboard", error);
+        console.error("Erro ao carregar dashboard:", error);
       } finally {
         setLoading(false);
       }
     }
-    load();
+
+    fetchDashboard();
   }, []);
 
   if (loading) {
-    return <p className={styles.loading}>Carregando painel...</p>;
+    return <div className={styles.loading}>Carregando painel...</div>;
   }
 
-  if (!data) {
-    return <p className={styles.error}>Erro ao carregar dados.</p>;
+  if (!dashboardData) {
+    return (
+      <div className={styles.error}>
+        Erro ao carregar dados do painel.
+      </div>
+    );
   }
+
+  const {
+    total_users,
+    total_orders,
+    total_products,
+    delivered_orders,
+    pending_orders,
+    total_revenue,
+    users,
+  } = dashboardData;
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Painel Administrativo</h1>
 
-      {/* Cards do Dashboard */}
+      {/* DASHBOARD CARDS */}
       <div className={styles.cards}>
-        <div className={styles.card}>
-          <h3>Usuários</h3>
-          <p>{data.total_users}</p>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Pedidos</h3>
-          <p>{data.total_orders}</p>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Produtos</h3>
-          <p>{data.total_products}</p>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Entregues</h3>
-          <p>{data.delivered_orders}</p>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Pendentes</h3>
-          <p>{data.pending_orders}</p>
-        </div>
-
-        <div className={styles.card}>
-          <h3>Receita Total</h3>
-          <p>R$ {Number(data.total_revenue || 0).toFixed(2)}</p>
-        </div>
+        <DashboardCard title="Usuários" value={total_users} />
+        <DashboardCard title="Pedidos" value={total_orders} />
+        <DashboardCard title="Produtos" value={total_products} />
+        <DashboardCard title="Entregues" value={delivered_orders} />
+        <DashboardCard title="Pendentes" value={pending_orders} />
+        <DashboardCard
+          title="Receita Total"
+          value={`R$ ${Number(total_revenue || 0).toFixed(2)}`}
+          highlight
+        />
       </div>
 
-      {/* Tabela de Usuários (agora com telefone) */}
-      <UsersTable users={data.users} />
+      {/* TABELA DE USUÁRIOS */}
+      <div className={styles.tableSection}>
+        <h2 className={styles.subtitle}>Lista de Usuários</h2>
+        <UsersTable users={users} />
+      </div>
+    </div>
+  );
+}
+
+/* COMPONENTE DE CARD */
+function DashboardCard({ title, value, highlight }) {
+  return (
+    <div className={`${styles.card} ${highlight ? styles.highlight : ""}`}>
+      <h3 className={styles.cardTitle}>{title}</h3>
+      <p className={styles.cardValue}>{value}</p>
     </div>
   );
 }

@@ -1,78 +1,48 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import qs from "qs";
-import jwt_decode from "jwt-decode";
-import { useUser } from "../context/UserContext";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { login as loginRequest } from "../api/auth";
 import styles from "./AdminLogin.module.css";
 
 export default function AdminLogin() {
+  const { login, isAuthenticated, user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { setUser } = useUser();
+
+  // Se já logado e for admin → vai direto pro painel
+  if (isAuthenticated && user?.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (authLoading) {
+    return <div className={styles.container}>Carregando autenticação...</div>;
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
-
-    if (!email.trim() || !password.trim()) {
-      setError("Preencha email e senha");
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
 
     try {
-      // Login via x-www-form-urlencoded
-      const response = await api.post(
-        "/auth/login",
-        qs.stringify({
-          username: email.trim(),
-          password: password.trim(),
-          grant_type: "",
-          scope: "",
-          client_id: "",
-          client_secret: "",
-        }),
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-      );
+      const token = await loginRequest(email, password);
 
-      const { access_token } = response.data;
-      localStorage.setItem("token", access_token);
+      login(token); // 🔥 CENTRALIZAÇÃO NO AUTHCONTEXT
 
-      // Decodifica o token para pegar o ID do usuário
-      const decoded = jwt_decode(access_token);
-      console.log("Payload do JWT:", decoded);
+      // Aguarda pequeno delay para o user atualizar
+      setTimeout(() => {
+        if (user?.role === "admin") {
+          navigate("/admin/dashboard", { replace: true });
+        } else {
+          setError("Acesso negado: você não é administrador.");
+        }
+      }, 200);
 
-      // Busca dados completos do usuário via endpoint correto
-        const userResponse = await api.get("/auth/me", {
-        headers: { Authorization: `Bearer ${access_token}` },
-        });
-        const user = userResponse.data;
-        setUser(user);
-
-      // Se o backend fornecer role, pode verificar se é ADMIN
-      if (user.role && user.role !== "ADMIN") {
-        setError("Acesso negado: você não é administrador");
-        setLoading(false);
-        return;
-      }
-
-      // Redireciona para o dashboard
-      navigate("/admin/dashboard");
     } catch (err) {
-      console.error("Erro no login:", err.response?.data || err);
-
-      if (err.response?.data?.error_description) {
-        setError(err.response.data.error_description);
-      } else if (err.response?.data?.detail) {
-        setError(err.response.data.detail);
-      } else {
-        setError("Email ou senha inválidos");
-      }
+      setError(err.message || "Email ou senha inválidos.");
     } finally {
       setLoading(false);
     }
@@ -101,7 +71,7 @@ export default function AdminLogin() {
           required
         />
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading || authLoading}>
           {loading ? "Entrando..." : "Login"}
         </button>
       </form>

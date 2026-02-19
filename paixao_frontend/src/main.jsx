@@ -1,15 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom"; // 👈 IMPORTANTE
-import App from "./App";
-import "leaflet/dist/leaflet.css";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
+import { CartProvider } from './context/CartContext.jsx'
 
-import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter> {/* 👈 ENVOLVE TUDO */}
+    <BrowserRouter>
       <AuthProvider>
         <CartProvider>
           <App />
@@ -17,4 +15,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
-);
+)

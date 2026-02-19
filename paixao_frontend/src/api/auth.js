@@ -3,7 +3,7 @@ import api from "./client";
 export async function login(email, password) {
   try {
     const form = new URLSearchParams();
-    form.append("username", email); // OAuth2 espera "username"
+    form.append("username", email);
     form.append("password", password);
 
     const response = await api.post("/auth/login", form, {
@@ -12,10 +12,12 @@ export async function login(email, password) {
       },
     });
 
-    // backend FastAPI normalmente retorna:
-    // { access_token: "...", token_type: "bearer" }
+    if (!response.data?.access_token) {
+      throw new Error("Resposta inválida do servidor.");
+    }
 
     return response.data.access_token;
+
   } catch (error) {
     if (error.response?.status === 401) {
       throw new Error("Email ou senha inválidos");
