@@ -1,5 +1,24 @@
 import api from "./client";
 
+
+export async function register(data) {
+  const response = await fetch("http://localhost:8000/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao registrar usuário");
+  }
+
+  const result = await response.json();
+
+  return result.access_token; // ajuste se sua API retornar diferente
+}
+
 export async function login(email, password) {
   try {
     const form = new URLSearchParams();

@@ -17,12 +17,8 @@ export default function PrivateRoute({ children, role }) {
     );
   }
 
-  // 🔥 Correção de comparação de role (case insensitive)
-  if (
-    role &&
-    (!user ||
-      user.role?.toUpperCase() !== role.toUpperCase())
-  ) {
+  // Apenas verifica a role se ela foi passada
+  if (role && (!user || user.role?.toUpperCase() !== role.toUpperCase())) {
     return <Navigate to="/products" replace />;
   }
 
