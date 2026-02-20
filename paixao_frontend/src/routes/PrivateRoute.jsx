@@ -1,16 +1,28 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function PrivateRoute({ children, role }) {
   const { isAuthenticated, loading, user } = useAuth();
+  const location = useLocation();
 
   if (loading) return <p>Carregando...</p>;
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        state={{ from: location.pathname }}
+        replace
+      />
+    );
   }
 
-  if (role && (!user || user.role !== role)) {
+  // 🔥 Correção de comparação de role (case insensitive)
+  if (
+    role &&
+    (!user ||
+      user.role?.toUpperCase() !== role.toUpperCase())
+  ) {
     return <Navigate to="/products" replace />;
   }
 

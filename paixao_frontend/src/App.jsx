@@ -6,6 +6,7 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
+import ProductDetails from "./pages/ProductDetails"; // 🔥 NOVO
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./layouts/AdminLayout";
@@ -18,57 +19,59 @@ function App() {
   return (
     <Routes>
 
-      {/* Públicas */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/products" element={<Products />} />
+  {/* Públicas */}
+  <Route path="/login" element={<Login />} />
+  <Route path="/admin/login" element={<AdminLogin />} />
+  <Route path="/products" element={<Products />} />
+  <Route path="/products/:id" element={<ProductDetails />} />
 
-      {/* Privadas usuário */}
-      <Route
-        path="/cart"
-        element={
-          <PrivateRoute>
-            <Cart />
-          </PrivateRoute>
-        }
-      />
+  {/* Privadas usuário */}
+  <Route
+    path="/cart"
+    element={
+      <PrivateRoute>
+        <Cart />
+      </PrivateRoute>
+    }
+  />
 
-      <Route
-        path="/checkout"
-        element={
-          <PrivateRoute>
-            <Checkout />
-          </PrivateRoute>
-        }
-      />
+  <Route
+    path="/checkout"
+    element={
+      <PrivateRoute>
+        <Checkout />
+      </PrivateRoute>
+    }
+  />
 
-      <Route
-        path="/orders/:id"
-        element={
-          <PrivateRoute>
-            <OrderDetails />
-          </PrivateRoute>
-        }
-      />
+  <Route
+    path="/orders/:id"
+    element={
+      <PrivateRoute>
+        <OrderDetails />
+      </PrivateRoute>
+    }
+  />
 
-      {/* Admin */}
-      <Route
-        path="/admin"
-        element={
-          <PrivateRoute role="admin">
-            <AdminLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="create-product" element={<CreateProduct />} />
-        <Route path="products" element={<ProductsAdmin />} />
-        <Route path="edit-product/:id" element={<EditProduct />} />
-      </Route>
+  {/* Admin */}
+  <Route
+    path="/admin"
+    element={
+      <PrivateRoute role="admin">
+        <AdminLayout />
+      </PrivateRoute>
+    }
+  >
+    <Route index element={<AdminDashboard />} />
+    <Route path="dashboard" element={<AdminDashboard />} />
+    <Route path="create-product" element={<CreateProduct />} />
+    <Route path="products" element={<ProductsAdmin />} />
+    <Route path="edit-product/:id" element={<EditProduct />} />
+  </Route>
 
-      <Route path="*" element={<Navigate to="/products" replace />} />
-    </Routes>
+  <Route path="*" element={<Navigate to="/products" replace />} />
+
+</Routes>
   );
 }
 

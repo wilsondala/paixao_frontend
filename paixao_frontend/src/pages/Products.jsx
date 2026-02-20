@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProducts } from "../api/products";
 import { useCart } from "../context/CartContext";
 import styles from "./Products.module.css";
-
-const API_BASE = "http://127.0.0.1:8000"; // ajuste se necessário
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -12,6 +11,7 @@ export default function Products() {
   const [modalImage, setModalImage] = useState(null);
 
   const { addToCart } = useCart();
+  const navigate = useNavigate(); // 🔥 NOVO
 
   useEffect(() => {
     async function loadProducts() {
@@ -28,14 +28,10 @@ export default function Products() {
     loadProducts();
   }, []);
 
-  // 🔥 Corrigido para funcionar com backend FastAPI
   const getFileUrl = (file) => {
     if (!file) return "/placeholder.png";
-
     if (file.startsWith("http")) return file;
-
-    // caso backend retorne apenas nome do ficheiro
-    return `${API_BASE}/images/produtos/${file}`;
+    return `/imagem/produtos/${file}`;
   };
 
   const handleNextImage = (productId, length) => {
@@ -77,7 +73,11 @@ export default function Products() {
           const currentIndex = selectedImageIndex[product.id] || 0;
 
           return (
-            <div key={product.id} className={styles.card}>
+            <div
+              key={product.id}
+              className={styles.card}
+              onClick={() => navigate(`/produto/${product.id}`)} // 🔥 AGORA NAVEGA
+            >
               <div className={styles.imageWrapper}>
                 {images.length > 0 ? (
                   <>
@@ -85,9 +85,10 @@ export default function Products() {
                       src={getFileUrl(images[currentIndex])}
                       alt={product.name}
                       className={styles.image}
-                      onClick={() =>
-                        setModalImage(getFileUrl(images[currentIndex]))
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setModalImage(getFileUrl(images[currentIndex]));
+                      }}
                       onError={(e) => (e.target.src = "/placeholder.png")}
                     />
 
@@ -95,17 +96,19 @@ export default function Products() {
                       <div className={styles.imageControls}>
                         <button
                           type="button"
-                          onClick={() =>
-                            handlePrevImage(product.id, images.length)
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrevImage(product.id, images.length);
+                          }}
                         >
                           ◀
                         </button>
                         <button
                           type="button"
-                          onClick={() =>
-                            handleNextImage(product.id, images.length)
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNextImage(product.id, images.length);
+                          }}
                         >
                           ▶
                         </button>
@@ -120,7 +123,6 @@ export default function Products() {
                   />
                 )}
 
-                {/* 🔥 Suporte melhorado para vídeo */}
                 {product.video_url && (
                   <div className={styles.videoWrapper}>
                     <iframe
@@ -149,7 +151,10 @@ export default function Products() {
 
                 <button
                   className={styles.addButton}
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // 🔥 IMPede navegação
+                    addToCart(product);
+                  }}
                 >
                   Adicionar ao Carrinho
                 </button>
@@ -159,7 +164,6 @@ export default function Products() {
         })}
       </div>
 
-      {/* 🔥 Modal melhorado */}
       {modalImage && (
         <div
           className={styles.modal}
