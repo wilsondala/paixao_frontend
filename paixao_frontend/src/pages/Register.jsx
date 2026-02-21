@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { register } from "../api/auth"; // precisa existir no seu auth.js
 import { useAuth } from "../context/AuthContext";
+import styles from "./Register.module.css"; // ⬅ importar CSS
 
 export default function Register() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function Register() {
       login(token);
 
       // Volta para onde veio ou produtos
-      const redirectTo = location.state?.from || "/products";
+      const redirectTo = location.state?.from || "/login"; // ⬅ agora vai para login
       navigate(redirectTo, { replace: true });
 
     } catch (err) {
@@ -44,48 +45,54 @@ export default function Register() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "60px auto" }}>
-      <h2>Criar Conta</h2>
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className={styles.box}>
+          <h2>Criar Conta</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+          {error && <p className={styles.error}>{error}</p>}
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
 
-        <input
-          type="tel"
-          placeholder="Telefone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-        />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+            <input
+              type="tel"
+              placeholder="Telefone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Criando..." : "Criar Conta"}
-        </button>
-      </form>
+            <input
+              type="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Criando..." : "Criar Conta"}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,59 +1,40 @@
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import styles from "./Header.module.css";
 
 export default function Header() {
-  const { cartItems } = useCart();
-
-  const totalItems = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const { user, logout } = useAuth();
 
   return (
-    <header style={styles.header}>
-      <Link to="/" style={styles.logo}>
-        Minha Loja
-      </Link>
+    <header className={styles.header}>
+      <div className={styles.headerContent}>
+        <Link to="/" className={styles.logo}>
+          <img
+            src="/imagem/logo.png"
+            alt="Paixão Angola"
+            className={styles.logoImage}
+          />
+        </Link>
 
-      <Link to="/cart" style={styles.cart}>
-        🛒
-        {totalItems > 0 && (
-          <span style={styles.badge}>{totalItems}</span>
-        )}
-      </Link>
+        <nav className={styles.nav}>
+          {!user ? (
+            <>
+              <Link to="/login">Entrar</Link>
+              <Link to="/register">Registrar</Link>
+            </>
+          ) : (
+            <>
+              <span className={styles.userName}>
+                Olá, {user.name || user.email}
+              </span>
+              <Link to="/perfil">Perfil</Link>
+              <button onClick={logout} className={styles.logoutBtn}>
+                Sair
+              </button>
+            </>
+          )}
+        </nav>
+      </div>
     </header>
   );
 }
-
-const styles = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "15px 20px",
-    background: "#1e293b",
-    color: "white",
-  },
-  logo: {
-    color: "white",
-    textDecoration: "none",
-    fontWeight: "bold",
-    fontSize: "18px",
-  },
-  cart: {
-    position: "relative",
-    color: "white",
-    textDecoration: "none",
-    fontSize: "22px",
-  },
-  badge: {
-    position: "absolute",
-    top: "-8px",
-    right: "-10px",
-    background: "red",
-    color: "white",
-    borderRadius: "50%",
-    padding: "3px 7px",
-    fontSize: "12px",
-  },
-};

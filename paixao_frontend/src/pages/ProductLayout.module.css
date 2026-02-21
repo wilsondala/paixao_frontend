@@ -1,0 +1,73 @@
+/* Container principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff5e6, #d4c68f); /* mesma paleta Paixão */
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #a67c52; /* óleo da marca */
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.header nav a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.header nav a:hover {
+  color: #fffacd; /* tom creme claro ao passar */
+}
+
+/* Conteúdo principal */
+.main {
+  flex: 1;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Footer */
+.footer {
+  background-color: #6b4226;
+  color: #fff5e6;
+  padding: 20px;
+  text-align: center;
+}
+
+.footerContent p {
+  margin: 4px 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header nav {
+    margin-top: 10px;
+  }
+
+  .header nav a {
+    margin-left: 0;
+    margin-right: 15px;
+  }
+}

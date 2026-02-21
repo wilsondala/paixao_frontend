@@ -1,83 +1,63 @@
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
-import api from "../api/client";
-import jwt_decode from "jwt-decode";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext(null); // 🔥 agora começa como null
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      delete api.defaults.headers.common["Authorization"];
-      setUser(null);
-      setLoading(false);
-      return;
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedToken !== "undefined") {
+      setToken(storedToken);
     }
 
-    try {
-      const decoded = jwt_decode(token);
-
-      if (decoded.exp * 1000 < Date.now()) {
-        localStorage.removeItem("token");
-        delete api.defaults.headers.common["Authorization"];
-        setToken(null);
-        setUser(null);
-        setLoading(false);
-        return;
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Erro ao parsear usuário:", error);
+        localStorage.removeItem("user");
       }
+    }
+  }, []);
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      setUser({
-        id: decoded.sub,
-        role: decoded.role?.toLowerCase(),
-      });
-
-    } catch (err) {
-      localStorage.removeItem("token");
-      delete api.defaults.headers.common["Authorization"];
-      setToken(null);
-      setUser(null);
+  const login = (newToken, userData) => {
+    if (newToken) {
+      localStorage.setItem("token", newToken);
+      setToken(newToken);
     }
 
-    setLoading(false);
-  }, [token]);
-
-  const login = (accessToken) => {
-    localStorage.setItem("token", accessToken);
-    setToken(accessToken);
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+    }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    delete api.defaults.headers.common["Authorization"];
+    localStorage.removeItem("user");
+
     setToken(null);
     setUser(null);
   };
 
-  const value = useMemo(() => ({
-    token,
-    user,
-    isAuthenticated: !!user,
-    login,
-    logout,
-    loading,
-  }), [token, user, loading]);
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ token, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+// 🔥 Hook protegido
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error("useAuth deve ser usado dentro de <AuthProvider>");
+    throw new Error("useAuth precisa estar dentro de AuthProvider");
   }
+
   return context;
 }

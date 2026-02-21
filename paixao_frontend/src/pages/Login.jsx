@@ -29,25 +29,23 @@ export default function Login() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      const token = await loginRequest(email, password);
-      login(token);
+  try {
+    const { token, user } = await login(email, password);
 
-      const redirectTo = location.state?.from || "/products";
-      navigate(redirectTo, { replace: true });
+    authLogin(token, user);
 
-    } catch (err) {
-      setError(
-        err.message || "Erro ao fazer login. Verifique suas credenciais."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    navigate("/", { replace: true });
+
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className={styles["login-container"]}>

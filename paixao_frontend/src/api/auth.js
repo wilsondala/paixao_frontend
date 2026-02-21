@@ -1,22 +1,21 @@
 import api from "./client";
 
-
 export async function register(data) {
-  const response = await fetch("http://localhost:8000/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await api.post("/auth/register", data);
 
-  if (!response.ok) {
-    throw new Error("Erro ao registrar usuário");
+    return {
+      token: response.data.access_token,
+      user: {
+        name: data.name,
+        email: data.email,
+      },
+    };
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.detail || "Erro ao registrar usuário."
+    );
   }
-
-  const result = await response.json();
-
-  return result.access_token; // ajuste se sua API retornar diferente
 }
 
 export async function login(email, password) {
@@ -31,17 +30,17 @@ export async function login(email, password) {
       },
     });
 
-    if (!response.data?.access_token) {
-      throw new Error("Resposta inválida do servidor.");
-    }
-
-    return response.data.access_token;
-
+    return {
+      token: response.data.access_token,
+      user: {
+        email: email,
+      },
+    };
   } catch (error) {
     if (error.response?.status === 401) {
       throw new Error("Email ou senha inválidos");
     }
 
-    throw new Error("Erro ao fazer login. Tente novamente.");
+    throw new Error("Erro ao fazer login.");
   }
 }

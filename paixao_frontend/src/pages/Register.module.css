@@ -1,0 +1,120 @@
+/* Container centraliza todo conteúdo */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  flex-direction: column;
+  /* fundo creme e óleo da marca */
+  background: linear-gradient(135deg, #fff5e6, #d4c68f);
+}
+
+/* Conteúdo para centralizar título e formulário juntos */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título principal */
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #6b4226; /* cor marrom escuro, combina com óleo da marca */
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Caixa do formulário */
+.box {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Subtítulo */
+.box h2 {
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #6b4226;
+}
+
+/* Mensagem de erro */
+.error {
+  color: #dc2626;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Inputs do formulário */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #a67c52; /* cor de óleo da marca */
+  box-shadow: 0 0 0 2px rgba(166, 124, 82, 0.2);
+}
+
+/* Botão */
+form button {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #a67c52; /* cor óleo da marca */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+form button:hover {
+  background-color: #8b5e34;
+  transform: translateY(-1px);
+}
+
+form button:disabled {
+  background-color: #d4c68f;
+  cursor: not-allowed;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .box {
+    padding: 30px 20px;
+  }
+
+  .box h2 {
+    font-size: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
