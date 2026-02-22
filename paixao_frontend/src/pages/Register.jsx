@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { register } from "../api/auth"; // precisa existir no seu auth.js
+import { useNavigate } from "react-router-dom";
+import { register } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
-import styles from "./Register.module.css"; // ⬅ importar CSS
+import styles from "./Register.module.css";
 
 export default function Register() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { login } = useAuth();
 
   const [name, setName] = useState("");
@@ -22,21 +21,9 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // Cria usuário
-      const token = await register({
-        name,
-        email,
-        phone,
-        password,
-      });
-
-      // Faz login automático
-      login(token);
-
-      // Volta para onde veio ou produtos
-      const redirectTo = location.state?.from || "/login"; // ⬅ agora vai para login
-      navigate(redirectTo, { replace: true });
-
+      const result = await register({ name, email, phone, password });
+      login(result.token); // salva token no contexto
+      navigate("/login", { replace: true });
     } catch (err) {
       setError(err.message || "Erro ao cadastrar.");
     } finally {
@@ -46,52 +33,43 @@ export default function Register() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
-
-        <div className={styles.box}>
-          <h2>Criar Conta</h2>
-
-          {error && <p className={styles.error}>{error}</p>}
-
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Nome"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-
-            <input
-              type="tel"
-              placeholder="Telefone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-
-            <input
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-
-            <button type="submit" disabled={loading}>
-              {loading ? "Criando..." : "Criar Conta"}
-            </button>
-          </form>
-        </div>
+      <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
+      <div className={styles.box}>
+        <h2>Criar Conta</h2>
+        {error && <p className={styles.error}>{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="tel"
+            placeholder="Telefone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Criando..." : "Criar Conta"}
+          </button>
+        </form>
       </div>
     </div>
   );

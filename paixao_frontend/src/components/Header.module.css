@@ -1,110 +1,144 @@
 .header {
-  width: 100%;
-  background: linear-gradient(90deg, #0f172a, #1e293b);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #9B1C2C;
+  color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 16px 0;
 }
 
 .headerContent {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 80px;
-
+  padding: 0 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 30px;
 }
 
+/* LOGO */
 .logo {
   display: flex;
   align-items: center;
+  gap: 12px;
   text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.65rem;
+  min-width: 200px;
 }
 
-.logoImage {
-  height: 60px;
-  object-fit: contain;
-  transition: transform 0.3s ease;
+.logo img {
+  height: 54px;
+  width: auto;
 }
 
-.logoImage:hover {
-  transform: scale(1.05);
-}
-
-.nav {
+/* ================= BUSCA ================= */
+.searchWrapper {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+  flex: 1;
+  max-width: 720px;
 }
 
-.nav a {
-  color: #f8fafc;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 2px;
-  background-color: #38bdf8;
-  transition: width 0.3s ease;
-}
-
-.nav a:hover {
-  color: #38bdf8;
-}
-
-.nav a:hover::after {
-  width: 100%;
-}
-
-.userName {
-  color: #cbd5e1;
-  font-size: 14px;
-}
-
-.logoutBtn {
-  background: #ef4444;
-  color: white;
+.categorySelect {
+  padding: 14px 18px;
+  background: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
+  font-size: 1.02rem;
+  color: #333;
+  min-width: 180px;
   cursor: pointer;
-  font-weight: 500;
+}
+
+.searchContainer {
+  flex: 1;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 14px 20px;
+  padding-right: 60px;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  font-size: 1.08rem;
+  outline: none;
+  background: white;
+  color: #333;
+}
+
+.searchButton {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #E8B923;
+  color: #0A0606;
+  border: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.logoutBtn:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
+.searchButton:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
 }
 
-/* RESPONSIVO */
+/* ================= DIREITA ================= */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.rightSection a, .rightSection button {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.rightSection a:hover {
+  color: #E8B923;
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 26px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background: white;
+  color: #9B1C2C;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+  .searchWrapper {
+    max-width: 420px;
+  }
+}
+
 @media (max-width: 768px) {
-  .headerContent {
-    flex-direction: column;
-    height: auto;
-    padding: 16px;
-    gap: 12px;
+  .categorySelect {
+    display: none;
   }
-
-  .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-  }
-
-  .logoImage {
-    height: 50px;
+  .searchWrapper {
+    max-width: 320px;
   }
 }

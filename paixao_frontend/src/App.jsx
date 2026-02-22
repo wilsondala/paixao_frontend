@@ -13,7 +13,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
 import SobreNos from "./pages/SobreNos";
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./pages/AdminLogin"; // 🔹 login exclusivo admin
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreateProduct from "./components/CreateProduct";
@@ -26,13 +26,15 @@ export default function App() {
       <CartProvider>
         <AuthProvider>
           <Routes>
-            {/* Públicas */}
+            {/* Rotas públicas */}
             <Route path="/login" element={<Login />} />
+            <Route path="/admin/login" element={<AdminLogin />} /> {/* 🔹 */}
             <Route path="/register" element={<Register />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/sobre-nos" element={<SobreNos />} />
-            {/* Privadas usuário */}
+
+            {/* Rotas privadas usuário */}
             <Route
               path="/cart"
               element={
@@ -58,7 +60,7 @@ export default function App() {
               }
             />
 
-            {/* Admin */}
+            {/* Rotas privadas admin */}
             <Route
               path="/admin"
               element={
@@ -74,7 +76,7 @@ export default function App() {
               <Route path="edit-product/:id" element={<EditProduct />} />
             </Route>
 
-            {/* Redirecionamento caso rota não exista */}
+            {/* Redirecionamento padrão */}
             <Route path="*" element={<Navigate to="/products" replace />} />
           </Routes>
         </AuthProvider>

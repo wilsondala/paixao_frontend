@@ -1,41 +1,127 @@
+/* OrderItem.module.css - Paixão Angola (Admin - Item de Pedido Luxo 2026) */
+
 .card {
-  padding: 16px;
-  margin-bottom: 14px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.badge {
-  color: white;
-  padding: 4px 10px;
+  background: rgba(15, 10, 10, 0.93);
+  border: 1px solid rgba(212, 175, 55, 0.18);
   border-radius: 20px;
-  font-size: 12px;
+  padding: 26px 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.pending {
-  border: 2px solid #f59e0b;
-  background: #fff7ed;
+.card:hover {
+  transform: translateY(-8px);
+  border-color: #D4AF37;
+  box-shadow: 0 25px 55px rgba(155, 28, 44, 0.45);
 }
 
-.confirmed {
-  border: 2px solid #3b82f6;
-  background: #eff6ff;
+/* Borda esquerda colorida por status */
+.card.pending   { border-left: 6px solid #F59E0B; }
+.card.confirmed { border-left: 6px solid #34D399; }
+.card.ready_for_delivery { border-left: 6px solid #8B5CF6; }
+.card.sent      { border-left: 6px solid #60A5FA; }
+.card.canceled  { border-left: 6px solid #EF4444; opacity: 0.9; }
+
+/* Título Pedido # */
+.card h3,
+.card strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #D4AF37;
+  margin: 0 0 16px;
+  letter-spacing: 1px;
 }
 
-.ready {
-  border: 2px solid #22c55e;
-  background: #f0fdf4;
+/* Informações */
+.card p {
+  margin: 10px 0;
+  color: #ddd;
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
 
-.buttonPending {
-  background: #f59e0b;
+.card strong {
+  color: #F5EDE0;
 }
 
-.buttonConfirmed {
-  background: #3b82f6;
+/* Mensagem de erro */
+.error {
+  color: #FF6B6B;
+  font-size: 0.98rem;
+  margin: 12px 0 16px;
+  text-align: center;
+}
+
+/* ================= BOTÕES ================= */
+.card button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 15px;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card button:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+
+/* Botão Confirmar */
+.card.pending button,
+.card.confirmed button {
+  background: linear-gradient(90deg, #34D399, #10B981);
+  color: white;
+}
+
+.card.pending button:hover {
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+/* Botão Escolher Entrega */
+.card.ready_for_delivery button {
+  background: linear-gradient(90deg, #8B5CF6, #A78BFA);
+  color: white;
+}
+
+.card.ready_for_delivery button:hover {
+  background: linear-gradient(90deg, #A78BFA, #8B5CF6);
+}
+
+/* Botão desabilitado */
+.card button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mensagem "Pronto para entrega" */
+.card .deliveryReady {
+  color: #34D399;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 16px 0 0;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
+  .card {
+    padding: 22px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px 18px;
+  }
 }

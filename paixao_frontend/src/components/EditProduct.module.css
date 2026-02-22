@@ -1,18 +1,202 @@
+/* EditProduct.module.css - Paixão Angola (Admin - Editar Produto Luxo 2026) */
+
 .container {
-  padding: 20px;
+  min-height: 100vh;
+  background: #0F0A0A;
+  color: #F5EDE0;
+  padding: 40px 20px 100px;
+  max-width: 920px;
+  margin: 0 auto;
 }
 
+.container h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.3rem, 6vw, 3.4rem);
+  color: #D4AF37;
+  text-align: center;
+  margin-bottom: 45px;
+  letter-spacing: 3px;
+}
+
+/* ================= FORMULÁRIO ================= */
 .form {
+  background: rgba(15, 10, 10, 0.93);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 24px;
+  padding: 48px 42px;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 26px;
 }
 
-.button {
-  padding: 10px;
-  background: #111;
+/* Inputs e Textarea */
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 16px 22px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-radius: 14px;
+  color: #F5EDE0;
+  font-size: 1.06rem;
+  transition: all 0.3s ease;
+}
+
+.form input:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #D4AF37;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.22);
+}
+
+.form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* Seção de Imagens e Vídeo */
+.form h4 {
+  color: #D4AF37;
+  font-size: 1.18rem;
+  margin: 18px 0 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Cada campo de imagem */
+.form > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.form > div input {
+  flex: 1;
+  margin: 0;
+}
+
+/* Botão Remover imagem (X) */
+.form > div button {
+  background: #991B1B;
   color: white;
   border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.form > div button:hover {
+  background: #EF4444;
+  transform: scale(1.1);
+}
+
+/* Botão + Adicionar imagem */
+.form button[type="button"] {
+  background: transparent;
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.form button[type="button"]:hover {
+  background: #D4AF37;
+  color: #0F0A0A;
+}
+
+/* Input de arquivo de vídeo */
+.form input[type="file"] {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px dashed rgba(212, 175, 55, 0.5);
+  border-radius: 14px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.form input[type="file"]::file-selector-button {
+  background: #D4AF37;
+  color: #0F0A0A;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Botão Salvar Alterações */
+.form button[type="submit"] {
+  margin-top: 25px;
+  padding: 18px;
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
+  color: white;
+  font-size: 1.22rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.form button[type="submit"]:hover {
+  background: linear-gradient(90deg, #C41E3A, #9B1C2C);
+  transform: translateY(-4px);
+  box-shadow: 0 22px 45px rgba(155, 28, 44, 0.65);
+}
+
+/* ================= LOADING ================= */
+.container > div {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #D4AF37;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 15px 80px;
+  }
+  
+  .form {
+    padding: 38px 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: 30px 22px;
+  }
+  
+  .form > div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .form > div button {
+    width: 100%;
+    border-radius: 12px;
+    height: auto;
+    padding: 12px;
+  }
 }

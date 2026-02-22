@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import jwt_decode from "jwt-decode";
 import { login as loginRequest } from "../api/auth";
 import styles from "./AdminLogin.module.css";
 
 export default function AdminLogin() {
-  const { login, isAuthenticated, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -13,36 +12,44 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Se já logado e for admin → vai direto pro painel
-  if (isAuthenticated && user?.role === "admin") {
-    return <Navigate to="/admin/dashboard" replace />;
+  // Se já logado como admin, redireciona
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwt_decode(token);
+      if (decoded.role?.toLowerCase() === "admin") {
+        return <Navigate to="/admin/dashboard" replace />;
+      }
+    } catch {}
   }
 
-  if (authLoading) {
-    return <div className={styles.container}>Carregando autenticação...</div>;
-  }
-
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const token = await loginRequest(email, password);
+      const result = await loginRequest(email, password);
 
-      login(token); // 🔥 CENTRALIZAÇÃO NO AUTHCONTEXT
+      if (!result?.access_token) {
+        setError("Token inválido ou usuário não encontrado.");
+        return;
+      }
 
-      // Aguarda pequeno delay para o user atualizar
-      setTimeout(() => {
-        if (user?.role === "admin") {
-          navigate("/admin/dashboard", { replace: true });
-        } else {
-          setError("Acesso negado: você não é administrador.");
-        }
-      }, 200);
+      const decoded = jwt_decode(result.access_token);
+
+      if (!decoded.role || decoded.role.toLowerCase() !== "admin") {
+        setError("Acesso negado: você não é administrador.");
+        return;
+      }
+
+      // Salva token no localStorage
+      localStorage.setItem("token", result.access_token);
+
+      navigate("/admin/dashboard", { replace: true });
 
     } catch (err) {
-      setError(err.message || "Email ou senha inválidos.");
+      setError(err.message || "Erro ao logar como admin.");
     } finally {
       setLoading(false);
     }
@@ -50,31 +57,36 @@ export default function AdminLogin() {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleLogin}>
+      <div className={styles.box}>
+        <h1 className={styles.title}>PAIXÃO ADMIN</h1>
         <h2>Painel Administrativo - Login</h2>
 
         {error && <p className={styles.error}>{error}</p>}
 
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <label>Senha</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <label htmlFor="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit" disabled={loading || authLoading}>
-          {loading ? "Entrando..." : "Login"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

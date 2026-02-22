@@ -1,120 +1,162 @@
-/* Container centraliza todo conteúdo */
+/* Register.module.css - Paixão Angola (Nova Paleta 2026 - Dia/Noite) */
+
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  padding: 20px;
-  flex-direction: column;
-  /* fundo creme e óleo da marca */
-  background: linear-gradient(135deg, #fff5e6, #d4c68f);
-}
-
-/* Conteúdo para centralizar título e formulário juntos */
-.content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
+  justify-content: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  padding: 20px 15px;
+  transition: background 0.6s ease;
 }
 
-/* Título principal */
-.title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #6b4226; /* cor marrom escuro, combina com óleo da marca */
-  margin-bottom: 30px;
-  text-align: center;
+/* Fundo romântico sutil */
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1518834107812-67b0b7c8e3d1?ixlib=rb-4.0.3') center/cover no-repeat;
+  opacity: 0.08;
+  z-index: 0;
 }
 
-/* Caixa do formulário */
+/* Box principal */
 .box {
-  background: white;
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background: var(--card);
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 50px 40px;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  max-width: 460px;
+  box-shadow: 0 30px 70px -15px var(--shadow);
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease;
 }
 
-/* Subtítulo */
+.box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px -15px var(--shadow);
+}
+
+/* Título PAIXÃO ANGOLA */
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 9vw, 4.2rem);
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+  text-shadow: 0 4px 20px rgba(232, 185, 35, 0.3);
+}
+
+/* Subtítulo Criar Conta */
 .box h2 {
-  margin-bottom: 25px;
-  font-size: 1.8rem;
-  color: #6b4226;
+  color: var(--text);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  text-align: center;
+  margin-bottom: 35px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
 }
 
 /* Mensagem de erro */
 .error {
-  color: #dc2626;
-  margin-bottom: 15px;
-  font-size: 0.9rem;
+  background: rgba(155, 28, 44, 0.18);
+  color: #FF6B6B;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border-left: 5px solid var(--primary);
+  margin-bottom: 28px;
+  font-size: 1rem;
   text-align: center;
 }
 
-/* Inputs do formulário */
+/* Formulário */
 form {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  gap: 24px;
 }
 
-form input {
+input {
   width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+  padding: 16px 22px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 1.08rem;
+  transition: all 0.3s ease;
 }
 
-form input:focus {
+input:focus {
   outline: none;
-  border-color: #a67c52; /* cor de óleo da marca */
-  box-shadow: 0 0 0 2px rgba(166, 124, 82, 0.2);
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(232, 185, 35, 0.2);
 }
 
-/* Botão */
-form button {
-  width: 100%;
-  padding: 12px 0;
-  background-color: #a67c52; /* cor óleo da marca */
+/* Botão Criar Conta */
+button {
+  margin-top: 15px;
+  padding: 18px;
+  background: linear-gradient(90deg, var(--primary), #C41E3A);
   color: white;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: all 0.4s ease;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
-form button:hover {
-  background-color: #8b5e34;
-  transform: translateY(-1px);
+button:hover {
+  background: linear-gradient(90deg, #C41E3A, var(--primary));
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px var(--shadow);
 }
 
-form button:disabled {
-  background-color: #d4c68f;
+button:disabled {
+  opacity: 0.65;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Responsivo */
-@media (max-width: 480px) {
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
   .box {
-    padding: 30px 20px;
+    padding: 45px 35px;
   }
+}
 
-  .box h2 {
-    font-size: 1.5rem;
+@media (max-width: 480px) {
+  .container {
+    padding: 15px 10px;
   }
+  
+  .box {
+    padding: 40px 28px;
+    border-radius: 20px;
+  }
+  
+  input, button {
+    padding: 15px 20px;
+    font-size: 1.05rem;
+  }
+}
 
-  .title {
-    font-size: 2rem;
+@media (min-width: 1024px) {
+  .box {
+    max-width: 480px;
+    padding: 60px 50px;
   }
 }

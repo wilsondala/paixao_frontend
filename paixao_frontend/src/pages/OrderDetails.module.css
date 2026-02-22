@@ -1,96 +1,152 @@
+/* OrderDetails.module.css - Paixão Angola (Admin - Detalhes do Pedido 2026) */
+
 .container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
+  min-height: 100vh;
+  background: #0F0A0A;
+  color: #F5EDE0;
+  padding: 30px 20px 100px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 100px;
-  font-size: 18px;
-}
-
+/* Botão Voltar */
 .backBtn {
-  background: none;
-  border: none;
-  font-size: 16px;
+  background: transparent;
+  border: 2px solid #D4AF37;
+  color: #D4AF37;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
   margin-bottom: 20px;
-  color: #555;
 }
 
+.backBtn:hover {
+  background: #D4AF37;
+  color: #0F0A0A;
+}
+
+/* Título Pedido # */
 .title {
-  font-size: 26px;
-  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  color: #D4AF37;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
 }
 
+/* Status Badge */
 .status {
   display: inline-block;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  text-transform: capitalize;
+  padding: 10px 28px;
+  border-radius: 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.05rem;
+  margin-bottom: 40px;
 }
 
-.pending {
-  background: #fff3cd;
-  color: #856404;
-}
+.status.pending   { background: #F59E0B; color: #0F0A0A; }
+.status.confirmed { background: #34D399; color: #0F0A0A; }
+.status.sent      { background: #60A5FA; color: #0F0A0A; }
+.status.canceled  { background: #EF4444; color: white; }
 
-.confirmed {
-  background: #d1ecf1;
-  color: #0c5460;
-}
-
-.sent {
-  background: #d4edda;
-  color: #155724;
-}
-
-.canceled {
-  background: #f8d7da;
-  color: #721c24;
-}
-
+/* ================= TIMELINE ================= */
 .timeline {
   display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+  justify-content: space-between;
+  position: relative;
+  margin: 50px 0 60px;
+  max-width: 800px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(212, 175, 55, 0.2);
+  z-index: 0;
 }
 
 .step {
-  flex: 1;
-  padding: 10px;
+  position: relative;
+  z-index: 1;
   text-align: center;
-  border-radius: 8px;
-  background: #eee;
-  text-transform: capitalize;
+  flex: 1;
 }
 
-.active {
-  background: #111827;
-  color: white;
+.step::before {
+  content: '';
+  display: block;
+  width: 38px;
+  height: 38px;
+  background: #1A0F0F;
+  border: 3px solid #444;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  transition: all 0.4s ease;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
 }
 
+.step.active::before {
+  background: #D4AF37;
+  border-color: #D4AF37;
+  color: #0F0A0A;
+  box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.25);
+}
+
+.step span {
+  display: block;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+}
+
+.step.active span {
+  color: #D4AF37;
+  font-weight: 700;
+}
+
+/* ================= CARDS ================= */
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 25px;
+  background: rgba(15, 10, 10, 0.92);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 22px;
+  padding: 32px;
+  margin-bottom: 40px;
+  transition: all 0.4s ease;
+}
+
+.card:hover {
+  border-color: #D4AF37;
+  box-shadow: 0 15px 35px rgba(155, 28, 44, 0.25);
 }
 
 .sectionTitle {
-  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+  color: #D4AF37;
+  font-size: 1.7rem;
+  margin-bottom: 24px;
 }
 
+/* Item Row */
 .itemRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .itemRow:last-child {
@@ -98,44 +154,124 @@
 }
 
 .itemInfo {
-  font-size: 14px;
-  color: #555;
+  color: #aaa;
+  font-size: 1rem;
+  margin-top: 6px;
 }
 
+/* Ações dos itens */
 .itemActions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .itemActions button {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
-  background: #1f2937;
-  color: white;
+  transition: all 0.3s ease;
+  border: none;
 }
 
-.itemActions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.itemActions button:not(.cancelBtn) {
+  background: #D4AF37;
+  color: #0F0A0A;
+}
+
+.itemActions button:hover:not(:disabled) {
+  transform: translateY(-3px);
 }
 
 .cancelBtn {
-  background: #dc2626 !important;
+  background: #991B1B;
+  color: white;
 }
 
+.cancelBtn:hover {
+  background: #EF4444;
+}
+
+/* ================= AÇÕES GERAIS ================= */
 .actions {
-  text-align: right;
+  text-align: center;
+  margin-top: 30px;
 }
 
 .actions button {
-  padding: 10px 18px;
-  border-radius: 8px;
-  border: none;
-  background: #111827;
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
   color: white;
-  font-weight: bold;
+  padding: 18px 60px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
   cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.actions button:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px rgba(155, 28, 44, 0.6);
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ================= LOADING ================= */
+.loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #D4AF37;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
+  .timeline {
+    flex-direction: column;
+    gap: 30px;
+    margin: 40px 0;
+  }
+  
+  .timeline::before {
+    top: 0;
+    left: 18px;
+    width: 4px;
+    height: 100%;
+  }
+  
+  .step::before {
+    margin: 0 0 12px 0;
+  }
+  
+  .itemRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .itemActions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 15px 80px;
+  }
+  
+  .card {
+    padding: 24px 18px;
+  }
 }

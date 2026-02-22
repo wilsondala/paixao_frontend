@@ -1,147 +1,192 @@
+/* ProductDetails.module.css - Paixão Angola (Versão Premium 2026) */
+
 .container {
-  padding: 40px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.galleryContainer {
+  min-height: 100vh;
+  background: #0A0606;
+  color: #F5EDE0;
+  padding: 40px 20px 100px;
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
-  gap: 30px;
+  gap: 80px;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
-.thumbnailColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.thumbnail {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: 0.2s;
-}
-
-.thumbnail:hover {
-  transform: scale(1.05);
-}
-
-.videoThumb {
-  width: 80px;
-  height: 80px;
-  background: #111;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 24px;
-  border: 2px solid transparent;
-}
-
-.active {
-  border: 2px solid #ff4d4f;
+/* ================= GALERIA ================= */
+.gallery {
+  flex: 1;
+  min-width: 320px;
+  max-width: 580px;
 }
 
 .mainImageContainer {
-  flex: 1;
-}
-
-.mainMedia {
-  width: 100%;
-  max-height: 500px;
-  object-fit: contain;
-  border-radius: 16px;
-  background: #f5f5f5;
-}
-
-.productInfo {
-  margin-top: 40px;
-}
-
-
-.buyButton {
-  margin-top: 20px;
-  padding: 14px 20px;
-  background: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-  width: 100%;
-}
-
-.buyButton:hover {
-  background: #e63c3f;
-}
-
-.buttons {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  min-height: 520px;
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
 }
 
-.cartButton {
-  flex: 1;
-  padding: 12px;
-  background: #333;
-  color: white;
-  border: none;
-  border-radius: 8px;
+.mainImage {
+  width: 100%;
+  height: auto;
+  transition: transform 0.8s ease;
+}
+
+.mainImageContainer:hover .mainImage {
+  transform: scale(1.08);
+}
+
+/* Thumbnails */
+.thumbnails {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.thumbnail {
+  width: 88px;
+  height: 88px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 3px solid transparent;
   cursor: pointer;
+  transition: all 0.4s ease;
+  flex-shrink: 0;
 }
 
-.buyButton {
+.thumbnail:hover,
+.thumbnail.active {
+  border-color: #E8B923;
+  transform: scale(1.1);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= INFORMAÇÕES ================= */
+.productInfo {
   flex: 1;
-  padding: 12px;
-  background: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  min-width: 340px;
+  max-width: 520px;
 }
 
-.outStock {
-  color: red;
-  font-weight: bold;
-}
-
-.stock {
-  color: green;
+.productInfo h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+  color: #F5EDE0;
+  line-height: 1.15;
+  margin-bottom: 16px;
 }
 
 .price {
-  font-size: 28px;
-  font-weight: bold;
-  color: #ff4d4f;
-  margin: 10px 0;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  color: #E8B923;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
-/* 📱 RESPONSIVO */
+.stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(52, 211, 153, 0.15);
+  color: #34D399;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.outStock {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+/* Descrição */
+.description {
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: #ddd;
+  margin-bottom: 40px;
+}
+
+/* Botões */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cartButton, .buyButton {
+  padding: 20px 40px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  width: 100%;
+}
+
+.cartButton {
+  background: transparent;
+  color: #E8B923;
+  border: 2px solid #E8B923;
+}
+
+.cartButton:hover {
+  background: #E8B923;
+  color: #0A0606;
+}
+
+.buyButton {
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
+  color: white;
+  border: none;
+}
+
+.buyButton:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(155, 28, 44, 0.6);
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 992px) {
+  .container {
+    gap: 50px;
+  }
+  .productInfo {
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
-  .galleryContainer {
+  .container {
     flex-direction: column;
+    gap: 40px;
   }
+}
 
-  .thumbnailColumn {
-    flex-direction: row;
-    justify-content: center;
+@media (max-width: 480px) {
+  .mainImageContainer {
+    min-height: 380px;
   }
-
-  .thumbnail,
-  .videoThumb {
-    width: 60px;
-    height: 60px;
-  }
-
-  .mainMedia {
-    max-height: 300px;
+  .thumbnail {
+    width: 72px;
+    height: 72px;
   }
 }

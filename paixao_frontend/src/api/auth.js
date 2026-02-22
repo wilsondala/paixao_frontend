@@ -1,46 +1,40 @@
 import api from "./client";
 
-export async function register(data) {
-  try {
-    const response = await api.post("/auth/register", data);
+// Login de usuário/admin
+export async function login(email, password) {
+  const form = new URLSearchParams();
+  form.append("username", email);
+  form.append("password", password);
 
-    return {
-      token: response.data.access_token,
-      user: {
-        name: data.name,
-        email: data.email,
-      },
-    };
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.detail || "Erro ao registrar usuário."
-    );
+  const response = await api.post("/auth/login", form, {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+
+  // Backend FastAPI normalmente retorna { access_token, user, token_type... }
+  const data = response.data;
+
+  if (!data.access_token) {
+    throw new Error("Token inválido ou usuário não encontrado.");
   }
+
+  return {
+    access_token: data.access_token,   // ← agora devolve com o nome que o Login espera
+    user: data.user || data,
+  };
 }
 
-export async function login(email, password) {
-  try {
-    const form = new URLSearchParams();
-    form.append("username", email);
-    form.append("password", password);
+// Registro de usuário (mesma correção)
+export async function register(data) {
+  const response = await api.post("/auth/register", data);
 
-    const response = await api.post("/auth/login", form, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+  const res = response.data;
 
-    return {
-      token: response.data.access_token,
-      user: {
-        email: email,
-      },
-    };
-  } catch (error) {
-    if (error.response?.status === 401) {
-      throw new Error("Email ou senha inválidos");
-    }
-
-    throw new Error("Erro ao fazer login.");
+  if (!res.access_token) {
+    throw new Error("Erro ao registrar usuário.");
   }
+
+  return {
+    access_token: res.access_token,
+    user: res.user || res,
+  };
 }

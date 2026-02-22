@@ -1,120 +1,127 @@
-/* Reset básico para body */
-:global(body) {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
-}
+/* Login.module.css - Paixão Angola (Dia/Noite) */
 
-/* Container principal da tela de login */
-.login-container {
-  max-width: 400px;
-  width: 90%; /* garante responsividade */
-  margin: 50px auto;
-  padding: 24px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  box-sizing: border-box;
-}
-
-.login-container button:hover {
-  opacity: 0.9;
-}
-
-/* Título */
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 24px;
-  color: #111827;
-  font-size: 24px;
-}
-
-/* Formulário */
-.login-container form {
+.container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  padding: 20px 15px;
+  transition: background 0.5s ease;
 }
 
-/* Inputs */
-.login-container input {
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1518834107812-67b0b7c8e3d1?ixlib=rb-4.0.3') center/cover no-repeat;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.box {
+  background: var(--card);
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 50px 40px;
   width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  max-width: 420px;
+  box-shadow: 0 25px 60px -15px var(--shadow);
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease;
 }
 
-.login-container input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+.box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 35px 70px -15px var(--shadow);
 }
 
-/* Botão exclusivo da tela de login */
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #3b82f6;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.login-container button:hover {
-  opacity: 0.9;
-}
-
-/* Mensagem de erro */
-.login-container .error {
-  color: #dc2626;
-  margin-bottom: 12px;
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 9vw, 4.2rem);
+  font-weight: 700;
+  color: var(--accent);
   text-align: center;
-  font-size: 14px;
+  margin-bottom: 10px;
+  text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  letter-spacing: 3px;
 }
 
-/* Responsividade */
-
-/* Para telas pequenas */
-@media (max-width: 480px) {
-  .login-container {
-    margin: 30px 16px;
-    padding: 20px;
-  }
-
-  .login-container h2 {
-    font-size: 20px;
-  }
-
-  .login-container input,
-  .login-container button {
-    font-size: 14px;
-    padding: 10px;
-  }
+.box h2 {
+  color: var(--text);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 500;
 }
 
-/* Para telas médias */
-@media (max-width: 768px) {
-  .login-container {
-    margin: 40px 24px;
-    padding: 22px;
-  }
+.error {
+  background: rgba(155, 28, 44, 0.15);
+  color: #FF6B6B;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 5px solid var(--primary);
+  margin-bottom: 24px;
+  font-size: 1rem;
+  text-align: center;
+}
 
-  .login-container h2 {
-    font-size: 22px;
-  }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
-  .login-container input,
-  .login-container button {
-    font-size: 15px;
-    padding: 11px;
-  }
+label {
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.18);
+}
+
+button {
+  margin-top: 15px;
+  padding: 18px;
+  background: linear-gradient(90deg, var(--primary), #C41E3A);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px -10px var(--shadow);
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }

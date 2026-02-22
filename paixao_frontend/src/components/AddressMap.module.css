@@ -1,61 +1,125 @@
+/* AddressMap.module.css - Paixão Angola (Seletor de Endereço Luxo 2026) */
+
 .container {
-  width: 100%;
+  background: rgba(15, 10, 10, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
+/* ================= BARRA DE BUSCA ================= */
 .searchContainer {
   display: flex;
   gap: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 24px;
 }
 
 .input {
   flex: 1;
-  padding: 12px 14px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-radius: 14px;
+  color: #F5EDE0;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
 }
 
 .input:focus {
-  border-color: #e91e63;
-  box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.1);
+  outline: none;
+  border-color: #D4AF37;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
 }
 
+.input::placeholder {
+  color: #888;
+}
+
+/* Botão Buscar */
 .button {
-  padding: 12px 20px;
-  background-color: #e91e63;
+  padding: 16px 32px;
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.4s ease;
   white-space: nowrap;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .button:hover {
-  background-color: #c2185b;
-  transform: translateY(-2px);
+  background: linear-gradient(90deg, #C41E3A, #9B1C2C);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(155, 28, 44, 0.5);
 }
 
+/* ================= LISTA DE RESULTADOS ================= */
 .resultItem {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 12px;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s ease;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: #ddd;
 }
 
 .resultItem:hover {
-  background-color: #f9f9f9;
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #D4AF37;
+  transform: translateX(6px);
+  color: #F5EDE0;
 }
 
-@media (max-width: 600px) {
+.resultItem:last-child {
+  margin-bottom: 0;
+}
+
+/* ================= MENSAGEM VAZIA (caso não ache) ================= */
+.container:empty::after {
+  content: "Digite um endereço em Angola e clique em Buscar";
+  display: block;
+  padding: 40px 20px;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
   .searchContainer {
     flex-direction: column;
   }
-
+  
   .button {
     width: 100%;
+    padding: 16px;
+  }
+  
+  .container {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 18px;
+    border-radius: 16px;
+  }
+  
+  .resultItem {
+    padding: 14px 16px;
+    font-size: 1rem;
   }
 }
