@@ -1,4 +1,4 @@
-/* Login.module.css - Paixão Angola (Dia/Noite) */
+/* Login.module.css - Paixão Angola (Estilo Limpo e Dramático) */
 
 .container {
   min-height: 100vh;
@@ -6,122 +6,118 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: linear-gradient(135deg, #0A0606 0%, #1A0F0F 100%);
   position: relative;
   overflow: hidden;
   padding: 20px 15px;
-  transition: background 0.5s ease;
 }
 
+/* Fundo sutil com glow */
 .container::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1518834107812-67b0b7c8e3d1?ixlib=rb-4.0.3') center/cover no-repeat;
-  opacity: 0.08;
+  background: radial-gradient(circle at center, rgba(232, 185, 35, 0.08), transparent 70%);
   z-index: 0;
 }
 
-.box {
-  background: var(--card);
-  backdrop-filter: blur(22px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 50px 40px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 25px 60px -15px var(--shadow);
-  position: relative;
-  z-index: 1;
-  transition: all 0.4s ease;
-}
-
-.box:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 35px 70px -15px var(--shadow);
-}
-
+/* Título grande */
 .title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.6rem, 9vw, 4.2rem);
+  font-size: clamp(3.2rem, 10vw, 5rem);
   font-weight: 700;
-  color: var(--accent);
+  color: #E8B923;
   text-align: center;
-  margin-bottom: 10px;
-  text-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
-  letter-spacing: 3px;
+  margin-bottom: 50px;
+  letter-spacing: 6px;
+  text-shadow: 0 0 30px rgba(232, 185, 35, 0.6);
+  z-index: 1;
 }
 
+/* Caixa central */
+.box {
+  background: rgba(10, 6, 6, 0.95);
+  border: 1px solid rgba(232, 185, 35, 0.3);
+  border-radius: 20px;
+  padding: 50px 45px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 0 60px rgba(232, 185, 35, 0.15),
+              0 25px 70px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 2;
+}
+
+/* Subtítulo Login */
 .box h2 {
-  color: var(--text);
-  font-size: clamp(1.5rem, 5vw, 2rem);
+  color: #F5EDE0;
+  font-size: 1.75rem;
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 35px;
   font-weight: 500;
 }
 
-.error {
-  background: rgba(155, 28, 44, 0.15);
-  color: #FF6B6B;
-  padding: 14px 18px;
-  border-radius: 10px;
-  border-left: 5px solid var(--primary);
-  margin-bottom: 24px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
+/* Labels */
 label {
-  color: var(--accent);
-  font-size: 1rem;
+  color: #E8B923;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  display: block;
 }
 
+/* Inputs */
 input {
   width: 100%;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  color: var(--text);
-  font-size: 1.05rem;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(232, 185, 35, 0.4);
+  border-radius: 12px;
+  color: #F5EDE0;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
 }
 
 input:focus {
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.18);
+  border-color: #E8B923;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
 }
 
+/* Botão ENTRAR */
 button {
-  margin-top: 15px;
+  width: 100%;
   padding: 18px;
-  background: linear-gradient(90deg, var(--primary), #C41E3A);
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   cursor: pointer;
+  margin-top: 15px;
   transition: all 0.4s ease;
-  letter-spacing: 1.5px;
   text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 35px -10px var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(155, 28, 44, 0.6);
 }
 
 button:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Erro */
+.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #FF6B6B;
+  padding: 14px 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1rem;
 }

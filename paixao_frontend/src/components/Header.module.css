@@ -1,11 +1,13 @@
+/* Header.module.css - Paixão Angola (Caprichado - Letras Grandes) */
+
 .header {
   background: #9B1C2C;
   color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 16px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 18px 0;
 }
 
 .headerContent {
@@ -18,7 +20,7 @@
   gap: 30px;
 }
 
-/* LOGO */
+/* ================= LOGO - MAIOR ================= */
 .logo {
   display: flex;
   align-items: center;
@@ -26,32 +28,37 @@
   text-decoration: none;
   color: white;
   font-weight: 700;
-  font-size: 1.65rem;
-  min-width: 200px;
+  min-width: 240px;
 }
 
 .logo img {
-  height: 54px;
+  height: 62px;
   width: auto;
+}
+
+.logo span {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.15rem;           /* Letra bem maior */
+  letter-spacing: 2px;
 }
 
 /* ================= BUSCA ================= */
 .searchWrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
   max-width: 720px;
 }
 
 .categorySelect {
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: white;
   border: none;
   border-radius: 8px 0 0 8px;
-  font-size: 1.02rem;
+  font-size: 1.08rem;
   color: #333;
-  min-width: 180px;
+  min-width: 190px;
   cursor: pointer;
 }
 
@@ -62,63 +69,63 @@
 
 .searchInput {
   width: 100%;
-  padding: 14px 20px;
-  padding-right: 60px;
+  padding: 16px 22px;
+  padding-right: 65px;
+  font-size: 1.15rem;
   border: none;
   border-radius: 0 8px 8px 0;
-  font-size: 1.08rem;
-  outline: none;
   background: white;
   color: #333;
+  outline: none;
 }
 
 .searchButton {
   position: absolute;
-  right: 6px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: #E8B923;
   color: #0A0606;
   border: none;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.searchButton:hover {
-  background: white;
-  transform: translateY(-50%) scale(1.1);
-}
-
-/* ================= DIREITA ================= */
+/* ================= DIREITA - BOTÕES GRANDES ================= */
 .rightSection {
   display: flex;
   align-items: center;
-  gap: 24px;
-  font-size: 1.05rem;
+  gap: 26px;
+  font-size: 1.18rem;           /* Letras maiores */
   white-space: nowrap;
 }
 
-.rightSection a, .rightSection button {
+.rightSection a {
   color: white;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.rightSection a:hover {
-  color: #E8B923;
+.loginBtn {
+  background: white;
+  color: #9B1C2C;
+  padding: 12px 34px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.18rem;
 }
 
 .logoutBtn {
   background: transparent;
   border: 2px solid white;
   color: white;
-  padding: 10px 26px;
+  padding: 12px 34px;
   border-radius: 50px;
   font-weight: 700;
+  font-size: 1.18rem;
   cursor: pointer;
 }
 
@@ -130,15 +137,17 @@
 /* Responsividade */
 @media (max-width: 992px) {
   .searchWrapper {
-    max-width: 420px;
+    max-width: 460px;
   }
 }
 
 @media (max-width: 768px) {
-  .categorySelect {
-    display: none;
+  .headerContent {
+    gap: 15px;
+    padding: 0 15px;
   }
-  .searchWrapper {
-    max-width: 320px;
+  
+  .logo span {
+    font-size: 1.75rem;
   }
 }

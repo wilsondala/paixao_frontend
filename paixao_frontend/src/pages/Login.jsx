@@ -3,7 +3,6 @@ import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { login as loginRequest } from "../api/auth";
 import styles from "./Login.module.css";
-import MainLayout from "../layouts/MainLayout";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,6 +13,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Se já estiver logado, redireciona
   const token = localStorage.getItem("token");
   if (token) {
     try {
@@ -55,39 +55,40 @@ export default function Login() {
   };
 
   return (
-    <MainLayout>
-      <div className={styles.container}>
-        <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
-        <div className={styles.box}>
-          <h2>Login</h2>
-          {error && <p className={styles.error}>{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className={styles.container}>
+      <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
 
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+      <div className={styles.box}>
+        <h2>Login</h2>
 
-            <button type="submit" disabled={loading}>
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
-        </div>
+        {error && <p className={styles.error}>{error}</p>}
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <label htmlFor="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "ENTRAR"}
+          </button>
+        </form>
       </div>
-    </MainLayout>
+    </div>
   );
 }

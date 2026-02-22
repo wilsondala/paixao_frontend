@@ -1,4 +1,4 @@
-/* Register.module.css - Paixão Angola (Nova Paleta 2026 - Dia/Noite) */
+/* Register.module.css - Paixão Angola (Versão Premium 2026) */
 
 .container {
   min-height: 100vh;
@@ -6,109 +6,91 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: linear-gradient(135deg, #0A0606 0%, #1A0F0F 100%);
   position: relative;
   overflow: hidden;
   padding: 20px 15px;
-  transition: background 0.6s ease;
 }
 
-/* Fundo romântico sutil */
+/* Fundo sutil romântico */
 .container::before {
   content: '';
   position: absolute;
   inset: 0;
   background: url('https://images.unsplash.com/photo-1518834107812-67b0b7c8e3d1?ixlib=rb-4.0.3') center/cover no-repeat;
-  opacity: 0.08;
+  opacity: 0.07;
   z-index: 0;
 }
 
 /* Box principal */
 .box {
-  background: var(--card);
-  backdrop-filter: blur(22px);
-  border: 1px solid var(--border);
+  background: rgba(15, 10, 10, 0.97);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 185, 35, 0.35);
   border-radius: 24px;
-  padding: 50px 40px;
+  padding: 60px 50px;
   width: 100%;
   max-width: 460px;
-  box-shadow: 0 30px 70px -15px var(--shadow);
+  box-shadow: 0 30px 80px -15px rgba(155, 28, 44, 0.7);
   position: relative;
   z-index: 1;
-  transition: all 0.4s ease;
-}
-
-.box:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 40px 80px -15px var(--shadow);
 }
 
 /* Título PAIXÃO ANGOLA */
 .title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 9vw, 4.2rem);
+  font-size: clamp(3rem, 9vw, 4.5rem);
   font-weight: 700;
-  color: var(--accent);
+  color: #E8B923;
   text-align: center;
   margin-bottom: 12px;
   letter-spacing: 4px;
-  text-shadow: 0 4px 20px rgba(232, 185, 35, 0.3);
+  text-shadow: 0 6px 25px rgba(232, 185, 35, 0.5);
 }
 
 /* Subtítulo Criar Conta */
 .box h2 {
-  color: var(--text);
-  font-size: clamp(1.5rem, 5vw, 2rem);
+  color: #F5EDE0;
+  font-size: 1.85rem;
   text-align: center;
-  margin-bottom: 35px;
+  margin-bottom: 40px;
   font-weight: 500;
-  letter-spacing: 1.5px;
 }
 
-/* Mensagem de erro */
-.error {
-  background: rgba(155, 28, 44, 0.18);
-  color: #FF6B6B;
-  padding: 14px 20px;
-  border-radius: 12px;
-  border-left: 5px solid var(--primary);
-  margin-bottom: 28px;
-  font-size: 1rem;
-  text-align: center;
+/* Labels - Bem visíveis */
+label {
+  color: #E8B923;
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
 }
 
-/* Formulário */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
+/* Inputs */
 input {
   width: 100%;
-  padding: 16px 22px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid var(--border);
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(232, 185, 35, 0.5);
   border-radius: 14px;
-  color: var(--text);
-  font-size: 1.08rem;
+  color: #F5EDE0;
+  font-size: 1.12rem;
   transition: all 0.3s ease;
 }
 
 input:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 4px rgba(232, 185, 35, 0.2);
+  border-color: #E8B923;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 4px rgba(232, 185, 35, 0.25);
 }
 
-/* Botão Criar Conta */
+/* Botão Criar Conta - Bem visível */
 button {
-  margin-top: 15px;
+  margin-top: 25px;
   padding: 18px;
-  background: linear-gradient(90deg, var(--primary), #C41E3A);
+  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
   color: white;
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   font-weight: 700;
   border: none;
   border-radius: 14px;
@@ -116,47 +98,41 @@ button {
   transition: all 0.4s ease;
   letter-spacing: 1.5px;
   text-transform: uppercase;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(155, 28, 44, 0.5);
 }
 
 button:hover {
-  background: linear-gradient(90deg, #C41E3A, var(--primary));
+  background: linear-gradient(90deg, #C41E3A, #9B1C2C);
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px var(--shadow);
+  box-shadow: 0 15px 35px rgba(155, 28, 44, 0.7);
 }
 
 button:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 768px) {
-  .box {
-    padding: 45px 35px;
-  }
+/* Erro */
+.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #FF6B6B;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border-left: 5px solid #FF6B6B;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 1rem;
 }
 
+/* Responsividade */
 @media (max-width: 480px) {
-  .container {
-    padding: 15px 10px;
+  .box {
+    padding: 45px 30px;
   }
   
-  .box {
-    padding: 40px 28px;
-    border-radius: 20px;
-  }
-  
-  input, button {
-    padding: 15px 20px;
-    font-size: 1.05rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .box {
-    max-width: 480px;
-    padding: 60px 50px;
+  button {
+    padding: 17px;
+    font-size: 1.2rem;
   }
 }

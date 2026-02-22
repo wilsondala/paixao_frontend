@@ -1,20 +1,22 @@
-/* Cart.module.css - Paixão Angola (Versão Corrigida 2026) */
+/* Cart.module.css - Paixão Angola (Luxo Premium 2026 - Responsivo Pro) */
 
 .container {
   min-height: 100vh;
   background: #0A0606;
   color: #F5EDE0;
-  padding: 40px 20px 120px;
-  max-width: 1250px;
+  padding: clamp(24px, 5vw, 60px) 20px 120px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Header */
+/* ================= HEADER ================= */
+
 .header {
   display: flex;
   align-items: center;
   gap: 25px;
   margin-bottom: 50px;
+  flex-wrap: wrap;
 }
 
 .backButton {
@@ -22,10 +24,11 @@
   border: 2px solid #E8B923;
   color: #E8B923;
   padding: 12px 28px;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.4s ease;
 }
 
 .backButton:hover {
@@ -35,12 +38,13 @@
 
 .header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
   color: #E8B923;
   letter-spacing: 2px;
 }
 
-/* ================= ITENS ================= */
+/* ================= LISTA ================= */
+
 .list {
   display: flex;
   flex-direction: column;
@@ -48,14 +52,17 @@
   margin-bottom: 70px;
 }
 
+/* ================= ITEM ================= */
+
 .item {
-  background: rgba(15, 10, 10, 0.95);
+  background: rgba(15, 10, 10, 0.96);
   border: 1px solid rgba(232, 185, 35, 0.25);
-  border-radius: 24px;
-  padding: 24px;
+  border-radius: 26px;
+  padding: clamp(18px, 3vw, 30px);
   display: flex;
-  align-items: flex-start;     /* Alinha no topo */
-  gap: 28px;
+  align-items: center;
+  gap: clamp(18px, 3vw, 30px);
+  flex-wrap: wrap;
   transition: all 0.4s ease;
 }
 
@@ -66,15 +73,16 @@
 }
 
 .item img {
-  width: 130px;
-  height: 130px;
+  width: clamp(110px, 20vw, 150px);
+  height: clamp(110px, 20vw, 150px);
   object-fit: cover;
-  border-radius: 18px;
+  border-radius: 20px;
   border: 3px solid rgba(232, 185, 35, 0.3);
   flex-shrink: 0;
 }
 
-/* Informações (cresce) */
+/* ================= INFO ================= */
+
 .info {
   flex: 1;
   min-width: 0;
@@ -92,30 +100,33 @@
   font-weight: 700;
 }
 
-/* Controles de quantidade */
+/* ================= QUANTIDADE ================= */
+
 .quantityControls {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(232, 185, 35, 0.1);
-  border: 1px solid rgba(232, 185, 35, 0.3);
-  padding: 6px 12px;
-  border-radius: 50px;
-  margin-top: 12px;
+  background: rgba(232, 185, 35, 0.12);
+  border: 1px solid rgba(232, 185, 35, 0.35);
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-top: 14px;
 }
 
 .quantityControls button {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   color: #E8B923;
   border: 1px solid #E8B923;
   border-radius: 50%;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .quantityControls button:hover {
@@ -123,18 +134,28 @@
   color: #0A0606;
 }
 
-/* Botão REMOVER - Sempre no canto superior direito */
+.quantityControls span {
+  font-size: 1.35rem;
+  font-weight: 600;
+  min-width: 28px;
+  text-align: center;
+  color: #F5EDE0;
+}
+
+/* ================= REMOVER ================= */
+
 .removeButton {
   background: transparent;
   color: #FF6B6B;
   border: 2px solid #FF6B6B;
-  padding: 10px 26px;
-  border-radius: 50px;
+  padding: 12px 28px;
+  border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
-  margin-left: auto;           /* Empurra para a direita */
-  align-self: flex-start;      /* Fica no topo */
+  margin-left: auto;
+  align-self: flex-start;
   white-space: nowrap;
+  transition: all 0.3s ease;
 }
 
 .removeButton:hover {
@@ -142,52 +163,71 @@
   color: white;
 }
 
-/* Resumo */
+/* ================= RESUMO ================= */
+
 .summary {
-  background: rgba(15, 10, 10, 0.95);
+  background: rgba(15, 10, 10, 0.96);
   border: 1px solid rgba(232, 185, 35, 0.25);
-  border-radius: 24px;
-  padding: 45px 40px;
+  border-radius: 26px;
+  padding: clamp(30px, 5vw, 50px);
   text-align: center;
   margin-top: 40px;
 }
 
 .summary h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 2.4rem;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
   color: #E8B923;
   margin-bottom: 30px;
 }
 
+/* ================= BOTÕES PRINCIPAIS ================= */
+
 .checkoutButton {
   background: linear-gradient(90deg, #9B1C2C, #C41E3A);
   color: white;
-  padding: 20px 55px;
-  font-size: 1.25rem;
-  font-weight: 700;
+  padding: 22px 60px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   width: 100%;
-  max-width: 440px;
-  margin: 0 auto 18px;
+  max-width: 500px;
+  margin: 0 auto 22px;
   cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.checkoutButton:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(155, 28, 44, 0.7);
 }
 
 .clearButton {
   background: transparent;
   border: 2px solid #555;
   color: #aaa;
-  padding: 16px 45px;
-  border-radius: 50px;
+  padding: 18px 55px;
+  font-size: 1.1rem;
+  border-radius: 999px;
   width: 100%;
-  max-width: 440px;
+  max-width: 500px;
   margin: 0 auto;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Carrinho vazio */
+.clearButton:hover {
+  border-color: #FF6B6B;
+  color: #FF6B6B;
+}
+
+/* ================= CARRINHO VAZIO ================= */
+
 .empty h2 {
   color: #E8B923;
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
 }
 
 .empty button {
@@ -197,5 +237,44 @@
   font-size: 1.2rem;
   font-weight: 700;
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+
+@media (max-width: 768px) {
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+  }
+
+  .removeButton {
+    margin-left: 0;
+    align-self: flex-start;
+    width: 100%;
+    text-align: center;
+  }
+
+  .summary {
+    padding: 30px 20px;
+  }
+
+  .checkoutButton,
+  .clearButton {
+    max-width: 100%;
+  }
 }

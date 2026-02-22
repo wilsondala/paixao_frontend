@@ -15,7 +15,7 @@ export default function Header() {
           <span>Paixão Angola</span>
         </Link>
 
-        {/* BARRA DE BUSCA COM SELECT */}
+        {/* BUSCA COM SELECT */}
         <div className={styles.searchWrapper}>
           <select className={styles.categorySelect}>
             <option value="">Todos os Produtos</option>
