@@ -10,7 +10,7 @@ export default function PrivateRoute({ children, role }) {
 
   if (!isAuthenticated) {
     // Se rota admin, vai para login admin
-    if (role?.toLowerCase() === "admin") {
+    if (user.role.toLowerCase() !== "admin") {
       return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
     }
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;

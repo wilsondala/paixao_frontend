@@ -23,7 +23,7 @@ export async function createOrder(orderData) {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/orders",
+      "https://paixao-backend.onrender.com/orders",
       orderData,
       {
         headers: {
