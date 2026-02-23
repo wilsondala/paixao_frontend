@@ -1,13 +1,15 @@
 import axios from "axios";
 
+// Criação da instância Axios
 const api = axios.create({
   baseURL: "https://paixao-backend.onrender.com",
-  timeout: 10000,
+  timeout: 60000, // 60 segundos
 });
 
 // 🔐 Interceptor para incluir token automaticamente
 api.interceptors.request.use(
   (config) => {
+    // Pega o token do localStorage (admin ou usuário normal)
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -21,16 +23,24 @@ api.interceptors.request.use(
   }
 );
 
-// 🚨 Interceptor para tratar erros 401 automaticamente
+// 🚨 Interceptor para tratar erros de resposta
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      console.warn("Token inválido ou expirado.");
+    const status = error.response?.status;
 
-      // opcional: limpar token e redirecionar
+    if (status === 401) {
+      // Token inválido ou expirado
+      console.warn("Token inválido ou expirado.");
       localStorage.removeItem("token");
       window.location.href = "/login";
+    } else if (status === 403) {
+      // Acesso proibido (role insuficiente)
+      console.warn("Acesso negado: você precisa ser ADMIN.");
+      alert("Acesso negado: você precisa ser ADMIN.");
+    } else if (status >= 500) {
+      // Erros de servidor
+      console.error("Erro no servidor. Tente novamente mais tarde.");
     }
 
     return Promise.reject(error);
