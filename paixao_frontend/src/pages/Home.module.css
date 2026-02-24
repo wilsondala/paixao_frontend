@@ -1,0 +1,109 @@
+.home {
+  width: 100%;
+}
+
+/* HERO */
+.hero {
+  height: 85vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url("/imagem/produtos/kitavelã.JPG") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.heroContent h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 2rem;
+  color: #FFD700;
+  margin: 1rem 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.primaryBtn {
+  background: #7B1E3C;
+  padding: 0.9rem 2rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.primaryBtn:hover {
+  background: #5a152c;
+}
+
+.whatsappBtn {
+  background: #25D366;
+  padding: 0.9rem 2rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+/* BENEFITS */
+.benefits {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.benefitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* WHOLESALE */
+.wholesale {
+  background: #f8f8f8;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.wholesaleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* VIDEO */
+.videoSection {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.video {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+}
+
+/* FINAL CTA */
+.finalCta {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #7B1E3C;
+  color: white;
+}

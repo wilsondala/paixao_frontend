@@ -1,192 +1,155 @@
-/* ProductDetails.module.css - Paixão Angola (Versão Premium 2026) */
-
-.container {
-  min-height: 100vh;
-  background: #0A0606;
-  color: #F5EDE0;
-  padding: 40px 20px 100px;
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  gap: 80px;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-/* ================= GALERIA ================= */
-.gallery {
-  flex: 1;
-  min-width: 320px;
-  max-width: 580px;
-}
-
-.mainImageContainer {
-  position: relative;
-  border-radius: 28px;
-  overflow: hidden;
-  background: #111;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-  min-height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mainImage {
-  width: 100%;
-  height: auto;
-  transition: transform 0.8s ease;
-}
-
-.mainImageContainer:hover .mainImage {
-  transform: scale(1.08);
-}
-
-/* Thumbnails */
-.thumbnails {
-  display: flex;
-  gap: 16px;
-  margin-top: 28px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-}
-
-.thumbnail {
-  width: 88px;
-  height: 88px;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 3px solid transparent;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  flex-shrink: 0;
-}
-
-.thumbnail:hover,
-.thumbnail.active {
-  border-color: #E8B923;
-  transform: scale(1.1);
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ================= INFORMAÇÕES ================= */
-.productInfo {
-  flex: 1;
-  min-width: 340px;
-  max-width: 520px;
-}
-
-.productInfo h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
-  color: #F5EDE0;
-  line-height: 1.15;
-  margin-bottom: 16px;
-}
-
-.price {
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  color: #E8B923;
+.title {
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.stock {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(52, 211, 153, 0.15);
-  color: #34D399;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-  margin-bottom: 30px;
+.priceHighlight {
+  font-size: 32px;
+  font-weight: bold;
+  color: #7b1e3c;
+  margin-bottom: 15px;
 }
 
-.outStock {
-  background: rgba(239, 68, 68, 0.15);
-  color: #EF4444;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-}
-
-/* Descrição */
-.description {
-  font-size: 1.15rem;
-  line-height: 1.85;
-  color: #ddd;
-  margin-bottom: 40px;
-}
-
-/* Botões */
-.buttons {
+.badges {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
 }
 
-.cartButton, .buyButton {
-  padding: 20px 40px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  width: 100%;
+.highlightBox {
+  background: #fff5f7;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
 }
 
-.cartButton {
-  background: transparent;
-  color: #E8B923;
-  border: 2px solid #E8B923;
-}
-
-.cartButton:hover {
-  background: #E8B923;
-  color: #0A0606;
-}
-
-.buyButton {
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
+.buyButtonStrong {
+  background: linear-gradient(90deg, #7b1e3c, #c9a227);
   color: white;
+  font-weight: bold;
+  padding: 12px;
   border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.buyButton:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(155, 28, 44, 0.6);
+.buyButtonStrong:hover {
+  opacity: 0.9;
 }
 
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 992px) {
-  .container {
-    gap: 50px;
-  }
-  .productInfo {
-    position: static;
-  }
+.securityBox {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #555;
 }
 
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    gap: 40px;
-  }
+.urgencyBox {
+  background: #fff3cd;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-@media (max-width: 480px) {
-  .mainImageContainer {
-    min-height: 380px;
+.timer {
+  color: #b30000;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.lowStock {
+  margin-top: 8px;
+  color: #b30000;
+  font-weight: bold;
+}
+
+
+.flashSale {
+  background: linear-gradient(90deg, #7b1e3c, #b30000);
+  color: white;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 20px 0;
+  text-align: center;
+  animation: pulse 1.5s infinite;
+}
+
+.flashHeader {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.countdownBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.timeBlock {
+  background: white;
+  color: #b30000;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 6px;
+  min-width: 50px;
+}
+
+.separator {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.flashText {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.lowStockStrong {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px;
+  border-radius: 6px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.socialProof {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: white;
+  color: #333;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  z-index: 9999;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  .thumbnail {
-    width: 72px;
-    height: 72px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

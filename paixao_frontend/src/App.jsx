@@ -1,19 +1,28 @@
-// src/App.jsx
-import { Routes, Route, Navigate } from "react-router-dom"; // sem BrowserRouter
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 
 import PrivateRoute from "./routes/PrivateRoute";
+
+import SocialProof from "./components/SocialProof"; // 🔥 PROVA SOCIAL
+
+// ================= PÁGINAS PÚBLICAS =================
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
+import SobreNos from "./pages/SobreNos";
+
+// ================= PÁGINAS PRIVADAS =================
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
-import SobreNos from "./pages/SobreNos";
-import AdminLogin from "./pages/AdminLogin"; // 🔹 login exclusivo admin
+
+// ================= ADMIN =================
+import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreateProduct from "./components/CreateProduct";
@@ -25,16 +34,22 @@ export default function App() {
     <UserProvider>
       <CartProvider>
         <AuthProvider>
+
+          {/* 🔥 PROVA SOCIAL GLOBAL */}
+          <SocialProof />
+
           <Routes>
-            {/* Rotas públicas */}
+
+            {/* ================= ROTAS PÚBLICAS ================= */}
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin/login" element={<AdminLogin />} /> {/* 🔹 */}
             <Route path="/register" element={<Register />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/sobre-nos" element={<SobreNos />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
 
-            {/* Rotas privadas usuário */}
+            {/* ================= ROTAS PRIVADAS USUÁRIO ================= */}
             <Route
               path="/cart"
               element={
@@ -43,6 +58,7 @@ export default function App() {
                 </PrivateRoute>
               }
             />
+
             <Route
               path="/checkout"
               element={
@@ -51,6 +67,7 @@ export default function App() {
                 </PrivateRoute>
               }
             />
+
             <Route
               path="/orders/:id"
               element={
@@ -60,7 +77,7 @@ export default function App() {
               }
             />
 
-            {/* Rotas privadas admin */}
+            {/* ================= ROTAS ADMIN ================= */}
             <Route
               path="/admin"
               element={
@@ -76,8 +93,9 @@ export default function App() {
               <Route path="edit-product/:id" element={<EditProduct />} />
             </Route>
 
-            {/* Redirecionamento padrão */}
-            <Route path="*" element={<Navigate to="/products" replace />} />
+            {/* ================= FALLBACK ================= */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+
           </Routes>
         </AuthProvider>
       </CartProvider>
