@@ -84,7 +84,7 @@ ${itemsText}
 
         <h1 className={styles.title}>Finalizar Pedido</h1>
 
-        {/* ================= RESUMO DO PEDIDO COM IMAGENS ================= */}
+        {/* Resumo do pedido */}
         <div className={styles.section}>
           <h3>Resumo do Pedido</h3>
           

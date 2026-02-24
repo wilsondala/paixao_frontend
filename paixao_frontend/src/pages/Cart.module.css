@@ -1,280 +1,130 @@
-/* Cart.module.css - Paixão Angola (Luxo Premium 2026 - Responsivo Pro) */
-
 .container {
-  min-height: 100vh;
-  background: #0A0606;
-  color: #F5EDE0;
-  padding: clamp(24px, 5vw, 60px) 20px 120px;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
-
-/* ================= HEADER ================= */
 
 .header {
   display: flex;
   align-items: center;
-  gap: 25px;
-  margin-bottom: 50px;
-  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .backButton {
   background: transparent;
-  border: 2px solid #E8B923;
-  color: #E8B923;
-  padding: 12px 28px;
-  border-radius: 999px;
-  font-size: 1.05rem;
-  font-weight: 600;
+  border: none;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.4s ease;
+  color: #0077ff;
+  transition: 0.2s;
 }
-
 .backButton:hover {
-  background: #E8B923;
-  color: #0A0606;
+  color: #0056b3;
 }
-
-.header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  color: #E8B923;
-  letter-spacing: 2px;
-}
-
-/* ================= LISTA ================= */
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  margin-bottom: 70px;
+  gap: 1.5rem;
 }
-
-/* ================= ITEM ================= */
 
 .item {
-  background: rgba(15, 10, 10, 0.96);
-  border: 1px solid rgba(232, 185, 35, 0.25);
-  border-radius: 26px;
-  padding: clamp(18px, 3vw, 30px);
   display: flex;
   align-items: center;
-  gap: clamp(18px, 3vw, 30px);
-  flex-wrap: wrap;
-  transition: all 0.4s ease;
-}
-
-.item:hover {
-  border-color: #E8B923;
-  box-shadow: 0 20px 45px rgba(155, 28, 44, 0.4);
-  transform: translateY(-6px);
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
 }
 
 .item img {
-  width: clamp(110px, 20vw, 150px);
-  height: clamp(110px, 20vw, 150px);
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  border-radius: 20px;
-  border: 3px solid rgba(232, 185, 35, 0.3);
-  flex-shrink: 0;
+  border-radius: 8px;
 }
-
-/* ================= INFO ================= */
 
 .info {
   flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-
-.info h3 {
-  font-size: 1.45rem;
-  margin-bottom: 8px;
-  color: #F5EDE0;
-}
-
-.info p {
-  color: #E8B923;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-/* ================= QUANTIDADE ================= */
 
 .quantityControls {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(232, 185, 35, 0.12);
-  border: 1px solid rgba(232, 185, 35, 0.35);
-  padding: 8px 16px;
-  border-radius: 999px;
-  margin-top: 14px;
+  gap: 0.5rem;
 }
 
 .quantityControls button {
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  color: #E8B923;
-  border: 1px solid #E8B923;
-  border-radius: 50%;
-  font-size: 1.4rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
   cursor: pointer;
-  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-size: 1rem;
 }
-
-.quantityControls button:hover {
-  background: #E8B923;
-  color: #0A0606;
-}
-
 .quantityControls span {
-  font-size: 1.35rem;
-  font-weight: 600;
-  min-width: 28px;
+  min-width: 24px;
   text-align: center;
-  color: #F5EDE0;
 }
-
-/* ================= REMOVER ================= */
 
 .removeButton {
-  background: transparent;
-  color: #FF6B6B;
-  border: 2px solid #FF6B6B;
-  padding: 12px 28px;
-  border-radius: 999px;
-  font-weight: 600;
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
   cursor: pointer;
-  margin-left: auto;
-  align-self: flex-start;
-  white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: 0.2s;
 }
-
 .removeButton:hover {
-  background: #FF6B6B;
-  color: white;
+  background: #d9363e;
 }
-
-/* ================= RESUMO ================= */
 
 .summary {
-  background: rgba(15, 10, 10, 0.96);
-  border: 1px solid rgba(232, 185, 35, 0.25);
-  border-radius: 26px;
-  padding: clamp(30px, 5vw, 50px);
-  text-align: center;
-  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
 }
-
-.summary h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.8rem, 5vw, 2.6rem);
-  color: #E8B923;
-  margin-bottom: 30px;
-}
-
-/* ================= BOTÕES PRINCIPAIS ================= */
 
 .checkoutButton {
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
-  padding: 22px 60px;
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  background: #28a745;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
   border: none;
-  border-radius: 999px;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto 22px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: 0.2s;
 }
-
 .checkoutButton:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 30px 60px rgba(155, 28, 44, 0.7);
+  background: #218838;
 }
 
 .clearButton {
-  background: transparent;
-  border: 2px solid #555;
-  color: #aaa;
-  padding: 18px 55px;
-  font-size: 1.1rem;
-  border-radius: 999px;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.clearButton:hover {
-  border-color: #FF6B6B;
-  color: #FF6B6B;
-}
-
-/* ================= CARRINHO VAZIO ================= */
-
-.empty h2 {
-  color: #E8B923;
-  font-size: clamp(2.4rem, 7vw, 3.6rem);
-}
-
-.empty button {
-  background: #E8B923;
-  color: #0A0606;
-  padding: 18px 50px;
-  font-size: 1.2rem;
-  font-weight: 700;
+  background: #ffc107;
+  color: #333;
+  padding: 0.7rem 1.2rem;
   border: none;
-  border-radius: 999px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s;
+}
+.clearButton:hover {
+  background: #e0a800;
 }
 
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 768px) {
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-  }
-
-  .item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .item img {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-  }
-
-  .removeButton {
-    margin-left: 0;
-    align-self: flex-start;
-    width: 100%;
-    text-align: center;
-  }
-
-  .summary {
-    padding: 30px 20px;
-  }
-
-  .checkoutButton,
-  .clearButton {
-    max-width: 100%;
-  }
+.empty {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #555;
 }

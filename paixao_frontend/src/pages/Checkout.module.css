@@ -1,72 +1,54 @@
-/* Checkout.module.css - Paixão Angola (Versão Melhorada 2026) */
-
 .container {
-  min-height: 100vh;
-  background: #0A0606;
-  color: #F5EDE0;
-  padding: 40px 20px 120px;
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* Botão Voltar */
 .backButton {
   background: transparent;
-  border: 2px solid #E8B923;
-  color: #E8B923;
-  padding: 10px 24px;
-  border-radius: 50px;
+  border: none;
   font-size: 1rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 25px;
+  color: #0077ff;
+  transition: 0.2s;
 }
-
 .backButton:hover {
-  background: #E8B923;
-  color: #0A0606;
+  color: #0056b3;
 }
 
-/* Título */
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 6.5vw, 3.6rem);
-  color: #E8B923;
-  text-align: center;
-  margin-bottom: 50px;
-  letter-spacing: 2px;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #222;
 }
 
-/* ================= SEÇÕES ================= */
 .section {
-  background: rgba(15, 10, 10, 0.95);
-  border: 1px solid rgba(232, 185, 35, 0.25);
-  border-radius: 24px;
-  padding: 35px;
-  margin-bottom: 40px;
-  transition: all 0.4s ease;
+  border: 1px solid #e2e2e2;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Resumo do Pedido */
 .item {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 18px 0;
-  border-bottom: 1px solid rgba(232, 185, 35, 0.15);
-}
-
-.item:last-child {
-  border-bottom: none;
+  gap: 1rem;
 }
 
 .itemImage {
   width: 70px;
   height: 70px;
   object-fit: cover;
-  border-radius: 14px;
-  border: 2px solid rgba(232, 185, 35, 0.3);
+  border-radius: 8px;
 }
 
 .itemInfo {
@@ -74,111 +56,40 @@
 }
 
 .itemPrice {
-  font-weight: 700;
-  color: #E8B923;
-  white-space: nowrap;
-  font-size: 1.15rem;
+  font-weight: bold;
 }
 
-/* Total */
 .total {
-  margin-top: 25px;
-  font-size: 1.85rem;
-  font-weight: 700;
-  color: #E8B923;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
   text-align: right;
-  padding-top: 20px;
-  border-top: 2px solid rgba(232, 185, 35, 0.3);
-}
-
-/* Endereço e Pagamento */
-.section h3 {
-  color: #E8B923;
-  margin-bottom: 20px;
-  font-size: 1.6rem;
 }
 
 .select {
-  width: 100%;
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.08);
-  border: 1.5px solid rgba(232, 185, 35, 0.3);
-  border-radius: 14px;
-  color: #F5EDE0;
-  font-size: 1.08rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-.searchContainer {
-  display: flex;
-  gap: 12px;
-}
-
-.searchContainer input {
-  flex: 1;
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.08);
-  border: 1.5px solid rgba(232, 185, 35, 0.3);
-  border-radius: 14px;
-  color: #F5EDE0;
-}
-
-/* Botão Buscar */
-.searchContainer button {
-  background: #9B1C2C;
-  color: white;
-  padding: 16px 32px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* Botão Confirmar Pedido */
 .button {
-  width: 100%;
-  padding: 20px;
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 700;
+  background: #28a745;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 50px;
+  border-radius: 10px;
   cursor: pointer;
-  margin-top: 30px;
-  transition: all 0.4s ease;
+  transition: 0.2s;
+  font-size: 1rem;
+  margin-top: 1rem;
 }
-
 .button:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 25px 50px rgba(155, 28, 44, 0.6);
+  background: #218838;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .container {
-    padding: 25px 15px 100px;
-  }
-  
-  .section {
-    padding: 28px 20px;
-  }
-  
-  .item {
-    gap: 16px;
-  }
-  
-  .itemImage {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-@media (max-width: 480px) {
-  .searchContainer {
-    flex-direction: column;
-  }
-  
-  .searchContainer button {
-    width: 100%;
-  }
+.empty {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #555;
 }

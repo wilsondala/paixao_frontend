@@ -1,123 +1,132 @@
-/* Login.module.css - Paixão Angola (Estilo Limpo e Dramático) */
+* {
+  box-sizing: border-box;
+}
 
 .container {
+  position: relative;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0A0606 0%, #1A0F0F 100%);
-  position: relative;
-  overflow: hidden;
-  padding: 20px 15px;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  padding: 20px;
 }
 
-/* Fundo sutil com glow */
-.container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(232, 185, 35, 0.08), transparent 70%);
-  z-index: 0;
-}
-
-/* Título grande */
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3.2rem, 10vw, 5rem);
-  font-weight: 700;
-  color: #E8B923;
+  position: absolute;
+  top: 30px;
   text-align: center;
-  margin-bottom: 50px;
-  letter-spacing: 6px;
-  text-shadow: 0 0 30px rgba(232, 185, 35, 0.6);
-  z-index: 1;
+  width: 100%;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
 }
 
-/* Caixa central */
 .box {
-  background: rgba(10, 6, 6, 0.95);
-  border: 1px solid rgba(232, 185, 35, 0.3);
-  border-radius: 20px;
-  padding: 50px 45px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 0 60px rgba(232, 185, 35, 0.15),
-              0 25px 70px rgba(0, 0, 0, 0.8);
-  position: relative;
-  z-index: 2;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-/* Subtítulo Login */
 .box h2 {
-  color: #F5EDE0;
-  font-size: 1.75rem;
   text-align: center;
-  margin-bottom: 35px;
-  font-weight: 500;
+  margin-bottom: 25px;
+  color: #111827;
 }
 
-/* Labels */
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 label {
-  color: #E8B923;
-  font-size: 1.1rem;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
+  color: #374151;
 }
 
-/* Inputs */
 input {
   width: 100%;
-  padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.5px solid rgba(232, 185, 35, 0.4);
-  border-radius: 12px;
-  color: #F5EDE0;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: 0.3s ease;
 }
 
 input:focus {
-  border-color: #E8B923;
-  background: rgba(255, 255, 255, 0.15);
   outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-/* Botão ENTRAR */
+/* 🔥 BOTÃO COM DESTAQUE REAL */
 button {
   width: 100%;
-  padding: 18px;
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 700;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
   border: none;
-  border-radius: 12px;
+  background-color: #2563eb; /* cor única */
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
-  margin-top: 15px;
-  transition: all 0.4s ease;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5); /* destaque antes do hover */
 }
 
 button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(155, 28, 44, 0.6);
+  background-color: #1d4ed8; /* levemente mais escuro */
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.6);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button:disabled {
-  opacity: 0.6;
+  background-color: #9ca3af;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
-/* Erro */
-.error {
-  background: rgba(239, 68, 68, 0.15);
-  color: #FF6B6B;
-  padding: 14px 20px;
-  border-radius: 10px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1rem;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .box {
+    padding: 25px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
 }

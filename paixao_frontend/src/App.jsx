@@ -6,7 +6,8 @@ import { AuthProvider } from "./context/AuthContext";
 
 import PrivateRoute from "./routes/PrivateRoute";
 
-import SocialProof from "./components/SocialProof"; // 🔥 PROVA SOCIAL
+import SocialProof from "./components/SocialProof";
+import Layout from "./components/Layout";
 
 // ================= PÁGINAS PÚBLICAS =================
 import Home from "./pages/Home";
@@ -40,13 +41,46 @@ export default function App() {
 
           <Routes>
 
-            {/* ================= ROTAS PÚBLICAS ================= */}
-            <Route path="/" element={<Home />} />
+            {/* ================= ROTAS PÚBLICAS COM LAYOUT ================= */}
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <Home />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/products"
+              element={
+                <Layout>
+                  <Products />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/products/:id"
+              element={
+                <Layout>
+                  <ProductDetails />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/sobre-nos"
+              element={
+                <Layout>
+                  <SobreNos />
+                </Layout>
+              }
+            />
+
+            {/* ================= LOGIN / REGISTER (SEM NAVBAR) ================= */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="/sobre-nos" element={<SobreNos />} />
             <Route path="/admin/login" element={<AdminLogin />} />
 
             {/* ================= ROTAS PRIVADAS USUÁRIO ================= */}
@@ -54,7 +88,9 @@ export default function App() {
               path="/cart"
               element={
                 <PrivateRoute>
-                  <Cart />
+                  <Layout>
+                    <Cart />
+                  </Layout>
                 </PrivateRoute>
               }
             />
@@ -63,7 +99,9 @@ export default function App() {
               path="/checkout"
               element={
                 <PrivateRoute>
-                  <Checkout />
+                  <Layout>
+                    <Checkout />
+                  </Layout>
                 </PrivateRoute>
               }
             />
@@ -72,7 +110,9 @@ export default function App() {
               path="/orders/:id"
               element={
                 <PrivateRoute>
-                  <OrderDetails />
+                  <Layout>
+                    <OrderDetails />
+                  </Layout>
                 </PrivateRoute>
               }
             />
@@ -97,6 +137,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
 
           </Routes>
+
         </AuthProvider>
       </CartProvider>
     </UserProvider>

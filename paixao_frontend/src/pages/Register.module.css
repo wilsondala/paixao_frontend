@@ -1,138 +1,132 @@
-/* Register.module.css - Paixão Angola (Versão Premium 2026) */
+* {
+  box-sizing: border-box;
+}
 
 .container {
+  position: relative;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0A0606 0%, #1A0F0F 100%);
-  position: relative;
-  overflow: hidden;
-  padding: 20px 15px;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  padding: 20px;
 }
 
-/* Fundo sutil romântico */
-.container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1518834107812-67b0b7c8e3d1?ixlib=rb-4.0.3') center/cover no-repeat;
-  opacity: 0.07;
-  z-index: 0;
-}
-
-/* Box principal */
-.box {
-  background: rgba(15, 10, 10, 0.97);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(232, 185, 35, 0.35);
-  border-radius: 24px;
-  padding: 60px 50px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 30px 80px -15px rgba(155, 28, 44, 0.7);
-  position: relative;
-  z-index: 1;
-}
-
-/* Título PAIXÃO ANGOLA */
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3rem, 9vw, 4.5rem);
+  position: absolute;
+  top: 30px;
+  text-align: center;
+  width: 100%;
+  font-size: 28px;
   font-weight: 700;
-  color: #E8B923;
-  text-align: center;
-  margin-bottom: 12px;
-  letter-spacing: 4px;
-  text-shadow: 0 6px 25px rgba(232, 185, 35, 0.5);
+  color: #ffffff;
+  letter-spacing: 2px;
 }
 
-/* Subtítulo Criar Conta */
+.box {
+  width: 100%;
+  max-width: 420px;
+  background: #833a3a;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
 .box h2 {
-  color: #F5EDE0;
-  font-size: 1.85rem;
   text-align: center;
-  margin-bottom: 40px;
-  font-weight: 500;
+  margin-bottom: 25px;
+  color: #111827;
 }
 
-/* Labels - Bem visíveis */
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 label {
-  color: #E8B923;
-  font-size: 1.12rem;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
+  color: #374151;
 }
 
-/* Inputs */
 input {
   width: 100%;
-  padding: 18px 22px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(232, 185, 35, 0.5);
-  border-radius: 14px;
-  color: #F5EDE0;
-  font-size: 1.12rem;
-  transition: all 0.3s ease;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: 0.3s ease;
 }
 
 input:focus {
-  border-color: #E8B923;
-  background: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 0 0 4px rgba(232, 185, 35, 0.25);
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-/* Botão Criar Conta - Bem visível */
+/* 🔥 BOTÃO COM DESTAQUE REAL */
 button {
-  margin-top: 25px;
-  padding: 18px;
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
-  font-size: 1.28rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
   width: 100%;
-  box-shadow: 0 8px 20px rgba(155, 28, 44, 0.5);
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2563eb; /* cor única */
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5); /* destaque antes do hover */
 }
 
 button:hover {
-  background: linear-gradient(90deg, #C41E3A, #9B1C2C);
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(155, 28, 44, 0.7);
+  background-color: #1d4ed8; /* levemente mais escuro */
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.6);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button:disabled {
-  opacity: 0.6;
+  background-color: #9ca3af;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
-/* Erro */
-.error {
-  background: rgba(239, 68, 68, 0.15);
-  color: #FF6B6B;
-  padding: 14px 20px;
-  border-radius: 12px;
-  border-left: 5px solid #FF6B6B;
-  margin-bottom: 24px;
-  text-align: center;
-  font-size: 1rem;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Responsividade */
 @media (max-width: 480px) {
   .box {
-    padding: 45px 30px;
+    padding: 25px;
   }
-  
-  button {
-    padding: 17px;
-    font-size: 1.2rem;
+
+  .title {
+    font-size: 22px;
   }
 }

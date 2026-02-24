@@ -12,13 +12,16 @@ export default function ProductDetails() {
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(900); // 15 minutos
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupData, setPopupData] = useState(null);
+  const [latestOrders, setLatestOrders] = useState([]);
+  const [currentPopup, setCurrentPopup] = useState(null);
+  const [usedOrders, setUsedOrders] = useState(new Set());
+
+  const [timeLeft, setTimeLeft] = useState(900);
   const [selectedImage, setSelectedImage] = useState("");
   const [showVideo, setShowVideo] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // 🔥 Buscar produto
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -39,65 +42,64 @@ export default function ProductDetails() {
     fetchProduct();
   }, [id]);
 
+  // 🔥 Buscar últimas compras reais (apenas completadas)
   useEffect(() => {
-  const timer = setInterval(() => {
-    setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-  }, 1000);
+    const fetchLatest = async () => {
+      try {
+        const response = await api.get("/orders/latest");
+        // Filtra apenas status = completed (ou pago)
+        const filtered = response.data.filter(
+          (o) => o.status === "completed" || o.payment_status === "completed"
+        );
+        setLatestOrders(filtered);
+      } catch (err) {
+        console.error("Erro ao buscar últimas compras:", err);
+      }
+    };
 
-  const formatTime = (seconds) => {
-  const min = Math.floor(seconds / 60);
-  const sec = seconds % 60;
-  return `${min.toString().padStart(2, "0")}:${sec
-    .toString()
-    .padStart(2, "0")}`;
-};
+    fetchLatest();
+  }, []);
 
-useEffect(() => {
-  const cities = [
-    "Luanda",
-    "Benguela",
-    "Huambo",
-    "Lubango",
-    "Cabinda",
-    "Uíge",
-    "Malanje",
-  ];
+  // 🔥 Rotacionar popup real
+  useEffect(() => {
+    if (latestOrders.length === 0) return;
 
-  const names = [
-    "Carlos",
-    "Ana",
-    "João",
-    "Marta",
-    "Paulo",
-    "Sandra",
-    "Nelson",
-  ];
+    const interval = setInterval(() => {
+      // Escolhe aleatório sem repetir recentemente
+      const available = latestOrders.filter(
+        (o) => !usedOrders.has(o.id)
+      );
 
-  const interval = setInterval(() => {
-    const randomCity =
-      cities[Math.floor(Math.random() * cities.length)];
-    const randomName =
-      names[Math.floor(Math.random() * names.length)];
-    const randomMinutes = Math.floor(Math.random() * 10) + 1;
+      if (available.length === 0) {
+        setUsedOrders(new Set());
+        return;
+      }
 
-    setPopupData({
-      name: randomName,
-      city: randomCity,
-      minutes: randomMinutes,
-    });
+      const random =
+        available[Math.floor(Math.random() * available.length)];
 
-    setShowPopup(true);
+      setCurrentPopup(random);
 
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 5000);
-  }, 20000);
+      // Marca como usado
+      setUsedOrders((prev) => new Set(prev).add(random.id));
 
-  return () => clearInterval(interval);
-}, []);
+      // Ocultar popup depois de 5s
+      setTimeout(() => {
+        setCurrentPopup(null);
+      }, 5000);
+    }, 20000);
 
-  return () => clearInterval(timer);
-}, []);
+    return () => clearInterval(interval);
+  }, [latestOrders, usedOrders]);
+
+  // 🔥 Timer oferta
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleAdd = () => {
     if (!product) return;
@@ -118,160 +120,131 @@ useEffect(() => {
   const isOutOfStock = product.stock === 0;
 
   return (
-  <MainLayout>
-    <div className={styles.container}>
-      {/* Galeria */}
-      <div className={styles.gallery}>
-        <div className={styles.mainImageContainer}>
-          {showVideo && product.video_url ? (
-            <video
-              src={formatMedia(product.video_url)}
-              controls
-              autoPlay
-              className={styles.mainVideo}
-            />
-          ) : (
-            <img
-              src={selectedImage}
-              alt={product.name}
-              className={styles.mainImage}
-            />
-          )}
-        </div>
+    <MainLayout>
+      <div className={styles.container}>
+        {/* GALERIA */}
+        <div className={styles.gallery}>
+          <div className={styles.mainImageContainer}>
+            {showVideo && product.video_url ? (
+              <video
+                src={formatMedia(product.video_url)}
+                controls
+                autoPlay
+                className={styles.mainVideo}
+              />
+            ) : (
+              <img src={selectedImage} alt={product.name} className={styles.mainImage} />
+            )}
+          </div>
 
-        <div className={styles.thumbnails}>
-          {product.images?.map((img, index) => (
-            <div
-              key={index}
-              className={`${styles.thumbnail} ${
-                !showVideo && selectedImage === formatMedia(img)
-                  ? styles.active
-                  : ""
-              }`}
-              onClick={() => {
-                setSelectedImage(formatMedia(img));
-                setShowVideo(false);
-              }}
-            >
-              <img src={formatMedia(img)} alt={`Imagem ${index + 1}`} />
-            </div>
-          ))}
-
-          {product.video_url && (
-            <div
-              className={`${styles.thumbnail} ${
-                showVideo ? styles.active : ""
-              }`}
-              onClick={() => setShowVideo(true)}
-            >
-              <div className={styles.videoThumb}>▶</div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Informações */}
-      <div className={styles.productInfo}>
-        <h1 className={styles.title}>
-          🔥 {product.name}
-        </h1>
-
-        <p className={styles.priceHighlight}>
-          {Number(product.price).toLocaleString("pt-AO")} Kz
-        </p>
-
-        <div className={styles.badges}>
-          <span>💳 Pagamento Expresso</span>
-          <span>🚚 Entrega rápida em Angola</span>
-          <span>📦 Entrega discreta</span>
-        </div>
-
-        <p>
-          {isOutOfStock ? (
-            <span className={styles.outStock}>❌ Produto esgotado</span>
-          ) : (
-            <span className={styles.stock}>
-              ✔ Em estoque ({product.stock} unidades)
-            </span>
-          )}
-        </p>
-
-        {/* Bloco emocional */}
-        <div className={styles.highlightBox}>
-          <h3>Desperte a Intensidade da Paixão</h3>
-          <p>
-            Experimente uma fragrância marcante, textura envolvente
-            e uma sensação irresistível que transforma momentos comuns
-            em experiências inesquecíveis.
-          </p>
-        </div>
-
-        <div className={styles.description}>
-          <p>{product.description}</p>
-        </div>
-
-        {/* OFERTA RELÂMPAGO */}
-        {!isOutOfStock && (
-          <div className={styles.flashSale}>
-            <div className={styles.flashHeader}>
-              🔥 OFERTA RELÂMPAGO
-            </div>
-
-            <div className={styles.countdownBox}>
-              <div className={styles.timeBlock}>
-                {Math.floor(timeLeft / 60)
-                  .toString()
-                  .padStart(2, "0")}
+          <div className={styles.thumbnails}>
+            {product.images?.map((img, index) => (
+              <div
+                key={index}
+                className={`${styles.thumbnail} ${
+                  !showVideo && selectedImage === formatMedia(img)
+                    ? styles.active
+                    : ""
+                }`}
+                onClick={() => {
+                  setSelectedImage(formatMedia(img));
+                  setShowVideo(false);
+                }}
+              >
+                <img src={formatMedia(img)} alt={`Imagem ${index + 1}`} />
               </div>
+            ))}
 
-              <span className={styles.separator}>:</span>
-
-              <div className={styles.timeBlock}>
-                {(timeLeft % 60).toString().padStart(2, "0")}
-              </div>
-            </div>
-
-            <div className={styles.flashText}>
-              ⚠️ Garanta agora antes que acabe!
-            </div>
-
-            {product.stock <= 5 && (
-              <div className={styles.lowStockStrong}>
-                🚨 Restam apenas {product.stock} unidades!
+            {product.video_url && (
+              <div
+                className={`${styles.thumbnail} ${showVideo ? styles.active : ""}`}
+                onClick={() => setShowVideo(true)}
+              >
+                <div className={styles.videoThumb}>▶</div>
               </div>
             )}
           </div>
-        )}
-
-        <div className={styles.buttons}>
-          <button
-            onClick={handleAdd}
-            disabled={isOutOfStock}
-            className={styles.cartButton}
-          >
-            🛒 Adicionar ao Carrinho
-          </button>
-
-          <button
-            onClick={handleBuy}
-            disabled={isOutOfStock}
-            className={styles.buyButtonStrong}
-          >
-            ⚡ Comprar Agora – Receber em Casa
-          </button>
         </div>
 
-        <div className={styles.securityBox}>
-          🔐 Compra 100% segura | Atendimento via WhatsApp
+        {/* INFO PRODUTO */}
+        <div className={styles.productInfo}>
+          <h1 className={styles.title}>🔥 {product.name}</h1>
+
+          <p className={styles.priceHighlight}>
+            {Number(product.price).toLocaleString("pt-AO")} Kz
+          </p>
+
+          <div className={styles.badges}>
+            <span>💳 Pagamento Expresso</span>
+            <span>🚚 Entrega rápida em Angola</span>
+            <span>📦 Entrega discreta</span>
+          </div>
+
+          <p>
+            {isOutOfStock ? (
+              <span className={styles.outStock}>❌ Produto esgotado</span>
+            ) : (
+              <span className={styles.stock}>✔ Em estoque ({product.stock} unidades)</span>
+            )}
+          </p>
+
+          <div className={styles.description}>
+            <p>{product.description}</p>
+          </div>
+
+          {!isOutOfStock && (
+            <div className={styles.flashSale}>
+              <div className={styles.flashHeader}>🔥 OFERTA RELÂMPAGO</div>
+
+              <div className={styles.countdownBox}>
+                <div className={styles.timeBlock}>
+                  {Math.floor(timeLeft / 60).toString().padStart(2, "0")}
+                </div>
+                <span className={styles.separator}>:</span>
+                <div className={styles.timeBlock}>
+                  {(timeLeft % 60).toString().padStart(2, "0")}
+                </div>
+              </div>
+
+              {product.stock <= 5 && (
+                <div className={styles.lowStockStrong}>
+                  🚨 Restam apenas {product.stock} unidades!
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className={styles.buttons}>
+            <button
+              onClick={handleAdd}
+              disabled={isOutOfStock}
+              className={styles.cartButton}
+            >
+              🛒 Adicionar ao Carrinho
+            </button>
+
+            <button
+              onClick={handleBuy}
+              disabled={isOutOfStock}
+              className={styles.buyButtonStrong}
+            >
+              ⚡ Comprar Agora – Receber em Casa
+            </button>
+          </div>
+
+          <div className={styles.securityBox}>
+            🔐 Compra 100% segura | Atendimento via WhatsApp
+          </div>
         </div>
       </div>
-    </div>
-    {showPopup && popupData && (
-    <div className={styles.socialProof}>
-      🛍 {popupData.name} em {popupData.city} comprou este produto há{" "}
-      {popupData.minutes} min
-    </div>
-)}
-  </MainLayout>
-);
+
+      {/* 🔥 POPUP SOCIAL PROOF */}
+      {currentPopup && (
+        <div className={`${styles.socialProof} ${styles.fade}`}>
+          🛍 {currentPopup.first_name} em {currentPopup.city} comprou{" "}
+          {currentPopup.product_name} às {new Date(currentPopup.created_at).toLocaleTimeString("pt-AO")}
+        </div>
+      )}
+    </MainLayout>
+  );
 }

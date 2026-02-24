@@ -123,26 +123,127 @@
   border-radius: 6px;
 }
 
+/* ================= SOCIAL PROOF ================= */
+
+.socialProof {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 320px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideIn 0.5s ease forwards;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.socialProof.hide {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.socialProof img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.socialProof strong {
+  font-size: 0.95rem;
+  color: #111;
+}
+
+.socialProof span {
+  display: block;
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* Badge pulsando */
+.socialProof::before {
+  content: "🔥";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4d4f;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 6px;
+  border-radius: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+/* ================= ANIMAÇÕES ================= */
+
+@keyframes slideIn {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ================= RESPONSIVO ================= */
+
+@media (max-width: 768px) {
+  .socialProof {
+    width: 90%;
+    left: 5%;
+    bottom: 15px;
+  }
+}
+
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.02); }
   100% { transform: scale(1); }
 }
 
+/* EXISTENTE */
 .socialProof {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background: white;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-weight: bold;
   color: #333;
-  padding: 12px 16px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  font-size: 13px;
   z-index: 9999;
-  animation: slideUp 0.4s ease-out;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+/* NOVO: animação fade */
+.fade {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Opcional: estilo tipo loja grande */
+.socialProof::before {
+  content: "🛒";
+  margin-right: 5px;
+}
 @keyframes slideUp {
   from {
     opacity: 0;
