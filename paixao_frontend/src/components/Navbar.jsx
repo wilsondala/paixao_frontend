@@ -122,9 +122,21 @@ export default function Navbar() {
         )}
 
         {!user && (
-          <Link to="/login" onClick={() => setOpen(false)}>
-            Entrar
-          </Link>
+
+          <>
+            <Link to="/login" onClick={() => setOpen(false)}>
+              Entrar
+            </Link>
+
+            <Link
+              to="/register"
+              className={styles.registerBtn}
+              onClick={() => setOpen(false)}
+            >
+              Cadastrar
+            </Link>
+          </>
+
         )}
       </div>
     </nav>

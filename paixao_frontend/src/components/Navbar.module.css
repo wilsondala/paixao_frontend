@@ -193,6 +193,19 @@
 .dropdown button:hover {
   background: #b91c1c;
 }
+.registerBtn {
+  background: #38bdf8;
+  color: white !important;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.registerBtn:hover {
+  background: #0ea5e9;
+  transform: translateY(-2px);
+}
 
 @keyframes fadeInDropdown {
   from {

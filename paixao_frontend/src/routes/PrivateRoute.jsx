@@ -1,4 +1,3 @@
-// src/routes/PrivateRoute.jsx
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -8,15 +7,29 @@ export default function PrivateRoute({ children, role }) {
 
   if (loading) return <p>Carregando...</p>;
 
+  // 🔒 Não autenticado
   if (!isAuthenticated) {
-    // Se rota admin, vai para login admin
-    if (user.role.toLowerCase() !== "admin") {
-      return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
+    if (role === "admin") {
+      return (
+        <Navigate
+          to="/admin/login"
+          state={{ from: location.pathname }}
+          replace
+        />
+      );
     }
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+
+    return (
+      <Navigate
+        to="/login"
+        state={{ from: location.pathname }}
+        replace
+      />
+    );
   }
 
-  if (!user || (role && user.role?.toLowerCase() !== role.toLowerCase())) {
+  // 🔒 Autenticado mas role errada
+  if (role && user?.role?.toLowerCase() !== role.toLowerCase()) {
     return <Navigate to="/products" replace />;
   }
 
