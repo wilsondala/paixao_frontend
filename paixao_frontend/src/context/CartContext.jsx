@@ -1,76 +1,113 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
+  /* ================= PERSISTÊNCIA ================= */
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  /* ================= ADICIONAR ================= */
   function addToCart(product) {
-    if (product.stock === 0) return;
+    if (!product || Number(product.stock) === 0) return;
+
+    const productId = Number(product.id);
+    const stock = Number(product.stock);
 
     setCart((prevCart) => {
-      const productId = Number(product.id);
-      const existingProduct = prevCart.find(
+      const existing = prevCart.find(
         (item) => Number(item.id) === productId
       );
 
-      if (existingProduct) {
-        if (existingProduct.quantity >= product.stock) {
+      if (existing) {
+        if (existing.quantity >= stock) {
           alert("Quantidade máxima em estoque atingida");
           return prevCart;
         }
 
         return prevCart.map((item) =>
-          item.id === productId
+          Number(item.id) === productId
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
 
-      return [...prevCart, { ...product, quantity: 1 }];
+      return [
+        ...prevCart,
+        {
+          ...product,
+          id: productId,
+          price: Number(product.price),
+          stock,
+          quantity: 1,
+        },
+      ];
     });
   }
 
+  /* ================= REMOVER ================= */
   function removeFromCart(id) {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    const productId = Number(id);
+    setCart((prev) =>
+      prev.filter((item) => Number(item.id) !== productId)
+    );
   }
 
+  /* ================= LIMPAR ================= */
   function clearCart() {
     setCart([]);
   }
 
+  /* ================= ATUALIZAR QUANTIDADE ================= */
   function updateQuantity(id, newQuantity) {
+    const productId = Number(id);
+    const quantity = Number(newQuantity);
+
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+
     setCart((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity:
-                newQuantity > item.stock
-                  ? item.stock
-                  : newQuantity,
-            }
-          : item
-      )
+      prev.map((item) => {
+        if (Number(item.id) !== productId) return item;
+
+        return {
+          ...item,
+          quantity:
+            quantity > item.stock
+              ? item.stock
+              : quantity,
+        };
+      })
     );
   }
 
-  const total = cart.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
-    0
-  );
+  /* ================= DERIVADOS OTIMIZADOS ================= */
+  const total = useMemo(() => {
+    return cart.reduce(
+      (sum, item) =>
+        sum + Number(item.price) * Number(item.quantity),
+      0
+    );
+  }, [cart]);
 
-  const totalItems = cart.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+  const totalItems = useMemo(() => {
+    return cart.reduce(
+      (sum, item) => sum + Number(item.quantity),
+      0
+    );
+  }, [cart]);
 
   return (
     <CartContext.Provider
@@ -91,8 +128,10 @@ export function CartProvider({ children }) {
 
 export function useCart() {
   const context = useContext(CartContext);
+
   if (!context) {
     throw new Error("useCart deve ser usado dentro de <CartProvider>");
   }
+
   return context;
 }

@@ -1,256 +1,101 @@
-.title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.priceHighlight {
-  font-size: 32px;
-  font-weight: bold;
-  color: #7b1e3c;
-  margin-bottom: 15px;
-}
-
-.badges {
+.container {
+  max-width: 1200px;
+  margin: 60px auto;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 15px;
-  font-size: 14px;
+  gap: 60px;
+  padding: 0 20px;
 }
 
-.highlightBox {
-  background: #fff5f7;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 15px 0;
+.gallery {
+  flex: 1;
 }
 
-.buyButtonStrong {
-  background: linear-gradient(90deg, #7b1e3c, #c9a227);
-  color: white;
-  font-weight: bold;
-  padding: 12px;
+.mainImage {
+  width: 100%;
+  height: 500px;
+  background: #f1f1f1;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.mainImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnailContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+
+.thumbnail:hover {
+  opacity: 1;
+}
+
+.active {
+  opacity: 1;
+  border: 2px solid black;
+}
+
+.info {
+  flex: 1;
+}
+
+.info h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.description {
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.buyButton {
+  padding: 14px 30px;
+  border-radius: 30px;
   border: none;
-  border-radius: 6px;
+  background: black;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.buyButtonStrong:hover {
-  opacity: 0.9;
+.buyButton:hover {
+  background: #333;
 }
 
-.securityBox {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #555;
-}
-
-.urgencyBox {
-  background: #fff3cd;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 15px 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.timer {
-  color: #b30000;
-  font-weight: bold;
-  margin-left: 5px;
-}
-
-.lowStock {
-  margin-top: 8px;
-  color: #b30000;
-  font-weight: bold;
-}
-
-
-.flashSale {
-  background: linear-gradient(90deg, #7b1e3c, #b30000);
-  color: white;
-  padding: 18px;
-  border-radius: 10px;
-  margin: 20px 0;
+.center {
   text-align: center;
-  animation: pulse 1.5s infinite;
+  margin-top: 60px;
 }
 
-.flashHeader {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-}
-
-.countdownBox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.timeBlock {
-  background: white;
-  color: #b30000;
-  font-size: 28px;
-  font-weight: bold;
-  padding: 8px 14px;
-  border-radius: 6px;
-  min-width: 50px;
-}
-
-.separator {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.flashText {
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.lowStockStrong {
-  margin-top: 8px;
-  font-weight: bold;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px;
-  border-radius: 6px;
-}
-
-/* ================= SOCIAL PROOF ================= */
-
-.socialProof {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 320px;
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 12px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
-  animation: slideIn 0.5s ease forwards;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.socialProof.hide {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.socialProof img {
-  width: 55px;
-  height: 55px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.socialProof strong {
-  font-size: 0.95rem;
-  color: #111;
-}
-
-.socialProof span {
-  display: block;
-  font-size: 0.8rem;
-  color: #777;
-  margin-top: 4px;
-}
-
-/* Badge pulsando */
-.socialProof::before {
-  content: "🔥";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #ff4d4f;
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 4px 6px;
-  border-radius: 20px;
-  animation: pulse 1.5s infinite;
-}
-
-/* ================= ANIMAÇÕES ================= */
-
-@keyframes slideIn {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
-
-/* ================= RESPONSIVO ================= */
-
-@media (max-width: 768px) {
-  .socialProof {
-    width: 90%;
-    left: 5%;
-    bottom: 15px;
-  }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
-
-/* EXISTENTE */
-.socialProof {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid #ccc;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  font-weight: bold;
-  color: #333;
-  z-index: 9999;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-/* NOVO: animação fade */
-.fade {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Opcional: estilo tipo loja grande */
-.socialProof::before {
-  content: "🛒";
-  margin-right: 5px;
-}
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .mainImage {
+    height: 350px;
   }
 }

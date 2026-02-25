@@ -59,6 +59,152 @@
   background: #b91c1c;
 }
 
+.logo a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.cart {
+  position: relative;
+  font-size: 18px;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.user {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.logout {
+  background: #dc2626;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.logout:hover {
+  background: #b91c1c;
+}
+
+.avatarContainer {
+  position: relative;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar:hover {
+  background: #1d4ed8;
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #ffffff;
+  width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeInDropdown 0.2s ease;
+  z-index: 2000;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.dropdown a {
+  text-decoration: none;
+  color: #111827;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.dropdown a:hover {
+  color: #2563eb;
+}
+
+.dropdown button {
+  background: #dc2626;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.dropdown button:hover {
+  background: #b91c1c;
+}
+
+@keyframes fadeInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 🔥 MOBILE */
 @media (max-width: 768px) {
   .toggle {

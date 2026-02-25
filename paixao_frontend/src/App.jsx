@@ -21,7 +21,7 @@ import SobreNos from "./pages/SobreNos";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
-
+import Profile from "./pages/Profile";
 // ================= ADMIN =================
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./layouts/AdminLayout";
@@ -84,38 +84,48 @@ export default function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
 
             {/* ================= ROTAS PRIVADAS USUÁRIO ================= */}
-            <Route
-              path="/cart"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Cart />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
+           <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Cart />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
 
-            <Route
-              path="/checkout"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <Checkout />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
+          <Route
+            path="/checkout"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Checkout />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
 
-            <Route
-              path="/orders/:id"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <OrderDetails />
-                  </Layout>
-                </PrivateRoute>
-              }
-            />
+          <Route
+            path="/orders/:id"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <OrderDetails />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Profile />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
 
             {/* ================= ROTAS ADMIN ================= */}
             <Route

@@ -8,93 +8,115 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Inicializa autenticação ao montar o contexto
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       try {
         const decoded = jwt_decode(token);
 
-        // Verifica se o token expirou
         if (decoded.exp * 1000 < Date.now()) {
-          console.warn("Token expirado ao inicializar AuthContext");
           localStorage.removeItem("token");
-          setUser(null);
-          setIsAuthenticated(false);
         } else {
-          setUser({
+          const userData = {
             id: decoded.sub,
             role: decoded.role,
             email: decoded.email || "",
-          });
+            name:
+              decoded.name ||
+              decoded.username ||
+              decoded.email ||
+              "Usuário",
+            photo: decoded.photo || decoded.avatar || null,
+          };
+
+          setUser(userData);
           setIsAuthenticated(true);
         }
       } catch (err) {
-        console.warn("Token inválido ao inicializar AuthContext", err);
         localStorage.removeItem("token");
-        setUser(null);
-        setIsAuthenticated(false);
       }
     }
+
     setLoading(false);
   }, []);
 
-  // Login: salva token e atualiza estado
-// Dentro do login(token, expectedRole)
-const login = (token, expectedRole = null) => {
-  if (!token) return false;
+  const login = (token, expectedRole = null) => {
+    if (!token) return false;
 
-  try {
-    const decoded = jwt_decode(token);
+    try {
+      const decoded = jwt_decode(token);
 
-    if (decoded.exp * 1000 < Date.now()) {
-      console.error("Token expirado no login");
+      if (decoded.exp * 1000 < Date.now()) {
+        return false;
+      }
+
+      if (
+        expectedRole &&
+        decoded.role.toLowerCase() !== expectedRole.toLowerCase()
+      ) {
+        return false;
+      }
+
+      const userData = {
+        id: decoded.sub,
+        role: decoded.role,
+        email: decoded.email || "",
+        name:
+          decoded.name ||
+          decoded.username ||
+          decoded.email ||
+          "Usuário",
+        photo: decoded.photo || decoded.avatar || null,
+      };
+
+      setUser(userData);
+      setIsAuthenticated(true);
+      localStorage.setItem("token", token);
+
+      return true;
+    } catch (err) {
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem("token");
       return false;
     }
+  };
 
-    // Se houver role esperada, valida
-    if (expectedRole && decoded.role.toLowerCase() !== expectedRole.toLowerCase()) {
-      console.error(`Usuário não tem permissão de ${expectedRole}`);
-      return false;
-    }
-
-    setUser({
-      id: decoded.sub,
-      role: decoded.role,
-      email: decoded.email || "",
-    });
-    setIsAuthenticated(true);
-    localStorage.setItem("token", token);
-    return true;
-  } catch (err) {
-    console.error("Erro ao decodificar token no login", err);
-    setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem("token");
-    return false;
-  }
-};
-
-  // Logout: remove token e limpa estado
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem("token");
   };
 
-  // Função para pegar token atual
   const getToken = () => localStorage.getItem("token") || null;
+
+  // 🔥 NOVO: atualizar usuário após edição de perfil
+  const updateUser = (newUserData) => {
+    setUser((prev) => ({
+      ...prev,
+      ...newUserData,
+    }));
+  };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, loading, getToken }}
+      value={{
+        user,
+        setUser,       // 🔥 agora disponível
+        updateUser,    // 🔥 melhor prática
+        isAuthenticated,
+        login,
+        logout,
+        loading,
+        getToken,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Hook para usar o contexto
 export function useAuth() {
   return useContext(AuthContext);
 }

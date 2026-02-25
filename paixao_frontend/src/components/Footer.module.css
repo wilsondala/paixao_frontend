@@ -1,90 +1,132 @@
-/* Footer.module.css - Paixão Angola (Footer Luxo 2026) */
-
 .footer {
-  background: #0A0606;
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
-  padding: 60px 20px 40px;
-  color: #F5EDE0;
-  position: relative;
+  background: #0f0f0f;
+  color: #fff;
+  padding-top: 60px;
 }
 
-/* Efeito sutil de brilho no topo */
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
-}
-
-/* Conteúdo do Footer */
-.footerContent {
+.container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
+  padding: 0 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 50px;
-  text-align: center;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
 }
 
-/* Títulos das colunas */
-.footerContent h4 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.45rem;
-  color: #D4AF37;
-  margin-bottom: 18px;
-  letter-spacing: 1.5px;
+.logo {
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
-/* Links e textos */
-.footerContent a,
-.footerContent p {
+.brandSection p {
   color: #ccc;
-  font-size: 1.05rem;
-  line-height: 1.8;
-  transition: all 0.3s ease;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-.footerContent a:hover {
-  color: #D4AF37;
-  transform: translateX(6px);
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* Link Sobre Nós */
-.link {
+.socials a {
+  color: #ccc;
+  font-size: 14px;
   text-decoration: none;
-  display: inline-block;
-  font-weight: 500;
+  transition: 0.3s;
 }
 
-/* Copyright */
-.footerContent p:last-child {
-  color: #777;
-  font-size: 1rem;
-  margin-top: 10px;
+.socials a:hover {
+  color: #fff;
 }
 
-/* ================= RESPONSIVIDADE ================= */
+.linksSection h4,
+.contactSection h4 {
+  margin-bottom: 15px;
+}
 
-@media (max-width: 768px) {
-  .footer {
-    padding: 50px 15px 35px;
-  }
-  
-  .footerContent {
+.linksSection a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 8px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.linksSection a:hover {
+  color: #fff;
+}
+
+.contactSection p {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.newsletter {
+  margin-top: 20px;
+}
+
+.newsletter h5 {
+  margin-bottom: 10px;
+}
+
+.inputGroup {
+  display: flex;
+}
+
+.inputGroup input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.inputGroup button {
+  padding: 8px 14px;
+  border: none;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+}
+
+.inputGroup button:hover {
+  background: #ccc;
+}
+
+.bottom {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  background: #000;
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+  .container {
     grid-template-columns: 1fr;
-    gap: 40px;
+    text-align: center;
   }
-}
 
-@media (max-width: 480px) {
-  .footer {
-    padding: 45px 12px 30px;
+  .socials {
+    justify-content: center;
   }
-  
-  .footerContent h4 {
-    font-size: 1.35rem;
+
+  .inputGroup {
+    flex-direction: column;
+  }
+
+  .inputGroup input,
+  .inputGroup button {
+    border-radius: 4px;
+  }
+
+  .inputGroup button {
+    margin-top: 8px;
   }
 }
