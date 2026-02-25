@@ -1,3 +1,4 @@
+// src/context/CartContext.jsx
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
 const CartContext = createContext(null);
@@ -17,7 +18,7 @@ export function CartProvider({ children }) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  /* ================= ADICIONAR ================= */
+  /* ================= ADICIONAR PRODUTO ================= */
   function addToCart(product) {
     if (!product || Number(product.stock) === 0) return;
 
@@ -25,9 +26,7 @@ export function CartProvider({ children }) {
     const stock = Number(product.stock);
 
     setCart((prevCart) => {
-      const existing = prevCart.find(
-        (item) => Number(item.id) === productId
-      );
+      const existing = prevCart.find((item) => Number(item.id) === productId);
 
       if (existing) {
         if (existing.quantity >= stock) {
@@ -55,15 +54,13 @@ export function CartProvider({ children }) {
     });
   }
 
-  /* ================= REMOVER ================= */
+  /* ================= REMOVER PRODUTO ================= */
   function removeFromCart(id) {
     const productId = Number(id);
-    setCart((prev) =>
-      prev.filter((item) => Number(item.id) !== productId)
-    );
+    setCart((prev) => prev.filter((item) => Number(item.id) !== productId));
   }
 
-  /* ================= LIMPAR ================= */
+  /* ================= LIMPAR CARRINHO ================= */
   function clearCart() {
     setCart([]);
   }
@@ -84,29 +81,19 @@ export function CartProvider({ children }) {
 
         return {
           ...item,
-          quantity:
-            quantity > item.stock
-              ? item.stock
-              : quantity,
+          quantity: quantity > item.stock ? item.stock : quantity,
         };
       })
     );
   }
 
-  /* ================= DERIVADOS OTIMIZADOS ================= */
+  /* ================= VALORES DERIVADOS ================= */
   const total = useMemo(() => {
-    return cart.reduce(
-      (sum, item) =>
-        sum + Number(item.price) * Number(item.quantity),
-      0
-    );
+    return cart.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
   }, [cart]);
 
   const totalItems = useMemo(() => {
-    return cart.reduce(
-      (sum, item) => sum + Number(item.quantity),
-      0
-    );
+    return cart.reduce((sum, item) => sum + Number(item.quantity), 0);
   }, [cart]);
 
   return (

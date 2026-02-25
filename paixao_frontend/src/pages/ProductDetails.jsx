@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../services/productService";
+import { useCart } from "../context/CartContext"; // ✅ ADICIONADO
 import styles from "./ProductDetails.module.css";
 import { formatMedia } from "../utils/media";
 import MainLayout from "../layouts/MainLayout";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { addToCart } = useCart(); // ✅ ADICIONADO
+
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +73,10 @@ export default function ProductDetails() {
             {product.description}
           </p>
 
-          <button className={styles.buyButton}>
+          <button
+            className={styles.buyButton}
+            onClick={() => addToCart(product)} // ✅ AGORA FUNCIONA
+          >
             Adicionar ao Carrinho
           </button>
         </div>

@@ -21,5 +21,18 @@ const api = axios.create({
   },
 });
 
-// ✅ Export default para poder importar diretamente
+// 🔐 INTERCEPTOR PARA ENVIAR TOKEN AUTOMATICAMENTE
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export default api;

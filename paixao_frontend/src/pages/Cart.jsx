@@ -1,10 +1,13 @@
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Cart.module.css";
 import { formatMedia } from "../utils/media";
 import MainLayout from "../layouts/MainLayout";
+import { createOrder } from "../services/orderService";
 
 export default function Cart() {
+  const navigate = useNavigate();
+
   const {
     cart,
     removeFromCart,
@@ -12,6 +15,36 @@ export default function Cart() {
     clearCart,
     total,
   } = useCart();
+
+  const handleCheckout = async () => {
+    try {
+      if (cart.length === 0) {
+        alert("Carrinho vazio");
+        return;
+      }
+
+      const orderData = {
+        items: cart.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      };
+
+      const response = await createOrder(orderData);
+
+      console.log("Pedido criado:", response);
+
+      alert("Pedido criado com sucesso!");
+
+      clearCart();
+
+      navigate("/products");
+
+    } catch (error) {
+      console.error("Erro ao criar pedido:", error);
+      alert("Erro ao finalizar compra");
+    }
+  };
 
   return (
     <MainLayout>
@@ -27,7 +60,7 @@ export default function Cart() {
           </div>
         ) : (
           <div className={styles.content}>
-            {/* ================= LISTA ================= */}
+            {/* LISTA */}
             <div className={styles.items}>
               {cart.map((item) => (
                 <div key={item.id} className={styles.item}>
@@ -64,8 +97,7 @@ export default function Cart() {
 
                   <div className={styles.subtotal}>
                     <p>
-                      R${" "}
-                      {(item.price * item.quantity).toFixed(2)}
+                      R$ {(item.price * item.quantity).toFixed(2)}
                     </p>
 
                     <button
@@ -79,7 +111,7 @@ export default function Cart() {
               ))}
             </div>
 
-            {/* ================= RESUMO ================= */}
+            {/* RESUMO */}
             <div className={styles.summary}>
               <h2>Resumo</h2>
 
@@ -90,7 +122,10 @@ export default function Cart() {
                 </strong>
               </div>
 
-              <button className={styles.checkout}>
+              <button
+                className={styles.checkout}
+                onClick={handleCheckout}
+              >
                 Finalizar Compra
               </button>
 

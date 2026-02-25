@@ -1,125 +1,69 @@
-/* AddressMap.module.css - Paixão Angola (Seletor de Endereço Luxo 2026) */
-
+/* ================= CONTAINER ================= */
 .container {
-  background: rgba(15, 10, 10, 0.95);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  border-radius: 20px;
-  padding: 28px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  width: 100%;
 }
 
-/* ================= BARRA DE BUSCA ================= */
+/* ================= SEARCH AREA ================= */
 .searchContainer {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .input {
   flex: 1;
-  padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  border-radius: 14px;
-  color: #F5EDE0;
-  font-size: 1.05rem;
-  transition: all 0.3s ease;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
 }
 
 .input:focus {
-  outline: none;
-  border-color: #D4AF37;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+  border-color: #111;
 }
 
-.input::placeholder {
-  color: #888;
-}
-
-/* Botão Buscar */
+/* ================= BUTTON ================= */
 .button {
-  padding: 16px 32px;
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
+  padding: 12px 18px;
+  border-radius: 30px;
   border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 1.05rem;
+  background: #111;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.4s ease;
-  white-space: nowrap;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .button:hover {
-  background: linear-gradient(90deg, #C41E3A, #9B1C2C);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(155, 28, 44, 0.5);
+  background: #000;
 }
 
-/* ================= LISTA DE RESULTADOS ================= */
+/* ================= RESULTS ================= */
 .resultItem {
-  padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 175, 55, 0.1);
+  background: white;
+  padding: 12px 15px;
   border-radius: 12px;
   margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.02rem;
-  line-height: 1.5;
-  color: #ddd;
+  transition: all 0.25s ease;
+  font-size: 14px;
 }
 
 .resultItem:hover {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: #D4AF37;
-  transform: translateX(6px);
-  color: #F5EDE0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
-.resultItem:last-child {
-  margin-bottom: 0;
-}
-
-/* ================= MENSAGEM VAZIA (caso não ache) ================= */
-.container:empty::after {
-  content: "Digite um endereço em Angola e clique em Buscar";
-  display: block;
-  padding: 40px 20px;
-  text-align: center;
-  color: #777;
-  font-style: italic;
-}
-
-/* ================= RESPONSIVIDADE ================= */
-
+/* ================= RESPONSIVO ================= */
 @media (max-width: 768px) {
   .searchContainer {
     flex-direction: column;
   }
-  
+
   .button {
     width: 100%;
-    padding: 16px;
-  }
-  
-  .container {
-    padding: 22px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 18px;
-    border-radius: 16px;
-  }
-  
-  .resultItem {
-    padding: 14px 16px;
-    font-size: 1rem;
   }
 }

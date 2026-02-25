@@ -42,8 +42,8 @@ export default function AddressMap({ onSelect }) {
           onClick={() =>
             onSelect({
               address: place.display_name,
-              lat: place.lat,
-              lon: place.lon
+              lat: parseFloat(place.lat),   // 🔥 CONVERTIDO
+              lon: parseFloat(place.lon)    // 🔥 CONVERTIDO
             })
           }
         >

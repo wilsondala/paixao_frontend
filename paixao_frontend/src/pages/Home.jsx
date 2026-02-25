@@ -82,7 +82,7 @@ export default function Home() {
         <section className={styles.videoSection}>
           <h2>Conheça o Kit Paixão</h2>
           <video controls className={styles.video}>
-            <source src="/video/nossos kits.mp4" type="video/mp4" />
+            <source src="/video/videotodosoleo.mp4" type="video/mp4" />
           </video>
         </section>
 
