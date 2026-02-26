@@ -1,5 +1,5 @@
-import api from "./client";
-import axios from "axios";
+// src/api/orders.js  (ou onde estiver)
+import api from "./client";  // ← mantenha isso, é o seu axios configurado
 
 export const getOrders = async () => {
   const response = await api.get("/orders");
@@ -18,32 +18,22 @@ export async function getOrderById(id) {
   const response = await api.get(`/orders/${id}`);
   return response.data;
 }
+
+// 🔥 Corrigido: usa o mesmo 'api' (com baseURL e token automático)
 export async function createOrder(orderData) {
-  const token = localStorage.getItem("token");
-
   try {
-    const response = await axios.post(
-      "https://paixao-backend.onrender.com/orders",
-      orderData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const response = await api.post("/orders", orderData);
     return response.data;
   } catch (error) {
-    console.log("ERRO COMPLETO:", error.response?.data);
-    throw error;
+    console.error("ERRO AO CRIAR PEDIDO:", error.response?.data || error.message);
+    throw error;  // mantém o throw para o catch no Checkout pegar
   }
 }
+
 export async function updateItemStatus(itemId, status) {
   const response = await api.put(
     `/orders/items/${itemId}/status`,
     { status }
   );
-
   return response.data;
 }
-

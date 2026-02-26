@@ -2,7 +2,6 @@ import { useState } from "react";
 import { confirmOrder, chooseDelivery } from "../services/orders";
 import styles from "./OrderItem.module.css";
 
-
 export default function OrderItem({ order, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -10,7 +9,6 @@ export default function OrderItem({ order, onUpdate }) {
   const handleConfirm = async () => {
     setLoading(true);
     setError("");
-
     try {
       await confirmOrder(order.id);
       onUpdate();
@@ -24,7 +22,6 @@ export default function OrderItem({ order, onUpdate }) {
   const handleDelivery = async () => {
     setLoading(true);
     setError("");
-
     try {
       await chooseDelivery(order.id, "entrega");
       onUpdate();
@@ -35,40 +32,48 @@ export default function OrderItem({ order, onUpdate }) {
     }
   };
 
-  <div className={`${styles.card} ${styles[order.status]}`}></div>
-
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: 12,
-        marginBottom: 10,
-        borderRadius: 6,
-      }}
-    >
-      <p>
-        <strong>Pedido #{order.id}</strong>
-      </p>
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <div className={styles.orderId}>Pedido #{order.id}</div>
+        <div className={`${styles.status} ${styles[order.status]}`}>
+          {order.status}
+        </div>
+      </div>
 
-      <p>Status: {order.status}</p>
-      <p>Total: {order.total_amount}</p>
+      <div className={styles.info}>
+        <p><strong>Status:</strong> {order.status}</p>
+        <p className={styles.total}>
+          Total: {order.total_amount} Kz
+        </p>
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
       {order.status === "pending" && (
-        <button onClick={handleConfirm} disabled={loading}>
+        <button 
+          className={`${styles.button} ${styles.confirm}`}
+          onClick={handleConfirm} 
+          disabled={loading}
+        >
           {loading ? "Confirmando..." : "Confirmar pedido"}
         </button>
       )}
 
       {order.status === "confirmed" && (
-        <button onClick={handleDelivery} disabled={loading}>
+        <button 
+          className={`${styles.button} ${styles.delivery}`}
+          onClick={handleDelivery} 
+          disabled={loading}
+        >
           {loading ? "Processando..." : "Escolher entrega"}
         </button>
       )}
 
       {order.status === "ready_for_delivery" && (
-        <p style={{ color: "green" }}>Pedido pronto para entrega 🚚</p>
+        <p style={{ color: "green", fontWeight: "600", marginTop: "12px" }}>
+          Pedido pronto para entrega 🚚
+        </p>
       )}
     </div>
   );

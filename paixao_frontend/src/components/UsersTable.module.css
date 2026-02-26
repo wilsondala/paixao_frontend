@@ -1,239 +1,210 @@
-/* UsersTable.module.css - Paixão Angola (Admin - Usuários Luxo 2026) */
-
+/* ================= CONTAINER ================= */
 .container {
-  min-height: 100vh;
-  background: #0F0A0A;
-  color: #F5EDE0;
-  padding: 40px 20px 100px;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 25px 20px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* ================= TITLE ================= */
 .container h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  color: #D4AF37;
+  font-size: 26px;
+  font-weight: 700;
+  color: #111;
   text-align: center;
-  margin-bottom: 40px;
-  letter-spacing: 3px;
 }
 
-/* ================= TABELA ================= */
+/* ================= TABLE ================= */
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(15, 10, 10, 0.92);
-  border-radius: 22px;
-  overflow: hidden;
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  overflow-x: auto;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .table th {
-  background: rgba(212, 175, 55, 0.12);
-  color: #D4AF37;
-  text-align: left;
-  padding: 22px 20px;
-  font-weight: 700;
-  font-size: 1.02rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+  background: #f8f9fb;
+  font-weight: 600;
+  color: #111;
 }
 
-.table td {
-  padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 1.05rem;
-  color: #ddd;
-}
-
-.table tr:hover {
-  background: rgba(155, 28, 44, 0.15);
-  transition: background 0.3s ease;
-}
-
-/* ================= BADGES ================= */
+/* ================= STATUS ================= */
 .active {
-  background: #34D399;
-  color: #0F0A0A;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: #43a047;
+  font-weight: 600;
 }
 
 .inactive {
-  background: #EF4444;
-  color: white;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: #e53935;
+  font-weight: 600;
 }
 
+/* ================= ROLE ================= */
 .admin {
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
-  color: white;
-  padding: 6px 18px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: #1e88e5;
+  font-weight: 600;
 }
 
 .customer {
-  background: #64748B;
-  color: white;
-  padding: 6px 18px;
-  border-radius: 50px;
+  color: #555;
   font-weight: 600;
-  font-size: 0.95rem;
 }
 
-/* ================= AÇÕES ================= */
+/* ================= ACTIONS ================= */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .actions button {
-  padding: 10px 20px;
+  padding: 6px 12px;
+  border-radius: 20px;
   border: none;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.actions button:hover {
-  transform: translateY(-2px);
-}
-
-.actions button:first-child {
-  background: #D4AF37;
-  color: #0F0A0A;
-}
-
-.actions button:nth-child(2) {
-  background: #3B82F6;
+/* Botões específicos */
+.actions button:nth-child(1) { /* Editar */
+  background: #2196f3;
   color: white;
 }
-
-.delete {
-  background: #991B1B !important;
-  color: white !important;
+.actions button:nth-child(1):hover {
+  background: #1976d2;
+  transform: translateY(-1px);
 }
 
-.delete:hover {
-  background: #EF4444 !important;
+.actions button:nth-child(2) { /* Ativar/Desativar */
+  background: #ffa000;
+  color: white;
+}
+.actions button:nth-child(2):hover {
+  background: #ff8f00;
+  transform: translateY(-1px);
+}
+
+.actions .delete { /* Excluir */
+  background: #e53935;
+  color: white;
+}
+.actions .delete:hover {
+  background: #c62828;
+  transform: translateY(-1px);
 }
 
 /* ================= MODAL ================= */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(12px);
+  inset: 0;
+  background: rgba(0,0,0,0.45);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 2000;
+  align-items: center;
+  z-index: 1000;
 }
 
 .modalContent {
-  background: rgba(15, 10, 10, 0.98);
-  border: 1px solid #D4AF37;
-  border-radius: 24px;
-  padding: 40px 45px;
+  background: white;
+  padding: 25px 20px;
+  border-radius: 14px;
   width: 100%;
-  max-width: 460px;
-  box-shadow: 0 30px 70px rgba(155, 28, 44, 0.6);
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 .modalContent h3 {
-  font-family: 'Playfair Display', serif;
-  color: #D4AF37;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 1.8rem;
 }
 
+/* ================= INPUTS & SELECT ================= */
 .modalContent input,
 .modalContent select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  font-size: 16px;
+  outline: none;
   width: 100%;
-  padding: 16px 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  border-radius: 14px;
-  color: #F5EDE0;
-  font-size: 1.05rem;
+  transition: all 0.3s ease;
 }
 
 .modalContent input:focus,
 .modalContent select:focus {
-  outline: none;
-  border-color: #D4AF37;
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25);
+  border-color: #111;
+  background: #f8f9fb;
 }
 
+/* ================= MODAL BUTTONS ================= */
 .modalButtons {
   display: flex;
-  gap: 15px;
-  margin-top: 25px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .modalButtons button {
   flex: 1;
-  padding: 16px;
+  padding: 12px 0;
+  border-radius: 30px;
   border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 1.05rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .modalButtons button:first-child {
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
+  background: #43a047; /* Salvar */
   color: white;
+}
+.modalButtons button:first-child:hover {
+  background: #388e3c;
+  transform: translateY(-1px);
 }
 
 .modalButtons button:last-child {
-  background: transparent;
-  border: 2px solid #666;
-  color: #ccc;
+  background: #e53935; /* Cancelar */
+  color: white;
+}
+.modalButtons button:last-child:hover {
+  background: #c62828;
+  transform: translateY(-1px);
 }
 
-.modalButtons button:hover {
-  transform: translateY(-3px);
-}
-
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 992px) {
-  .table {
-    min-width: 900px;
-  }
-}
-
+/* ================= RESPONSIVO ================= */
 @media (max-width: 768px) {
-  .container {
-    padding: 30px 15px 80px;
-  }
-  
   .actions {
     flex-direction: column;
+    gap: 8px;
   }
-  
+
   .modalContent {
-    padding: 35px 30px;
-    margin: 15px;
+    padding: 20px 15px;
+  }
+
+  .modalButtons {
+    flex-direction: column;
+  }
+
+  .modalButtons button {
+    width: 100%;
   }
 }

@@ -1,32 +1,39 @@
-/* ================= CONTAINER ================= */
-.container {
+/* Wrapper adaptado para o card */
+.wrapperCard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Barra de pesquisa */
+.searchRowCard {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start; /* barra alinhada à esquerda dentro do card */
+  align-items: center;
   width: 100%;
 }
 
-/* ================= SEARCH AREA ================= */
-.searchContainer {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.input {
+/* Input maior que os botões */
+.inputCard {
   flex: 1;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 14px;
+  padding: 14px 18px;
+  border-radius: 30px;
+  border: 1px solid #e0e0e0;
+  font-size: 16px;
   outline: none;
-  transition: 0.2s ease;
+  background: #f8f9fb;
 }
 
-.input:focus {
+.inputCard:focus {
   border-color: #111;
+  background: white;
 }
 
-/* ================= BUTTON ================= */
-.button {
-  padding: 12px 18px;
+/* Botão Buscar */
+.searchButtonCard {
+  padding: 12px 24px;
   border-radius: 30px;
   border: none;
   background: #111;
@@ -36,34 +43,91 @@
   transition: all 0.3s ease;
 }
 
-.button:hover {
-  background: #000;
+.searchButtonCard:hover {
+  background: black;
+  transform: translateY(-2px);
 }
 
-/* ================= RESULTS ================= */
-.resultItem {
-  background: white;
-  padding: 12px 15px;
+/* Botão Limpar em vermelho */
+.clearButtonCard {
+  padding: 12px 22px;
+  border-radius: 30px;
+  border: none;
+  background: #e53935;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clearButtonCard:hover {
+  background: #c62828;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(229, 57, 53, 0.3);
+}
+
+/* Loader */
+.loaderCard {
+  margin: 15px auto;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f1f1f1;
+  border-top: 3px solid #111;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Resultados */
+.resultsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* Item do resultado */
+.resultItemCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f8f9fb;
   border-radius: 12px;
-  margin-bottom: 10px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: all 0.25s ease;
-  font-size: 14px;
+  border: 1px solid transparent;
 }
 
-.resultItem:hover {
+.resultItemCard:hover {
+  background: white;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
-/* ================= RESPONSIVO ================= */
+/* Item ativo */
+.activeCard {
+  border: 1px solid #111;
+  background: white;
+}
+
+.iconCard { font-size: 18px; }
+.textCard { font-size: 14px; color: #111; line-height: 1.4; }
+
+/* Responsivo */
 @media (max-width: 768px) {
-  .searchContainer {
+  .searchRowCard {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .button {
+  .inputCard,
+  .searchButtonCard,
+  .clearButtonCard {
     width: 100%;
   }
 }

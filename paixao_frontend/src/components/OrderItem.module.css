@@ -1,127 +1,120 @@
-/* OrderItem.module.css - Paixão Angola (Admin - Item de Pedido Luxo 2026) */
-
+/* ================= CARD ================= */
 .card {
-  background: rgba(15, 10, 10, 0.93);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  border-radius: 20px;
-  padding: 26px 24px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  border-color: #D4AF37;
-  box-shadow: 0 25px 55px rgba(155, 28, 44, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
 
-/* Borda esquerda colorida por status */
-.card.pending   { border-left: 6px solid #F59E0B; }
-.card.confirmed { border-left: 6px solid #34D399; }
-.card.ready_for_delivery { border-left: 6px solid #8B5CF6; }
-.card.sent      { border-left: 6px solid #60A5FA; }
-.card.canceled  { border-left: 6px solid #EF4444; opacity: 0.9; }
-
-/* Título Pedido # */
-.card h3,
-.card strong {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  color: #D4AF37;
-  margin: 0 0 16px;
-  letter-spacing: 1px;
+/* ================= HEADER ================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Informações */
-.card p {
-  margin: 10px 0;
-  color: #ddd;
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.card strong {
-  color: #F5EDE0;
-}
-
-/* Mensagem de erro */
-.error {
-  color: #FF6B6B;
-  font-size: 0.98rem;
-  margin: 12px 0 16px;
-  text-align: center;
-}
-
-/* ================= BOTÕES ================= */
-.card button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 15px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.card button:hover:not(:disabled) {
-  transform: translateY(-3px);
-}
-
-/* Botão Confirmar */
-.card.pending button,
-.card.confirmed button {
-  background: linear-gradient(90deg, #34D399, #10B981);
-  color: white;
-}
-
-.card.pending button:hover {
-  background: linear-gradient(90deg, #10B981, #34D399);
-}
-
-/* Botão Escolher Entrega */
-.card.ready_for_delivery button {
-  background: linear-gradient(90deg, #8B5CF6, #A78BFA);
-  color: white;
-}
-
-.card.ready_for_delivery button:hover {
-  background: linear-gradient(90deg, #A78BFA, #8B5CF6);
-}
-
-/* Botão desabilitado */
-.card button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Mensagem "Pronto para entrega" */
-.card .deliveryReady {
-  color: #34D399;
+.orderId {
   font-weight: 600;
-  font-size: 1.1rem;
-  text-align: center;
-  margin: 16px 0 0;
+  font-size: 16px;
+  color: #111;
 }
 
-/* ================= RESPONSIVIDADE ================= */
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 14px;
+  color: white;
+}
 
+/* ================= STATUS COLORS ================= */
+.pending {
+  background: #ffa000; /* Amarelo */
+}
+
+.confirmed {
+  background: #2196f3; /* Azul */
+}
+
+.ready_for_delivery {
+  background: #43a047; /* Verde */
+}
+
+/* ================= INFO ================= */
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 15px;
+  color: #111;
+}
+
+.total {
+  font-weight: 700;
+  color: #111;
+}
+
+/* ================= ERROR ================= */
+.error {
+  color: #e53935;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* ================= BUTTONS ================= */
+.button {
+  padding: 10px 18px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+  align-self: flex-start;
+}
+
+.confirm {
+  background: #2196f3;
+  color: white;
+}
+
+.confirm:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+}
+
+.delivery {
+  background: #43a047;
+  color: white;
+}
+
+.delivery:hover {
+  background: #388e3c;
+  transform: translateY(-1px);
+}
+
+/* ================= RESPONSIVO ================= */
 @media (max-width: 768px) {
-  .card {
-    padding: 22px 20px;
+  .header, .info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
-}
 
-@media (max-width: 480px) {
-  .card {
-    padding: 20px 18px;
+  .button {
+    width: 100%;
   }
 }

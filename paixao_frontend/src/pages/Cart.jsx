@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./Cart.module.css";
 import { formatMedia } from "../utils/media";
 import MainLayout from "../layouts/MainLayout";
-import { createOrder } from "../services/orderService";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -16,34 +15,13 @@ export default function Cart() {
     total,
   } = useCart();
 
-  const handleCheckout = async () => {
-    try {
-      if (cart.length === 0) {
-        alert("Carrinho vazio");
-        return;
-      }
-
-      const orderData = {
-        items: cart.map((item) => ({
-          product_id: item.id,
-          quantity: item.quantity,
-        })),
-      };
-
-      const response = await createOrder(orderData);
-
-      console.log("Pedido criado:", response);
-
-      alert("Pedido criado com sucesso!");
-
-      clearCart();
-
-      navigate("/products");
-
-    } catch (error) {
-      console.error("Erro ao criar pedido:", error);
-      alert("Erro ao finalizar compra");
+  // 🔥 AJUSTE MÍNIMO: agora só redireciona pro Checkout
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert("Carrinho vazio");
+      return;
     }
+    navigate("/checkout");   // ← vai pra página completa que você já tem
   };
 
   return (

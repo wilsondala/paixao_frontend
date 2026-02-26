@@ -1,12 +1,14 @@
-/* ProductsAdmin.module.css - Paixão Angola (Admin - Lista de Produtos Luxo 2026) */
-
+/* ================= CONTAINER ================= */
 .container {
-  min-height: 100vh;
-  background: #0F0A0A;
-  color: #F5EDE0;
-  padding: 40px 20px 100px;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 25px 20px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* ================= HEADER ================= */
@@ -14,161 +16,122 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px;
 }
 
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  color: #D4AF37;
-  margin: 0;
-  letter-spacing: 3px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #111;
 }
 
-/* Botão Novo Produto */
+/* ================= ADD BUTTON ================= */
 .addButton {
-  background: linear-gradient(90deg, #9B1C2C, #C41E3A);
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  background: #111;
   color: white;
-  border: none;
-  padding: 16px 32px;
-  font-size: 1.15rem;
-  font-weight: 700;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  box-shadow: 0 10px 25px rgba(155, 28, 44, 0.4);
-}
-
-.addButton:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(155, 28, 44, 0.6);
-}
-
-/* ================= TABELA ================= */
-.tableWrapper {
-  background: rgba(15, 10, 10, 0.92);
-  border-radius: 22px;
-  padding: 8px;
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  overflow-x: auto;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 800px;
-}
-
-.table th {
-  background: rgba(212, 175, 55, 0.1);
-  color: #D4AF37;
-  text-align: left;
-  padding: 22px 20px;
   font-weight: 600;
-  font-size: 1.02rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-}
-
-.table td {
-  padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 1.05rem;
-  color: #ddd;
-}
-
-.table tr:hover {
-  background: rgba(155, 28, 44, 0.12);
-  transition: background 0.3s ease;
-}
-
-/* Ações */
-.actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.editButton,
-.deleteButton {
-  padding: 10px 24px;
-  border: none;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.98rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+.addButton:hover {
+  background: black;
+  transform: translateY(-2px);
+}
+
+/* ================= TABLE WRAPPER ================= */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+/* ================= EMPTY STATE ================= */
+.empty {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+  padding: 20px 0;
+}
+
+/* ================= TABLE ================= */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  background: #f8f9fb;
+  font-weight: 600;
+  color: #111;
+}
+
+/* ================= ROW ACTIONS ================= */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ================= EDIT BUTTON ================= */
 .editButton {
-  background: #D4AF37;
-  color: #0F0A0A;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  background: #2196f3;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .editButton:hover {
-  background: #C4A030;
-  transform: translateY(-2px);
+  background: #1976d2;
+  transform: translateY(-1px);
 }
 
+/* ================= DELETE BUTTON ================= */
 .deleteButton {
-  background: #991B1B;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  background: #e53935;
   color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .deleteButton:hover {
-  background: #EF4444;
-  transform: translateY(-2px);
+  background: #c62828;
+  transform: translateY(-1px);
 }
 
-/* Empty State */
-.empty {
-  text-align: center;
-  padding: 80px 20px;
-  font-size: 1.6rem;
-  color: #777;
-  font-style: italic;
-}
-
-/* Loading / Error */
-.container > div {
-  text-align: center;
-  padding: 100px 20px;
-  font-size: 1.5rem;
-  color: #D4AF37;
-}
-
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 992px) {
+/* ================= RESPONSIVO ================= */
+@media (max-width: 768px) {
   .header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
-}
 
-@media (max-width: 768px) {
-  .table {
-    min-width: 700px;
+  .addButton {
+    width: 100%;
   }
-  
-  .container {
-    padding: 30px 15px 80px;
-  }
-}
 
-@media (max-width: 480px) {
+  .table th,
+  .table td {
+    padding: 10px 8px;
+  }
+
   .actions {
     flex-direction: column;
-  }
-  
-  .editButton, .deleteButton {
-    width: 100%;
   }
 }

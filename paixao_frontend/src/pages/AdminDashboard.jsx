@@ -18,7 +18,8 @@ export default function AdminDashboard() {
         setLoading(false);
       }
     }
-
+const token = localStorage.getItem("token");
+console.log("Token atual:", token);  // ← coloca isso antes do fetch
     fetchDashboard();
   }, []);
 
