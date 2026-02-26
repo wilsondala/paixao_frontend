@@ -78,20 +78,84 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= VÍDEO ================= */}
+        {/* ================= VÍDEO 1 - Conheça o Kit Paixão (sem controles - tipo fundo) ================= */}
         <section className={styles.videoSection}>
           <h2>Conheça o Kit Paixão</h2>
-          <video controls className={styles.video}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className={styles.video}
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: "12px",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+            }}
+          >
             <source src="/video/videotodosoleo.mp4" type="video/mp4" />
+            Seu navegador não suporta o elemento de vídeo.
           </video>
         </section>
 
-        {/* ================= CTA FINAL ================= */}
+        {/* ================= CTA FINAL (com VÍDEO 2 - Publicitário sem controles) ================= */}
         <section className={styles.finalCta}>
-          <h2>Transforme seus momentos com Paixão</h2>
-          <Link to="/products" className={styles.primaryBtn}>
-            Comprar Agora
-          </Link>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "2.5rem",
+              alignItems: "center",
+              justifyContent: "center",
+              maxWidth: "1200px",
+              margin: "0 auto",
+            }}
+          >
+            {/* Texto + Botão */}
+            <div style={{ flex: "1 1 320px", minWidth: "280px" }}>
+              <h2 style={{ marginBottom: "1.5rem" }}>
+                Transforme seus momentos com Paixão
+              </h2>
+              <Link to="/products" className={styles.primaryBtn}>
+                Comprar Agora
+              </Link>
+            </div>
+
+            {/* Vídeo Publicitário - SEM CONTROLES + LOOP + MUDO + AUTOPLAY */}
+            <div
+              style={{
+                flex: "1 1 420px",
+                maxWidth: "520px",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  paddingBottom: "56.25%", // 16:9
+                  height: 0,
+                  overflow: "hidden",
+                  borderRadius: "12px",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                }}
+              >
+                <iframe
+                  src="https://streamable.com/e/pzh5yb?autoplay=1&loop=1&muted=1&nocontrols=1"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay"
+                  title="Vídeo Publicitário Paixão"
+                ></iframe>
+              </div>
+            </div>
+          </div>
         </section>
 
       </div>

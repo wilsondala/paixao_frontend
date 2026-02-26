@@ -15,7 +15,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(""); // ← novo
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleConfirmOrder = async () => {
     if (cart.length === 0) {
@@ -134,16 +134,37 @@ ${itemsText}
           </div>
         </div>
 
-        {/* Endereço */}
+        {/* ================= ENDEREÇO - CAMPO DE BUSCA CENTRALIZADO E MAIOR ================= */}
         <div className={styles.section}>
           <h3>Endereço de Entrega</h3>
-          <AddressMap
-            onSelect={(data) => {
-              setAddress(data.address);
-              setLat(data.lat);
-              setLon(data.lon);
+          
+          {/* Container centralizado e maior (exatamente onde você marcou) */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "25px 0 15px",
             }}
-          />
+          >
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "680px",        // ← maior que os botões BUSCAR/LIMPAR
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "0 8px 25px rgba(0, 0, 0, 0.12)",
+              }}
+            >
+              <AddressMap
+                onSelect={(data) => {
+                  setAddress(data.address);
+                  setLat(data.lat);
+                  setLon(data.lon);
+                }}
+              />
+            </div>
+          </div>
+
           <p>
             <strong>Selecionado:</strong> {address || "Nenhum endereço selecionado"}
           </p>
