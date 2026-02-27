@@ -12,7 +12,6 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Se já logado como admin, redireciona
   const token = localStorage.getItem("token");
   if (token) {
     try {
@@ -43,9 +42,7 @@ export default function AdminLogin() {
         return;
       }
 
-      // Salva token no localStorage
       localStorage.setItem("token", result.access_token);
-
       navigate("/admin/dashboard", { replace: true });
 
     } catch (err) {
@@ -57,36 +54,49 @@ export default function AdminLogin() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.box}>
-        <h1 className={styles.title}>PAIXÃO ADMIN</h1>
-        <h2>Painel Administrativo - Login</h2>
-
-        {error && <p className={styles.error}>{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <label htmlFor="password">Senha</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Entrando..." : "Login"}
-          </button>
-        </form>
+      
+      {/* LADO ESQUERDO */}
+      <div className={styles.left}>
+        <div className={styles.bannerContent}>
+          <h1>PAINEL ADMIN</h1>
+          <p>Gestão e controle da plataforma</p>
+        </div>
       </div>
+
+      {/* LADO DIREITO */}
+      <div className={styles.right}>
+        <div className={styles.box}>
+          <h1 className={styles.title}>PAIXÃO ADMIN</h1>
+          <h2>Login Administrativo</h2>
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <label htmlFor="password">Senha</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Entrando..." : "Login"}
+            </button>
+          </form>
+        </div>
+      </div>
+
     </div>
   );
 }

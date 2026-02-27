@@ -1,143 +1,91 @@
-/* AdminLogin.module.css - Paixão Angola (Dia/Noite - Versão Corrigida) */
-
 .container {
-  min-height: 100vh;
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* LADO ESQUERDO */
+.left {
+  flex: 1;
+  background: linear-gradient(135deg, #111827, #1f2937);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
-  padding: 20px 15px;
-  transition: background 0.6s ease;
+  color: white;
+  text-align: center;
+  padding: 40px;
 }
 
-/* Fundo sutil (funciona nos dois temas) */
-.container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-4.0.3') center/cover no-repeat;
-  opacity: 0.07;
-  z-index: 0;
+.bannerContent h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
-/* Box principal */
+.bannerContent p {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* LADO DIREITO */
+.right {
+  flex: 1;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .box {
-  background: var(--card);
-  backdrop-filter: blur(22px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 55px 45px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 30px 70px -15px var(--shadow);
-  position: relative;
-  z-index: 1;
-  transition: all 0.4s ease;
+  background: white;
+  padding: 40px;
+  width: 380px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.box:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 40px 80px -15px var(--shadow);
-}
-
-/* Título PAIXÃO ADMIN */
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 8vw, 4rem);
-  font-weight: 700;
-  color: var(--accent);
-  text-align: center;
-  margin-bottom: 8px;
-  letter-spacing: 5px;
-  text-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  margin-bottom: 5px;
 }
 
-/* Subtítulo */
 .box h2 {
-  color: var(--text);
-  font-size: clamp(1.35rem, 4.5vw, 1.7rem);
-  text-align: center;
-  margin-bottom: 40px;
-  font-weight: 500;
-  letter-spacing: 2px;
+  margin-bottom: 20px;
+  font-weight: normal;
+  color: #555;
 }
 
-/* Erro */
-.error {
-  background: rgba(155, 28, 44, 0.15);
-  color: #FF6B6B;
-  padding: 14px 20px;
-  border-radius: 12px;
-  border-left: 5px solid var(--primary);
-  margin-bottom: 28px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-/* Formulário */
-form {
+.box form {
   display: flex;
   flex-direction: column;
-  gap: 26px;
 }
 
-label {
-  color: var(--accent);
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+.box label {
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
-input {
-  width: 100%;
-  padding: 17px 22px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  color: var(--text);
-  font-size: 1.08rem;
+.box input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-input:focus {
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
-}
-
-/* Botão Login */
-button {
-  margin-top: 10px;
-  padding: 18px;
-  background: linear-gradient(90deg, var(--primary), #C41E3A);
+.box button {
+  padding: 12px;
+  background: #111827;
   color: white;
-  font-size: 1.15rem;
-  font-weight: 700;
   border: none;
-  border-radius: 14px;
+  border-radius: 4px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.4s ease;
-  letter-spacing: 2px;
-  text-transform: uppercase;
 }
 
-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -10px var(--shadow);
+.box button:hover {
+  background: #000;
 }
 
-button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-/* ================= RESPONSIVIDADE ================= */
-
-@media (max-width: 768px) {
-  .box { padding: 45px 35px; }
-}
-
-@media (max-width: 480px) {
-  .box { padding: 40px 28px; }
+.error {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 14px;
 }

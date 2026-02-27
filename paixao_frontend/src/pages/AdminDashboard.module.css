@@ -82,6 +82,36 @@
   margin-bottom: 25px;
 }
 
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* BOTÃO SAIR */
+.logoutButton {
+  background-color: #1e1e2f;
+  color: white;
+  border: none;
+
+  padding: 3px 8px;       /* bem menor */
+  font-size: 12px;
+  border-radius: 3px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  width: auto;            /* impede largura grande */
+  min-width: unset;       /* remove largura mínima */
+  display: inline-block;  /* não estica */
+  white-space: nowrap;    /* evita quebra de texto */
+}
+
+.logoutButton:hover {
+  background-color: #000;
+}
 /* Responsivo */
 @media (max-width: 768px) {
   .cards { grid-template-columns: 1fr; }

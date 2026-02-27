@@ -1,12 +1,10 @@
-import Navbar from "../components/Navbar";   // ← troquei Header por Navbar
-import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 export default function MainLayout({ children }) {
   return (
     <>
-      <Navbar />          {/* ← agora usa o Navbar completo */}
+      <Navbar />
       <main>{children}</main>
-      <Footer />
     </>
   );
 }

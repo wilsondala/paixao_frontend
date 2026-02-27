@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ ADICIONADO
 import { getDashboard } from "../api/admin";
 import UsersTable from "../components/UsersTable";
 import styles from "./AdminDashboard.module.css";
@@ -6,6 +7,13 @@ import styles from "./AdminDashboard.module.css";
 export default function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // ✅ ADICIONADO
+
+  // ✅ FUNÇÃO LOGOUT
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/admin/login", { replace: true });
+  };
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -18,8 +26,10 @@ export default function AdminDashboard() {
         setLoading(false);
       }
     }
-const token = localStorage.getItem("token");
-console.log("Token atual:", token);  // ← coloca isso antes do fetch
+
+    const token = localStorage.getItem("token");
+    console.log("Token atual:", token);
+
     fetchDashboard();
   }, []);
 
@@ -47,7 +57,14 @@ console.log("Token atual:", token);  // ← coloca isso antes do fetch
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Painel Administrativo</h1>
+      
+      {/* HEADER COM BOTÃO SAIR */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1 className={styles.title}>Painel Administrativo</h1>
+        <button onClick={handleLogout} style={{ padding: "8px 16px", cursor: "pointer" }}>
+          Sair
+        </button>
+      </div>
 
       {/* DASHBOARD CARDS */}
       <div className={styles.cards}>

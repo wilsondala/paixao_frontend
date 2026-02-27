@@ -31,11 +31,18 @@ export default function Register() {
     }
   };
 
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
+ return (
+  <div className={styles.container}>
+    {/* LADO ESQUERDO */}
+    <div className={styles.leftSide}>
+      <h1>CRIAR CONTA</h1>
+      <p>Cadastre-se para acessar a plataforma</p>
+    </div>
+
+    {/* LADO DIREITO */}
+    <div className={styles.rightSide}>
       <div className={styles.box}>
-        <h2>Criar Conta</h2>
+        <h2>Registro</h2>
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <input
@@ -72,5 +79,6 @@ export default function Register() {
         </form>
       </div>
     </div>
+  </div>
   );
 }

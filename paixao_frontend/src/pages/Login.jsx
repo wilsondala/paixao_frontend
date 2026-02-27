@@ -13,16 +13,23 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Se já estiver logado, redireciona
+  // ✅ Redirecionamento automático corrigido
   const token = localStorage.getItem("token");
+
   if (token) {
     try {
       const decoded = jwt_decode(token);
-      if (decoded.role?.toLowerCase() !== "admin") {
+
+      if (decoded.role?.toLowerCase() === "admin") {
+        return <Navigate to="/admin/dashboard" replace />;
+      } else {
         const redirectTo = location.state?.from || "/products";
         return <Navigate to={redirectTo} replace />;
       }
-    } catch {}
+
+    } catch {
+      localStorage.removeItem("token");
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -56,39 +63,50 @@ export default function Login() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>PAIXÃO ANGOLA</h1>
-
-      <div className={styles.box}>
-        <h2>Login</h2>
-
-        {error && <p className={styles.error}>{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <label htmlFor="password">Senha</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Entrando..." : "ENTRAR"}
-          </button>
-        </form>
+      
+      {/* LADO ESQUERDO */}
+      <div className={styles.left}>
+        <div className={styles.bannerContent}>
+          <h1>PAIXÃO ANGOLA</h1>
+          <p>Transformando visão em inovação</p>
+        </div>
       </div>
+
+      {/* LADO DIREITO */}
+      <div className={styles.right}>
+        <div className={styles.box}>
+          <h2>Login</h2>
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <label htmlFor="password">Senha</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Entrando..." : "ENTRAR"}
+            </button>
+          </form>
+        </div>
+      </div>
+
     </div>
   );
 }

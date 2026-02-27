@@ -139,20 +139,24 @@ export default function Home() {
                   boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
                 }}
               >
-                <iframe
-                  src="https://streamable.com/e/pzh5yb?autoplay=1&loop=1&muted=1&nocontrols=1"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  frameBorder="0"
-                  allowFullScreen
-                  allow="autoplay"
-                  title="Vídeo Publicitário Paixão"
-                ></iframe>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className={styles.video}
+            style={{
+            top: 0,
+            left: 0,   
+            width: "100%",
+            height: "auto",
+            borderRadius: "12px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+            }}
+          >
+          <source src="/video/nossos kits.mp4" type="video/mp4" />
+               Seu navegador não suporta o elemento de vídeo.
+          </video>
               </div>
             </div>
           </div>
