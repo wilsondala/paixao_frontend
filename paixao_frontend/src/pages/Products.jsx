@@ -28,7 +28,6 @@ export default function Products() {
     }
   };
 
-  // 🔄 Auto slide (se futuramente quiser usar produtos no carrossel)
   useEffect(() => {
     if (products.length === 0) return;
 
@@ -41,37 +40,36 @@ export default function Products() {
 
   return (
     <MainLayout>
-      <div className={styles.container}>
-
-        {/* ================= CARROSSEL ================= */}
-        <div className={styles.carousel}>
+      <div className={styles.page}>
+        {/* ================= HERO / CARROSSEL ================= */}
+        <section className={styles.hero}>
           <div
-            className={styles.slide}
+            className={styles.heroSlide}
             style={{
               backgroundImage: `url('/imagem/produtos/kitavelã.JPG')`,
             }}
           >
-            <div className={styles.carouselContent}>
+            <div className={styles.overlay}></div>
+
+            <div className={styles.heroContent}>
               <h1>Descubra a Paixão</h1>
               <p>Óleos e loções corporais com fragrâncias irresistíveis</p>
-              <Link to="/products" className={styles.carouselButton}>
+              <Link to="/products" className={styles.heroButton}>
                 Ver Todos os Produtos
               </Link>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ================= LISTAGEM ================= */}
-        <main className={styles.main}>
+        {/* ================= PRODUTOS ================= */}
+        <section className={styles.main}>
           <h2 className={styles.title}>Nossos Produtos</h2>
 
           {loading && (
             <p className={styles.center}>Carregando produtos...</p>
           )}
 
-          {error && (
-            <p className={styles.error}>{error}</p>
-          )}
+          {error && <p className={styles.error}>{error}</p>}
 
           {!loading && !error && (
             <div className={styles.grid}>
@@ -108,7 +106,7 @@ export default function Products() {
               )}
             </div>
           )}
-        </main>
+        </section>
       </div>
     </MainLayout>
   );

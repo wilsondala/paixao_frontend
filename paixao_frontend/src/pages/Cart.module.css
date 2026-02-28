@@ -1,15 +1,30 @@
-.container {
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 0 20px;
+/* ===================== PAGE ===================== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f4f4f4, #e9e9e9);
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
 }
 
+.card {
+  width: 100%;
+  max-width: 1100px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================== TITLE ===================== */
 .title {
   text-align: center;
   margin-bottom: 40px;
   font-size: 28px;
+  font-weight: 700;
 }
 
+/* ===================== EMPTY ===================== */
 .empty {
   text-align: center;
 }
@@ -17,13 +32,20 @@
 .shopButton {
   display: inline-block;
   margin-top: 20px;
-  padding: 10px 20px;
-  background: black;
+  padding: 12px 28px;
+  background: #111;
   color: white;
   text-decoration: none;
-  border-radius: 30px;
+  border-radius: 9999px;
+  transition: 0.3s;
 }
 
+.shopButton:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+/* ===================== CONTENT ===================== */
 .content {
   display: flex;
   gap: 40px;
@@ -33,20 +55,27 @@
   flex: 2;
 }
 
+/* ===================== ITEM CARD ===================== */
 .item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
+  background: #fafafa;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  transition: 0.25s;
+}
+
+.item:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .image {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -56,42 +85,65 @@
   margin-left: 20px;
 }
 
+.price {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* ===================== QUANTITY ===================== */
 .quantity {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .quantity button {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: none;
-  background: black;
+  background: #111;
   color: white;
   border-radius: 50%;
   cursor: pointer;
+  transition: 0.2s;
 }
 
+.quantity button:hover {
+  background: #000;
+}
+
+.quantity span {
+  font-weight: 600;
+}
+
+/* ===================== SUBTOTAL ===================== */
 .subtotal {
   text-align: right;
+  font-weight: 600;
 }
 
 .remove {
   background: none;
   border: none;
-  color: red;
+  color: #e53935;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 8px;
+  font-size: 14px;
 }
 
+/* ===================== SUMMARY ===================== */
 .summary {
   flex: 1;
-  background: white;
+  background: #fafafa;
   padding: 30px;
   border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
   height: fit-content;
+}
+
+.summary h2 {
+  margin-bottom: 20px;
 }
 
 .totalRow {
@@ -101,28 +153,46 @@
   font-size: 18px;
 }
 
+/* ===================== BUTTONS ===================== */
 .checkout {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  background: black;
+  background: #111;
   color: white;
-  border-radius: 30px;
+  border-radius: 9999px;
   cursor: pointer;
-  margin-bottom: 10px;
+  font-weight: 600;
+  transition: 0.3s;
+  margin-bottom: 12px;
+}
+
+.checkout:hover {
+  background: #000;
+  transform: translateY(-2px);
 }
 
 .clear {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  background: none;
-  border-radius: 30px;
+  background: white;
+  border-radius: 9999px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
+.clear:hover {
+  background: #f5f5f5;
+}
+
+/* ===================== RESPONSIVO ===================== */
 @media (max-width: 900px) {
   .content {
     flex-direction: column;
+  }
+
+  .card {
+    padding: 25px;
   }
 }

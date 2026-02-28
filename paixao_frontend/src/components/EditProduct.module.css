@@ -1,140 +1,156 @@
-/* ================= CONTAINER ================= */
+/* ==============================
+   EDIT PRODUCT - PREMIUM STYLE
+============================== */
+
 .container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 30px 25px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 60px 20px 120px;
+  color: var(--text);
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  align-items: center;
 }
 
-/* ================= TITLE ================= */
 .container h2 {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: #111;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: var(--accent);
+  margin-bottom: 40px;
 }
 
 /* ================= FORM ================= */
+
 .form {
+  width: 100%;
+  max-width: 750px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+  box-shadow: 0 20px 40px var(--shadow);
+  transition: 0.3s ease;
 }
 
-/* ================= INPUTS & TEXTAREA ================= */
-.form input[type="text"],
-.form input[type="number"],
+/* ================= INPUTS ================= */
+
+.form input,
 .form textarea {
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.3s ease;
-  background: #f8f9fb;
   width: 100%;
-  box-sizing: border-box;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: 0.3s ease;
+}
+
+.form textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
 .form input:focus,
 .form textarea:focus {
-  border-color: #111;
-  background: white;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1);
 }
 
-/* ================= TEXTAREA ================= */
-.form textarea {
-  resize: vertical;
-  min-height: 80px;
-}
+/* ================= TITULOS INTERNOS ================= */
 
-/* ================= HEADINGS ================= */
 .form h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 8px;
+  margin-top: 15px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
 }
 
-/* ================= IMAGE FIELD ================= */
-.form div[style*="flex"] {
+/* ================= IMAGENS ================= */
+
+.imageRow {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
-.form div[style*="flex"] input {
+.imageRow input {
   flex: 1;
 }
 
-/* ================= IMAGE REMOVE BUTTON ================= */
-.form div[style*="flex"] button {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: none;
-  background: #e53935;
-  color: white;
-  font-weight: 600;
+.removeButton {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.form div[style*="flex"] button:hover {
-  background: #c62828;
-  transform: translateY(-1px);
+.removeButton:hover {
+  background: #c41e3a;
+  color: white;
+  border-color: #c41e3a;
 }
 
-/* ================= ADD IMAGE BUTTON ================= */
-.form button[type="button"] {
-  padding: 10px 18px;
+/* ================= BOTÕES ================= */
+
+.addButton {
+  background: transparent;
+  border: 1px dashed var(--accent);
+  color: var(--accent);
+  padding: 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.addButton:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.submitButton {
+  margin-top: 20px;
+  padding: 16px;
   border-radius: 30px;
   border: none;
-  background: #111;
+  background: linear-gradient(135deg, var(--primary), #C41E3A);
   color: white;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 5px;
+  transition: 0.3s ease;
 }
 
-.form button[type="button"]:hover {
-  background: black;
-  transform: translateY(-2px);
-}
-
-/* ================= SUBMIT BUTTON ================= */
-.form button[type="submit"] {
-  padding: 14px 24px;
-  border-radius: 30px;
-  border: none;
-  background: #111;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  margin-top: 10px;
-}
-
-.form button[type="submit"]:hover {
-  background: black;
-  transform: translateY(-2px);
+.submitButton:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
 }
 
 /* ================= RESPONSIVO ================= */
+
 @media (max-width: 768px) {
-  .container {
-    padding: 20px;
-    margin: 20px;
+  .form {
+    padding: 30px 20px;
   }
-  
-  .form button[type="button"],
-  .form button[type="submit"] {
+
+  .container h2 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .imageRow {
+    flex-direction: column;
+  }
+
+  .removeButton {
     width: 100%;
   }
 }

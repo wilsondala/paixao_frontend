@@ -15,107 +15,110 @@ export default function Cart() {
     total,
   } = useCart();
 
-  // 🔥 AJUSTE MÍNIMO: agora só redireciona pro Checkout
   const handleCheckout = () => {
     if (cart.length === 0) {
       alert("Carrinho vazio");
       return;
     }
-    navigate("/checkout");   // ← vai pra página completa que você já tem
+    navigate("/checkout");
   };
 
   return (
     <MainLayout>
-      <div className={styles.container}>
-        <h1 className={styles.title}>Meu Carrinho</h1>
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <h1 className={styles.title}>Meu Carrinho</h1>
 
-        {cart.length === 0 ? (
-          <div className={styles.empty}>
-            <p>Seu carrinho está vazio.</p>
-            <Link to="/products" className={styles.shopButton}>
-              Ver Produtos
-            </Link>
-          </div>
-        ) : (
-          <div className={styles.content}>
-            {/* LISTA */}
-            <div className={styles.items}>
-              {cart.map((item) => (
-                <div key={item.id} className={styles.item}>
-                  <img
-                    src={formatMedia(item.images?.[0])}
-                    alt={item.name}
-                    className={styles.image}
-                  />
+          {cart.length === 0 ? (
+            <div className={styles.empty}>
+              <p>Seu carrinho está vazio.</p>
+              <Link to="/products" className={styles.shopButton}>
+                Ver Produtos
+              </Link>
+            </div>
+          ) : (
+            <div className={styles.content}>
+              {/* LISTA */}
+              <div className={styles.items}>
+                {cart.map((item) => (
+                  <div key={item.id} className={styles.item}>
+                    <img
+                      src={formatMedia(item.images?.[0])}
+                      alt={item.name}
+                      className={styles.image}
+                    />
 
-                  <div className={styles.info}>
-                    <h3>{item.name}</h3>
-                    <p>R$ {Number(item.price).toFixed(2)}</p>
+                    <div className={styles.info}>
+                      <h3>{item.name}</h3>
+                      <p className={styles.price}>
+                        R$ {Number(item.price).toFixed(2)}
+                      </p>
 
-                    <div className={styles.quantity}>
+                      <div className={styles.quantity}>
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          −
+                        </button>
+
+                        <span>{item.quantity}</span>
+
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className={styles.subtotal}>
+                      <p>
+                        R$ {(item.price * item.quantity).toFixed(2)}
+                      </p>
+
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
+                        className={styles.remove}
+                        onClick={() => removeFromCart(item.id)}
                       >
-                        −
-                      </button>
-
-                      <span>{item.quantity}</span>
-
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                      >
-                        +
+                        Remover
                       </button>
                     </div>
                   </div>
-
-                  <div className={styles.subtotal}>
-                    <p>
-                      R$ {(item.price * item.quantity).toFixed(2)}
-                    </p>
-
-                    <button
-                      className={styles.remove}
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Remover
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* RESUMO */}
-            <div className={styles.summary}>
-              <h2>Resumo</h2>
-
-              <div className={styles.totalRow}>
-                <span>Total:</span>
-                <strong>
-                  R$ {Number(total).toFixed(2)}
-                </strong>
+                ))}
               </div>
 
-              <button
-                className={styles.checkout}
-                onClick={handleCheckout}
-              >
-                Finalizar Compra
-              </button>
+              {/* RESUMO */}
+              <div className={styles.summary}>
+                <h2>Resumo do Pedido</h2>
 
-              <button
-                className={styles.clear}
-                onClick={clearCart}
-              >
-                Limpar Carrinho
-              </button>
+                <div className={styles.totalRow}>
+                  <span>Total:</span>
+                  <strong>
+                    R$ {Number(total).toFixed(2)}
+                  </strong>
+                </div>
+
+                <button
+                  className={styles.checkout}
+                  onClick={handleCheckout}
+                >
+                  Finalizar Compra
+                </button>
+
+                <button
+                  className={styles.clear}
+                  onClick={clearCart}
+                >
+                  Limpar Carrinho
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </MainLayout>
   );

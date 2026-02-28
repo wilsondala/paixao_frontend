@@ -8,20 +8,20 @@ export default function UsersTable() {
   const [total, setTotal] = useState(0);
   const [editingUser, setEditingUser] = useState(null);
 
-  async function loadUsers() {
-    try {
-      setLoading(true);
-      const response = await api.get("/admin/users")
+async function loadUsers() {
+  try {
+    setLoading(true);
+    const response = await api.get("/admin/users?skip=0&limit=20");  // Adicione params se precisar de paginação inicial
 
-      setUsers(response.data.data)   // <- aqui está o ponto
-      setTotal(response.data.total)  // se você usa paginação
+    setUsers(response.data);  // Mude para response.data (o array direto)
+    // setTotal(response.data.total);  // Comente ou remova se backend não retorna total
 
-    } catch (err) {
-      console.error("Erro ao carregar usuários", err);
-    } finally {
-      setLoading(false);
-    }
+  } catch (err) {
+    console.error("Erro ao carregar usuários", err);
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     loadUsers();

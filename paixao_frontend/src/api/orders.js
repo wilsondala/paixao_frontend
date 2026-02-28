@@ -22,11 +22,11 @@ export async function getOrderById(id) {
 // 🔥 Corrigido: usa o mesmo 'api' (com baseURL e token automático)
 export async function createOrder(orderData) {
   try {
-    const response = await api.post("/orders", orderData);
+    const response = await api.post("/orders/", orderData); // ← ADICIONE A BARRA
     return response.data;
   } catch (error) {
     console.error("ERRO AO CRIAR PEDIDO:", error.response?.data || error.message);
-    throw error;  // mantém o throw para o catch no Checkout pegar
+    throw error;
   }
 }
 

@@ -1,131 +1,158 @@
-/* ================= CONTAINER ================= */
-.create-product-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 30px 25px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+.create-product-wrapper {
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  background: #f4f6f9;
+  padding: 40px 20px;
 }
 
-/* ================= TITLE ================= */
-.create-product-container h2 {
+/* CARD */
+.create-product-card {
+  width: 100%;
+  max-width: 550px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.create-product-card h2 {
   text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: #111;
+  margin-bottom: 25px;
+  color: #1e293b;
+  font-size: 24px;
 }
 
-/* ================= FORM ================= */
+/* FORM */
 .create-product-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 15px;
 }
 
-/* ================= INPUTS & TEXTAREA ================= */
 .create-product-form input,
 .create-product-form textarea {
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.3s ease;
-  background: #f8f9fb;
   width: 100%;
-  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: 0.2s;
 }
 
 .create-product-form input:focus,
 .create-product-form textarea:focus {
-  border-color: #111;
-  background: white;
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
-/* ================= TEXTAREA ================= */
 .create-product-form textarea {
+  min-height: 100px;
   resize: vertical;
-  min-height: 80px;
 }
 
-/* ================= HEADINGS ================= */
-.create-product-form h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 8px;
+/* IMAGEM */
+.image-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* ================= IMAGE PREVIEW ================= */
-.create-product-form img {
-  width: 100px;
-  border-radius: 6px;
-  margin-top: 5px;
+.image-field img {
+  width: 120px;
+  border-radius: 8px;
 }
 
-/* ================= IMAGE BUTTONS ================= */
-.create-product-form button[type="button"] {
-  padding: 10px 18px;
-  border-radius: 30px;
+/* BOTÕES */
+.add-btn {
+  background: #e5e7eb;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
-  background: #111;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.add-btn:hover {
+  background: #d1d5db;
+}
+
+.remove-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+.submit-btn {
+  background: #2563eb;
   color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 5px;
-}
-
-.create-product-form button[type="button"]:hover {
-  background: black;
-  transform: translateY(-2px);
-}
-
-/* ================= REMOVE BUTTON ================= */
-.create-product-form button[style*="color: red"] {
-  background: transparent;
+  padding: 12px;
+  border-radius: 8px;
   border: none;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.create-product-form button[style*="color: red"]:hover {
-  text-decoration: underline;
-}
-
-/* ================= SUBMIT BUTTON ================= */
-.create-product-form button[type="submit"] {
-  padding: 14px 24px;
-  border-radius: 30px;
-  border: none;
-  background: #111;
-  color: white;
   font-weight: 600;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   margin-top: 10px;
 }
 
-.create-product-form button[type="submit"]:hover {
-  background: black;
-  transform: translateY(-2px);
+.submit-btn:hover {
+  background: #1e40af;
 }
 
-/* ================= RESPONSIVO ================= */
+/* ========================= */
+/* 📱 RESPONSIVIDADE */
+/* ========================= */
+
+/* Tablet */
 @media (max-width: 768px) {
-  .create-product-container {
-    padding: 20px;
-    margin: 20px;
+  .create-product-wrapper {
+    padding: 30px 15px;
   }
-  
-  .create-product-form button[type="button"],
-  .create-product-form button[type="submit"] {
-    width: 100%;
+
+  .create-product-card {
+    padding: 25px;
+  }
+
+  .create-product-card h2 {
+    font-size: 20px;
+  }
+}
+
+/* Celular */
+@media (max-width: 480px) {
+  .create-product-wrapper {
+    padding: 20px 10px;
+  }
+
+  .create-product-card {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .create-product-form input,
+  .create-product-form textarea {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .submit-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .image-field img {
+    width: 100px;
   }
 }

@@ -1,210 +1,241 @@
-/* ================= CONTAINER ================= */
+/* =========================
+   USERS TABLE - PREMIUM
+========================= */
+
 .container {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 25px 20px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 40px var(--shadow);
+  transition: 0.3s ease;
 }
 
-/* ================= TITLE ================= */
 .container h2 {
-  font-size: 26px;
-  font-weight: 700;
-  color: #111;
-  text-align: center;
+  margin-bottom: 30px;
+  color: var(--accent);
+  font-size: 1.4rem;
 }
 
 /* ================= TABLE ================= */
+
 .table {
   width: 100%;
   border-collapse: collapse;
-  overflow-x: auto;
+  overflow: hidden;
 }
 
-.table th,
-.table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+.table thead {
+  background: var(--bg);
 }
 
 .table th {
-  background: #f8f9fb;
-  font-weight: 600;
-  color: #111;
+  text-align: left;
+  padding: 14px 12px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.table tbody tr {
+  transition: 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 /* ================= STATUS ================= */
+
 .active {
-  color: #43a047;
+  background: rgba(0, 200, 0, 0.1);
+  color: green;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .inactive {
-  color: #e53935;
+  background: rgba(200, 0, 0, 0.1);
+  color: #c41e3a;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 /* ================= ROLE ================= */
+
 .admin {
-  color: #1e88e5;
+  background: linear-gradient(135deg, var(--primary), #C41E3A);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .customer {
-  color: #555;
+  background: rgba(0,0,0,0.05);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 /* ================= ACTIONS ================= */
+
 .actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .actions button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
   padding: 6px 12px;
-  border-radius: 20px;
-  border: none;
-  font-weight: 600;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 0.75rem;
+  transition: 0.3s ease;
 }
 
-/* Botões específicos */
-.actions button:nth-child(1) { /* Editar */
-  background: #2196f3;
+.actions button:hover {
+  background: var(--accent);
   color: white;
-}
-.actions button:nth-child(1):hover {
-  background: #1976d2;
-  transform: translateY(-1px);
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
-.actions button:nth-child(2) { /* Ativar/Desativar */
-  background: #ffa000;
-  color: white;
-}
-.actions button:nth-child(2):hover {
-  background: #ff8f00;
-  transform: translateY(-1px);
+.delete {
+  border-color: #c41e3a !important;
+  color: #c41e3a !important;
 }
 
-.actions .delete { /* Excluir */
-  background: #e53935;
-  color: white;
-}
-.actions .delete:hover {
-  background: #c62828;
-  transform: translateY(-1px);
+.delete:hover {
+  background: #c41e3a !important;
+  color: white !important;
 }
 
 /* ================= MODAL ================= */
+
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.45);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
 }
 
 .modalContent {
-  background: white;
-  padding: 25px 20px;
-  border-radius: 14px;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 40px;
   width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  max-width: 420px;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+  animation: fadeIn 0.25s ease;
 }
 
 .modalContent h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #111;
-  text-align: center;
+  margin-bottom: 20px;
+  color: var(--accent);
 }
 
-/* ================= INPUTS & SELECT ================= */
 .modalContent input,
 .modalContent select {
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  font-size: 16px;
-  outline: none;
   width: 100%;
-  transition: all 0.3s ease;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  transition: 0.3s ease;
 }
 
 .modalContent input:focus,
 .modalContent select:focus {
-  border-color: #111;
-  background: #f8f9fb;
+  outline: none;
+  border-color: var(--accent);
 }
 
-/* ================= MODAL BUTTONS ================= */
 .modalButtons {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .modalButtons button {
   flex: 1;
-  padding: 12px 0;
-  border-radius: 30px;
+  padding: 10px;
+  border-radius: 14px;
   border: none;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: 0.3s ease;
 }
 
 .modalButtons button:first-child {
-  background: #43a047; /* Salvar */
+  background: linear-gradient(135deg, var(--primary), #C41E3A);
   color: white;
 }
+
 .modalButtons button:first-child:hover {
-  background: #388e3c;
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 .modalButtons button:last-child {
-  background: #e53935; /* Cancelar */
-  color: white;
+  background: transparent;
+  border: 1px solid var(--border);
 }
+
 .modalButtons button:last-child:hover {
-  background: #c62828;
-  transform: translateY(-1px);
+  background: var(--border);
 }
 
 /* ================= RESPONSIVO ================= */
-@media (max-width: 768px) {
+
+@media (max-width: 900px) {
+
+  .table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .container {
+    padding: 25px;
+  }
+
   .actions {
     flex-direction: column;
-    gap: 8px;
   }
 
-  .modalContent {
-    padding: 20px 15px;
-  }
-
-  .modalButtons {
-    flex-direction: column;
-  }
-
-  .modalButtons button {
+  .actions button {
     width: 100%;
   }
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

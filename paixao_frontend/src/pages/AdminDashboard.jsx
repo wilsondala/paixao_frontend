@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ ADICIONADO
+import { useNavigate } from "react-router-dom";
 import { getDashboard } from "../api/admin";
 import UsersTable from "../components/UsersTable";
 import styles from "./AdminDashboard.module.css";
@@ -7,9 +7,8 @@ import styles from "./AdminDashboard.module.css";
 export default function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // ✅ ADICIONADO
+  const navigate = useNavigate();
 
-  // ✅ FUNÇÃO LOGOUT
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/admin/login", { replace: true });
@@ -26,9 +25,6 @@ export default function AdminDashboard() {
         setLoading(false);
       }
     }
-
-    const token = localStorage.getItem("token");
-    console.log("Token atual:", token);
 
     fetchDashboard();
   }, []);
@@ -55,18 +51,28 @@ export default function AdminDashboard() {
     users,
   } = dashboardData;
 
-  return (
-    <div className={styles.container}>
-      
-      {/* HEADER COM BOTÃO SAIR */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1 className={styles.title}>Painel Administrativo</h1>
-        <button onClick={handleLogout} style={{ padding: "8px 16px", cursor: "pointer" }}>
+return (
+  <div className={styles.pageWrapper}>
+    <div className={styles.dashboardBox}>
+
+      {/* HEADER DESTACADO */}
+      <div className={styles.header}>
+        <div>
+          <h1 className={styles.title}>Painel Administrativo</h1>
+          <p className={styles.subtitle}>
+            Controle completo da plataforma
+          </p>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className={styles.logoutButton}
+        >
           Sair
         </button>
       </div>
 
-      {/* DASHBOARD CARDS */}
+      {/* CARDS */}
       <div className={styles.cards}>
         <DashboardCard title="Usuários" value={total_users} />
         <DashboardCard title="Pedidos" value={total_orders} />
@@ -80,16 +86,17 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* TABELA DE USUÁRIOS */}
-      <div className={styles.tableSection}>
-        <h2 className={styles.subtitle}>Lista de Usuários</h2>
+      {/* TABELA */}
+      <div className={styles.tableCard}>
+        <h2>Lista de Usuários</h2>
         <UsersTable users={users} />
       </div>
+
     </div>
-  );
+  </div>
+);
 }
 
-/* COMPONENTE DE CARD */
 function DashboardCard({ title, value, highlight }) {
   return (
     <div className={`${styles.card} ${highlight ? styles.highlight : ""}`}>
