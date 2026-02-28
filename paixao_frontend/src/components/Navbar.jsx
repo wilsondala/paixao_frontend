@@ -7,6 +7,7 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [productsDropdown, setProductsDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
   const navigate = useNavigate();
@@ -23,20 +24,16 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // Fecha dropdown ao clicar fora
+  // Fecha dropdown ao clicar fora (avatar e também produtos)
   useEffect(() => {
     function handleClickOutside(event) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdown(false);
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const userInitial =
@@ -59,40 +56,139 @@ export default function Navbar() {
       </button>
 
       <div className={`${styles.links} ${open ? styles.active : ""}`}>
-        <Link to="/products" onClick={() => setOpen(false)}>
-          Produtos
-        </Link>
+        {/* MENU PRODUTOS (category + subcategory + atacado/kit) */}
+        <div className={styles.productsContainer}>
+          <button
+            type="button"
+            className={styles.productsButton}
+            onClick={() => setProductsDropdown((v) => !v)}
+          >
+            Produtos ▾
+          </button>
+
+          {productsDropdown && (
+            <div className={styles.productsDropdown}>
+              <div className={styles.categoryGroup}>
+                <strong>Roupas</strong>
+                <Link
+                  to="/products?category=Roupas&subcategory=Feminino"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Feminino
+                </Link>
+                <Link
+                  to="/products?category=Roupas&subcategory=Masculino"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Masculino
+                </Link>
+              </div>
+
+              <div className={styles.categoryGroup}>
+                <strong>Beleza</strong>
+                <Link
+                  to="/products?category=Beleza&subcategory=Hidratante"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Hidratante
+                </Link>
+                <Link
+                  to="/products?category=Beleza&subcategory=Óleo"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Óleo
+                </Link>
+                <Link
+                  to="/products?category=Beleza&subcategory=Kit"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Kits
+                </Link>
+              </div>
+
+              <div className={styles.categoryGroup}>
+                <strong>Calçado</strong>
+                <Link
+                  to="/products?category=Calçado&subcategory=Masculino"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Masculino
+                </Link>
+                <Link
+                  to="/products?category=Calçado&subcategory=Feminino"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Feminino
+                </Link>
+              </div>
+
+              <div className={styles.categoryGroup}>
+                <strong>Especiais</strong>
+                <Link
+                  to="/products?is_wholesale=true"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Atacado
+                </Link>
+                <Link
+                  to="/products?is_kit=true"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Apenas Kits
+                </Link>
+                <Link
+                  to="/products"
+                  onClick={() => {
+                    setProductsDropdown(false);
+                    setOpen(false);
+                  }}
+                >
+                  Ver todos
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
 
         {user && (
           <>
-            <Link
-              to="/cart"
-              className={styles.cart}
-              onClick={() => setOpen(false)}
-            >
+            <Link to="/cart" className={styles.cart} onClick={() => setOpen(false)}>
               🛒
-              {totalItems > 0 && (
-                <span className={styles.badge}>
-                  {totalItems}
-                </span>
-              )}
+              {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
             </Link>
 
             {/* AVATAR */}
-            <div
-              className={styles.avatarContainer}
-              ref={dropdownRef}
-            >
-              <div
-                className={styles.avatar}
-                onClick={() => setDropdown(!dropdown)}
-              >
+            <div className={styles.avatarContainer} ref={dropdownRef}>
+              <div className={styles.avatar} onClick={() => setDropdown(!dropdown)}>
                 {user.photo ? (
-                  <img
-                    src={user.photo}
-                    alt="Avatar"
-                    className={styles.avatarImg}
-                  />
+                  <img src={user.photo} alt="Avatar" className={styles.avatarImg} />
                 ) : (
                   userInitial
                 )}
@@ -105,16 +201,11 @@ export default function Navbar() {
                     <small>{user.email}</small>
                   </div>
 
-                  <Link
-                    to="/profile"
-                    onClick={() => setDropdown(false)}
-                  >
+                  <Link to="/profile" onClick={() => setDropdown(false)}>
                     Meu Perfil
                   </Link>
 
-                  <button onClick={handleLogout}>
-                    Sair
-                  </button>
+                  <button onClick={handleLogout}>Sair</button>
                 </div>
               )}
             </div>
@@ -122,7 +213,6 @@ export default function Navbar() {
         )}
 
         {!user && (
-
           <>
             <Link to="/login" onClick={() => setOpen(false)}>
               Entrar
@@ -136,9 +226,8 @@ export default function Navbar() {
               Cadastrar
             </Link>
           </>
-
         )}
       </div>
     </nav>
   );
-}       
+}
