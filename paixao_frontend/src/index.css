@@ -2,35 +2,121 @@
 /*   INDEX.CSS - PAIXÃO ANGOLA (LUXO 2026)       */
 /* ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap");
 
 :root {
-  --bg: #0A0606;
+  --bg: #0a0606;
   --card: rgba(15, 10, 10, 0.96);
-  --text: #F5EDE0;
-  --accent: #E8B923;     /* Dourado rico */
-  --primary: #9B1C2C;    /* Vermelho Paixão */
+  --text: #f5ede0;
+  --accent: #e8b923; /* Dourado rico */
+  --primary: #9b1c2c; /* Vermelho Paixão */
   --border: rgba(232, 185, 35, 0.25);
-  --shadow: rgba(155, 28, 44, 0.65);
+  --shadow: rgba(155, 28, 44, 0.35);
+}
+
+/* ✅ RESET BASE */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden; /* fallback universal */
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip; /* melhor quando suportado */
+  }
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  #root {
+    overflow-x: clip;
+  }
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   line-height: 1.6;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Playfair Display', serif;
+/* Tipografia */
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Playfair Display", serif;
   font-weight: 700;
+  margin: 0;
 }
 
-/* Estilo global para cards e containers */
-.card, .box, .container > div, .main, .productInfo, .gallery, 
-.table, .tableSection, .admin-sidebar, .admin-content {
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ✅ mídia nunca estoura */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================= */
+/* Cards globais (somente componentes de card)    */
+/* ============================================= */
+.card,
+.box,
+.main,
+.productInfo,
+.gallery,
+.table,
+.tableSection,
+.admin-sidebar,
+.admin-content {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 22px;
   box-shadow: 0 15px 35px var(--shadow);
+}
+
+/* Inputs/botões */
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Evita elementos usando 100vw “vazarem” */
+header,
+main,
+footer,
+section,
+nav,
+.container,
+.wrapper,
+.page {
+  max-width: 100%;
 }

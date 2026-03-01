@@ -144,17 +144,16 @@ export default function Home() {
             loop
             muted
             playsInline
-            className={styles.video}
             style={{
-            top: 0,
-            left: 0,   
-            width: "100%",
-            height: "auto",
-            borderRadius: "12px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
           >
-          <source src="/video/nossos kits.mp4" type="video/mp4" />
+                    <source src="/video/nossos kits.mp4" type="video/mp4" />
                Seu navegador não suporta o elemento de vídeo.
           </video>
               </div>

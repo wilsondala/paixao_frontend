@@ -1,15 +1,15 @@
 /* ===================== PAGE ===================== */
 .page {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(to bottom, #f4f4f4, #e9e9e9);
+  overflow-x: hidden; /* remove scroll horizontal indesejado */
 }
 
 /* ===================== HERO ===================== */
 .hero {
   width: 100%;
-  height: 420px;
-  position: relative;
-  overflow: hidden;
+  max-width: 100%;
+  overflow: hidden; /* impede estourar lateral */
 }
 
 .heroSlide {
@@ -18,6 +18,7 @@
   background-size: cover;
   background-position: center;
   position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,14 +31,10 @@
 }
 
 .heroContent {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-  max-width: 700px;
-  padding: 20px;
+  width: 100%;
+  max-width: 720px;
+  padding: 20px 16px;
 }
-
 .heroContent h1 {
   font-size: 44px;
   margin-bottom: 16px;
@@ -111,6 +108,8 @@
   height: 280px;
   overflow: hidden;
   background: #f1f1f1;
+
+  position: relative; /* necessário pras badges */
 }
 
 .image {
@@ -122,6 +121,30 @@
 
 .card:hover .image {
   transform: scale(1.1);
+}
+
+/* ===================== BADGES ===================== */
+.badgeKit,
+.badgeWholesale {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+}
+
+.badgeWholesale {
+  left: auto;
+  right: 10px;
 }
 
 /* ===================== INFO ===================== */
@@ -142,8 +165,9 @@
   color: #111;
 }
 
-.hero, .overlay {
-  z-index: 1;
+.wholesalePrice {
+  margin-top: 6px;
+  font-weight: 800;
 }
 
 /* ===================== STATES ===================== */
@@ -159,7 +183,39 @@
   margin-top: 40px;
 }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+}
+
+.primaryBtn,
+.whatsappBtn {
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+
+  max-width: 100%;
+  white-space: nowrap;
+}
 /* ===================== RESPONSIVO ===================== */
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryBtn,
+  .whatsappBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
     height: 300px;
@@ -176,32 +232,11 @@
   .imageContainer {
     height: 220px;
   }
-}
 
-
-.badgeKit,
-.badgeWholesale{
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-}
-
-.badgeWholesale{
-  top: 10px;
-  left: auto;
-  right: 10px;
-}
-
-.wholesalePrice{
-  margin-top: 6px;
-  font-weight: 800;
+  .badgeKit,
+  .badgeWholesale {
+    top: 8px;
+    padding: 5px 9px;
+    font-size: 11px;
+  }
 }

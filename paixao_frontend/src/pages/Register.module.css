@@ -1,10 +1,13 @@
 .container {
-  height: 100vh;
   display: flex;
+  min-height: 100dvh; /* melhor que 100vh no mobile */
   font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
 }
 
-/* LADO ESQUERDO */
+/* =========================
+   LADO ESQUERDO
+========================= */
 .leftSide {
   flex: 1;
   background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -14,19 +17,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  text-align: center;
+  padding: 48px;
 }
 
 .leftSide h1 {
   font-size: 42px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  line-height: 1.1;
 }
 
 .leftSide p {
   font-size: 16px;
-  opacity: 0.8;
+  opacity: 0.85;
+  line-height: 1.5;
+  max-width: 520px;
 }
 
-/* LADO DIREITO */
+/* =========================
+   LADO DIREITO
+========================= */
 .rightSide {
   flex: 1;
   background: #f3f4f6;
@@ -34,52 +45,65 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 32px;
 }
 
+/* =========================
+   CARD
+========================= */
 .box {
-  background: #e5e7eb;
+  background: white;
   padding: 40px;
-  width: 380px;
+  width: min(420px, 100%);
 
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
 }
 
 .box h2 {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  font-size: 20px;
 }
 
+/* =========================
+   FORM
+========================= */
 .box form {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .box input {
-  margin-bottom: 12px;
-  padding: 8px;
+  padding: 12px;
   font-size: 14px;
 
   border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  border-radius: 10px;
   outline: none;
+
+  background: #fff;
 }
 
 .box input:focus {
   border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
 }
 
 .box button {
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 6px;
+  padding: 12px;
 
   background-color: #0f172a;
   color: white;
 
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
 
   font-size: 14px;
+  font-weight: 800;
 }
 
 .box button:hover {
@@ -87,7 +111,81 @@
 }
 
 .error {
-  color: red;
+  color: #dc2626;
   font-size: 13px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+  .leftSide {
+    padding: 36px;
+  }
+
+  .leftSide h1 {
+    font-size: 34px;
+  }
+
+  .leftSide p {
+    font-size: 15px;
+  }
+
+  .rightSide {
+    padding: 24px;
+  }
+
+  .box {
+    padding: 32px;
+  }
+}
+
+/* =========================
+   MOBILE (vira 1 coluna)
+========================= */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSide {
+    flex: none;
+    padding: 28px 18px;
+  }
+
+  .leftSide h1 {
+    font-size: 28px;
+  }
+
+  .leftSide p {
+    font-size: 14px;
+  }
+
+  .rightSide {
+    flex: none;
+    padding: 18px;
+  }
+
+  .box {
+    padding: 22px;
+    border-radius: 14px;
+  }
+}
+
+/* =========================
+   MOBILE PEQUENO
+========================= */
+@media (max-width: 420px) {
+  .leftSide h1 {
+    font-size: 24px;
+  }
+
+  .box {
+    padding: 18px;
+  }
+
+  .box h2 {
+    font-size: 18px;
+  }
 }

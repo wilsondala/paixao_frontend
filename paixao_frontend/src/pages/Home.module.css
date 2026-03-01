@@ -1,109 +1,195 @@
+/* ================= HOME WRAPPER ================= */
 .home {
   width: 100%;
+  overflow-x: hidden;
 }
 
-/* HERO */
+/* ================= HERO ================= */
 .hero {
-  height: 85vh;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-              url("/imagem/produtos/kitavelã.JPG") center/cover no-repeat;
+  width: 100%;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: white;
-  padding: 2rem;
+
+  background-image: url("/imagem/produtos/kitavelã.JPG");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.66);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  width: 100%;
+  padding: 20px;
 }
 
 .heroContent h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: clamp(32px, 5.2vw, 64px);
+  line-height: 1.05;
+  margin-bottom: 14px;
+
+  /* MAIS CHAMATIVO */
+  font-weight: 800;
+  letter-spacing: 0.4px;
+
+  /* contraste + destaque */
+  color: #fff;
+  text-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.65),
+    0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.heroContent p {
+  font-size: clamp(14px, 2.4vw, 20px);
+  opacity: 0.95;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
 .price {
-  font-size: 2rem;
-  color: #FFD700;
-  margin: 1rem 0;
+  font-size: clamp(20px, 3.2vw, 32px);
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 22px;
+
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.65);
 }
 
+/* BOTÕES */
 .buttons {
   display: flex;
-  gap: 1rem;
   justify-content: center;
-  margin-top: 1.5rem;
+  gap: 14px;
+  flex-wrap: wrap; /* importante */
 }
 
 .primaryBtn {
-  background: #7B1E3C;
-  padding: 0.9rem 2rem;
+  background: var(--primary);
   color: white;
+  padding: 12px 22px;
+  border-radius: 999px;
   text-decoration: none;
-  border-radius: 8px;
+  font-weight: 700;
   transition: 0.3s;
 }
 
 .primaryBtn:hover {
-  background: #5a152c;
+  transform: translateY(-3px);
 }
 
 .whatsappBtn {
-  background: #25D366;
-  padding: 0.9rem 2rem;
+  background: #25d366;
   color: white;
+  padding: 12px 22px;
+  border-radius: 999px;
   text-decoration: none;
-  border-radius: 8px;
+  font-weight: 700;
+  transition: 0.3s;
 }
 
-/* BENEFITS */
+.whatsappBtn:hover {
+  transform: translateY(-3px);
+}
+
+/* ================= BENEFITS ================= */
 .benefits {
-  padding: 4rem 2rem;
+  padding: 80px 20px;
   text-align: center;
+}
+
+.benefits h2 {
+  margin-bottom: 50px;
 }
 
 .benefitGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* WHOLESALE */
+.benefitGrid div {
+  padding: 25px;
+  border-radius: 20px;
+}
+
+/* ================= ATACADO ================= */
 .wholesale {
-  background: #f8f8f8;
-  padding: 4rem 2rem;
+  padding: 80px 20px;
   text-align: center;
 }
 
 .wholesaleGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 25px;
+  text-align: center;
 }
 
-/* VIDEO */
+/* ================= VIDEO SECTION ================= */
 .videoSection {
-  padding: 4rem 2rem;
+  padding: 80px 20px;
   text-align: center;
 }
 
 .video {
   width: 100%;
-  max-width: 800px;
-  border-radius: 12px;
+  height: auto;
+  display: block;
 }
 
-/* FINAL CTA */
+/* ================= FINAL CTA ================= */
 .finalCta {
-  padding: 4rem 2rem;
-  text-align: center;
-  background: #7B1E3C;
-  color: white;
+  padding: 80px 20px;
+}
+
+/* ================= RESPONSIVO ================= */
+
+.buttons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+}
+
+.buttons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryBtn,
+  .whatsappBtn {
+    width: 100%;
+    text-align: center;
+  }
 }

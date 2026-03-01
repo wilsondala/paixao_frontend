@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import styles from "./Navbar.module.css";
@@ -8,9 +8,13 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [productsDropdown, setProductsDropdown] = useState(false);
-  const dropdownRef = useRef(null);
+
+  const dropdownRef = useRef(null);   // avatar
+  const productsRef = useRef(null);   // produtos
 
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { cartItems = [] } = useCart();
   const { user, logout } = useAuth();
 
@@ -24,17 +28,27 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // Fecha dropdown ao clicar fora (avatar e também produtos)
+  // Fecha dropdowns ao clicar fora
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdown(false);
+      }
+      if (productsRef.current && !productsRef.current.contains(event.target)) {
+        setProductsDropdown(false);
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Fecha menus quando muda de rota (evita ficar aberto)
+  useEffect(() => {
+    setOpen(false);
+    setDropdown(false);
+    setProductsDropdown(false);
+  }, [location.pathname, location.search]);
 
   const userInitial =
     user?.name?.charAt(0)?.toUpperCase() ||
@@ -49,19 +63,20 @@ export default function Navbar() {
 
       <button
         className={styles.toggle}
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((v) => !v)}
         aria-label="Abrir menu"
       >
         ☰
       </button>
 
       <div className={`${styles.links} ${open ? styles.active : ""}`}>
-        {/* MENU PRODUTOS (category + subcategory + atacado/kit) */}
-        <div className={styles.productsContainer}>
+        {/* MENU PRODUTOS */}
+        <div className={styles.productsContainer} ref={productsRef}>
           <button
             type="button"
             className={styles.productsButton}
             onClick={() => setProductsDropdown((v) => !v)}
+            aria-expanded={productsDropdown}
           >
             Produtos ▾
           </button>
@@ -70,108 +85,28 @@ export default function Navbar() {
             <div className={styles.productsDropdown}>
               <div className={styles.categoryGroup}>
                 <strong>Roupas</strong>
-                <Link
-                  to="/products?category=Roupas&subcategory=Feminino"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Feminino
-                </Link>
-                <Link
-                  to="/products?category=Roupas&subcategory=Masculino"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Masculino
-                </Link>
+                <Link to="/products?category=Roupas&subcategory=Feminino">Feminino</Link>
+                <Link to="/products?category=Roupas&subcategory=Masculino">Masculino</Link>
               </div>
 
               <div className={styles.categoryGroup}>
                 <strong>Beleza</strong>
-                <Link
-                  to="/products?category=Beleza&subcategory=Hidratante"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Hidratante
-                </Link>
-                <Link
-                  to="/products?category=Beleza&subcategory=Óleo"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Óleo
-                </Link>
-                <Link
-                  to="/products?category=Beleza&subcategory=Kit"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Kits
-                </Link>
+                <Link to="/products?category=Beleza&subcategory=Hidratante">Hidratante</Link>
+                <Link to="/products?category=Beleza&subcategory=Óleo">Óleo</Link>
+                <Link to="/products?category=Beleza&subcategory=Kit">Kits</Link>
               </div>
 
               <div className={styles.categoryGroup}>
                 <strong>Calçado</strong>
-                <Link
-                  to="/products?category=Calçado&subcategory=Masculino"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Masculino
-                </Link>
-                <Link
-                  to="/products?category=Calçado&subcategory=Feminino"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Feminino
-                </Link>
+                <Link to="/products?category=Calçado&subcategory=Masculino">Masculino</Link>
+                <Link to="/products?category=Calçado&subcategory=Feminino">Feminino</Link>
               </div>
 
               <div className={styles.categoryGroup}>
                 <strong>Especiais</strong>
-                <Link
-                  to="/products?is_wholesale=true"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Atacado
-                </Link>
-                <Link
-                  to="/products?is_kit=true"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Apenas Kits
-                </Link>
-                <Link
-                  to="/products"
-                  onClick={() => {
-                    setProductsDropdown(false);
-                    setOpen(false);
-                  }}
-                >
-                  Ver todos
-                </Link>
+                <Link to="/products?is_wholesale=true">Atacado</Link>
+                <Link to="/products?is_kit=true">Apenas Kits</Link>
+                <Link to="/products">Ver todos</Link>
               </div>
             </div>
           )}
@@ -179,14 +114,12 @@ export default function Navbar() {
 
         {user && (
           <>
-            <Link to="/cart" className={styles.cart} onClick={() => setOpen(false)}>
-              🛒
-              {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
+            <Link to="/cart" className={styles.cart}>
+              🛒{totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
             </Link>
 
-            {/* AVATAR */}
             <div className={styles.avatarContainer} ref={dropdownRef}>
-              <div className={styles.avatar} onClick={() => setDropdown(!dropdown)}>
+              <div className={styles.avatar} onClick={() => setDropdown((v) => !v)}>
                 {user.photo ? (
                   <img src={user.photo} alt="Avatar" className={styles.avatarImg} />
                 ) : (
@@ -201,9 +134,7 @@ export default function Navbar() {
                     <small>{user.email}</small>
                   </div>
 
-                  <Link to="/profile" onClick={() => setDropdown(false)}>
-                    Meu Perfil
-                  </Link>
+                  <Link to="/profile">Meu Perfil</Link>
 
                   <button onClick={handleLogout}>Sair</button>
                 </div>
@@ -214,15 +145,8 @@ export default function Navbar() {
 
         {!user && (
           <>
-            <Link to="/login" onClick={() => setOpen(false)}>
-              Entrar
-            </Link>
-
-            <Link
-              to="/register"
-              className={styles.registerBtn}
-              onClick={() => setOpen(false)}
-            >
+            <Link to="/login">Entrar</Link>
+            <Link to="/register" className={styles.registerBtn}>
               Cadastrar
             </Link>
           </>

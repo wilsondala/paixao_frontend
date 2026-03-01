@@ -1,7 +1,8 @@
 .container {
   display: flex;
-  height: 100vh;
+  min-height: 100dvh; /* melhor que 100vh no celular */
   font-family: Arial, sans-serif;
+  background: #f5f5f5;
 }
 
 /* LADO ESQUERDO */
@@ -13,71 +14,161 @@
   justify-content: center;
   color: white;
   text-align: center;
-  padding: 40px;
+  padding: 48px;
+}
+
+.bannerContent {
+  max-width: 520px;
 }
 
 .bannerContent h1 {
   font-size: 48px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  line-height: 1.05;
 }
 
 .bannerContent p {
-  font-size: 20px;
+  font-size: 18px;
   opacity: 0.9;
+  line-height: 1.5;
 }
 
 /* LADO DIREITO */
 .right {
   flex: 1;
-  background: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 32px;
 }
 
+/* CARD */
 .box {
   background: white;
   padding: 40px;
-  width: 380px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: min(420px, 100%); /* responsivo */
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
 }
 
 .box h2 {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  font-size: 22px;
 }
 
+/* FORM */
 .box form {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .box label {
   font-size: 14px;
-  margin-bottom: 5px;
 }
 
 .box input {
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.box input:focus {
+  border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
 }
 
 .box button {
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 6px;
+  padding: 12px;
 
   background-color: #0f172a;
   color: white;
 
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
 
   font-size: 14px;
+  font-weight: 800;
 }
 
 .box button:hover {
   background-color: #020617;
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+  .left {
+    padding: 36px;
+  }
+
+  .bannerContent h1 {
+    font-size: 40px;
+  }
+
+  .bannerContent p {
+    font-size: 16px;
+  }
+
+  .right {
+    padding: 24px;
+  }
+
+  .box {
+    padding: 32px;
+  }
+}
+
+/* =========================
+   MOBILE (vira 1 coluna)
+========================= */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left {
+    flex: none;
+    padding: 28px 18px;
+  }
+
+  .bannerContent h1 {
+    font-size: 30px;
+  }
+
+  .bannerContent p {
+    font-size: 14px;
+  }
+
+  .right {
+    flex: none;
+    padding: 18px;
+  }
+
+  .box {
+    padding: 22px;
+    border-radius: 14px;
+  }
+}
+
+/* =========================
+   MOBILE PEQUENO
+========================= */
+@media (max-width: 420px) {
+  .bannerContent h1 {
+    font-size: 26px;
+  }
+
+  .box {
+    padding: 18px;
+  }
+
+  .box h2 {
+    font-size: 20px;
+  }
 }

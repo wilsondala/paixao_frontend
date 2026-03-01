@@ -1,13 +1,13 @@
 /* =========================
-   BASE / RESET
+   NAVBAR BASE
 ========================= */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 9999;
 
-  height: 64px;
   width: 100%;
+  height: 64px;
   padding: 0 20px;
 
   display: flex;
@@ -16,7 +16,12 @@
 
   background: #0e1a2b;
   color: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Logo */
+.logo {
+  flex: 0 0 auto;
 }
 
 .logo a {
@@ -24,19 +29,20 @@
   text-decoration: none;
   font-weight: 800;
   letter-spacing: 0.3px;
+
   display: inline-flex;
   align-items: center;
   height: 64px;
 }
 
-/* botão hamburguer */
+/* Botão hambúrguer */
 .toggle {
   display: none;
   height: 40px;
   width: 44px;
   border: 0;
   border-radius: 10px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
   cursor: pointer;
 }
@@ -45,8 +51,12 @@
    LINKS (DESKTOP)
 ========================= */
 .links {
+  flex: 1 1 auto;
+  min-width: 0;
+
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 14px;
 }
 
@@ -62,21 +72,24 @@
 
   padding: 0 10px;
   border-radius: 10px;
+
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .links a:hover {
-  background: rgba(255,255,255,0.10);
+  background: rgba(255, 255, 255, 0.10);
 }
 
-/* Botão cadastrar (se você já tinha) */
+/* Botão cadastrar */
 .registerBtn {
   background: #ffffff;
   color: #0e1a2b !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
 }
 
 .registerBtn:hover {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 /* =========================
@@ -90,6 +103,7 @@
   position: absolute;
   top: -6px;
   right: -6px;
+
   min-width: 18px;
   height: 18px;
 
@@ -98,39 +112,46 @@
   justify-content: center;
 
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
 
   border-radius: 999px;
   background: #ff3b30;
-  color: white;
+  color: #fff;
   padding: 0 6px;
 }
 
 /* =========================
-   DROPDOWN: PRODUTOS
+   MENU PRODUTOS
 ========================= */
 .productsContainer {
   position: relative;
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 
-/* se você usa <span className={productsLink}>Produtos ▾</span> */
-.productsLink {
+.productsButton {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+
+  cursor: pointer;
   height: 40px;
-  display: inline-flex;
-  align-items: center;
   padding: 0 10px;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
+
+  display: inline-flex;
+  align-items: center;
+
+  white-space: nowrap;
 }
 
-.productsLink:hover {
-  background: rgba(255,255,255,0.10);
+.productsButton:hover {
+  background: rgba(255, 255, 255, 0.10);
 }
 
+/* dropdown desktop */
 .productsDropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -141,13 +162,13 @@
 
   padding: 16px;
   border-radius: 14px;
-  box-shadow: 0 14px 34px rgba(0,0,0,0.20);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20);
 
   z-index: 10000;
   display: flex;
   gap: 26px;
 
-  min-width: 420px;
+  min-width: 520px;
 }
 
 .categoryGroup {
@@ -171,7 +192,7 @@
   padding: 8px 10px;
   border-radius: 10px;
 
-  height: auto; /* evita herdar altura fixa do .links a */
+  height: auto;
   display: block;
 }
 
@@ -192,12 +213,14 @@
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.14);
+
+  background: rgba(255, 255, 255, 0.14);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 900;
   user-select: none;
 }
 
@@ -219,8 +242,8 @@
 
   border-radius: 14px;
   padding: 12px;
-  box-shadow: 0 14px 34px rgba(0,0,0,0.20);
 
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20);
   z-index: 10000;
 }
 
@@ -246,6 +269,7 @@
   display: block;
   padding: 10px 10px;
   border-radius: 10px;
+
   color: #111;
   text-decoration: none;
   font-size: 14px;
@@ -258,13 +282,16 @@
 .dropdown button {
   width: 100%;
   border: 0;
+
   background: #0e1a2b;
   color: #fff;
+
   padding: 10px 12px;
   border-radius: 10px;
+
   cursor: pointer;
   margin-top: 8px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .dropdown button:hover {
@@ -272,34 +299,55 @@
 }
 
 /* =========================
-   RESPONSIVO (MOBILE)
+   TABLET (reduz espaçamentos)
 ========================= */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navbar {
-    height: 56px;
-    padding: 0 14px;
+    height: 60px;
+    padding: 0 12px;
   }
 
   .logo a {
-    height: 56px;
+    height: 60px;
     font-size: 14px;
   }
 
+  .links {
+    gap: 8px;
+  }
+
+  .links a,
+  .productsButton {
+    height: 38px;
+    padding: 0 8px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .productsDropdown {
+    min-width: 480px;
+  }
+}
+
+/* =========================
+   MOBILE / TABLET PEQUENO
+   (quebra antes de estourar)
+========================= */
+@media (max-width: 900px) {
   .toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
 
-  /* menu vira painel */
   .links {
     position: absolute;
-    top: 56px;
+    top: 60px;
     left: 0;
     right: 0;
 
     background: #0e1a2b;
-    border-top: 1px solid rgba(255,255,255,0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 
     display: none;
     flex-direction: column;
@@ -307,6 +355,7 @@
     gap: 8px;
 
     padding: 12px;
+    z-index: 9999;
   }
 
   .active {
@@ -314,15 +363,15 @@
   }
 
   .links a,
-  .productsLink {
+  .productsButton {
     width: 100%;
-    justify-content: space-between;
     height: 44px;
     padding: 0 12px;
+    justify-content: space-between;
     border-radius: 12px;
   }
 
-  /* Dropdown de produtos no mobile vira bloco (não flutuante) */
+  /* Produtos dropdown vira bloco dentro do menu */
   .productsContainer {
     width: 100%;
     flex-direction: column;
@@ -331,8 +380,8 @@
 
   .productsDropdown {
     position: static;
-    min-width: auto;
     width: 100%;
+    min-width: auto;
 
     display: flex;
     flex-direction: column;
@@ -342,7 +391,7 @@
     border-radius: 14px;
     box-shadow: none;
 
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     color: #fff;
   }
 
@@ -352,16 +401,25 @@
 
   .categoryGroup a {
     color: #fff;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .categoryGroup a:hover {
-    background: rgba(255,255,255,0.14);
+    background: rgba(255, 255, 255, 0.14);
   }
 
-  /* Avatar dropdown no mobile: ocupa largura */
   .dropdown {
-    right: 0;
     width: min(320px, 92vw);
+  }
+}
+
+/* Ajuste final para celulares menores */
+@media (max-width: 420px) {
+  .navbar {
+    padding: 0 10px;
+  }
+
+  .logo a {
+    font-size: 13px;
   }
 }
