@@ -28,4 +28,3 @@ export default function Dashboard() {
     </div>
   );
 }
-console.log("DASHBOARD PUBLICO RENDERIZADO");

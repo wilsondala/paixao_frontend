@@ -6,20 +6,30 @@ export default function CreateProduct() {
   const [form, setForm] = useState({
     name: "",
     description: "",
+    category: "Perfumaria",
+    subcategory: "",
     price: "",
     stock: "",
+    is_wholesale: false,
+    wholesale_price: "",
+    is_kit: false,
     images: [""],
     video_url: "",
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+
+    setForm({
+      ...form,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleImageChange = (index, value) => {
-    const updatedImages = [...form.images];
-    updatedImages[index] = value;
-    setForm({ ...form, images: updatedImages });
+    const updated = [...form.images];
+    updated[index] = value;
+    setForm({ ...form, images: updated });
   };
 
   const addImageField = () => {
@@ -27,8 +37,8 @@ export default function CreateProduct() {
   };
 
   const removeImageField = (index) => {
-    const updatedImages = form.images.filter((_, i) => i !== index);
-    setForm({ ...form, images: updatedImages });
+    const updated = form.images.filter((_, i) => i !== index);
+    setForm({ ...form, images: updated.length ? updated : [""] });
   };
 
   const handleSubmit = async (e) => {
@@ -38,8 +48,15 @@ export default function CreateProduct() {
       await api.post("/admin/products", {
         name: form.name,
         description: form.description,
+        category: form.category,
+        subcategory: form.subcategory,
         price: Number(form.price),
         stock: Number(form.stock),
+        is_wholesale: form.is_wholesale,
+        wholesale_price: form.is_wholesale
+          ? Number(form.wholesale_price)
+          : null,
+        is_kit: form.is_kit,
         images: form.images.filter((img) => img.trim() !== ""),
         video_url: form.video_url.trim(),
       });
@@ -49,11 +66,17 @@ export default function CreateProduct() {
       setForm({
         name: "",
         description: "",
+        category: "Perfumaria",
+        subcategory: "",
         price: "",
         stock: "",
+        is_wholesale: false,
+        wholesale_price: "",
+        is_kit: false,
         images: [""],
         video_url: "",
       });
+
     } catch (err) {
       console.error(err);
       alert("Erro ao criar produto");
@@ -66,6 +89,7 @@ export default function CreateProduct() {
         <h2>Criar Produto</h2>
 
         <form onSubmit={handleSubmit} className="create-product-form">
+
           <input
             name="name"
             placeholder="Nome do Produto"
@@ -76,57 +100,97 @@ export default function CreateProduct() {
 
           <textarea
             name="description"
-            placeholder="Descrição do Produto"
+            placeholder="Descrição"
             value={form.description}
             onChange={handleChange}
           />
 
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+          >
+            <option value="Roupas">Roupas</option>
+            <option value="Perfumaria">Perfumaria</option>
+            <option value="Calçados">Calçados</option>
+            <option value="Praia">Praia</option>
+            <option value="Outros">Outros</option>
+            <option value="Atacado">Atacado</option>
+            <option value="Kits">Kits</option>
+          </select>
+
           <input
-            name="price"
+            name="subcategory"
+            placeholder="Subcategoria (Ex: Óleo, Hidratante, Kit...)"
+            value={form.subcategory}
+            onChange={handleChange}
+          />
+
+          <input
             type="number"
-            placeholder="Preço"
+            name="price"
+            placeholder="Preço normal"
             value={form.price}
             onChange={handleChange}
             required
           />
 
           <input
-            name="stock"
             type="number"
+            name="stock"
             placeholder="Estoque"
             value={form.stock}
             onChange={handleChange}
             required
           />
 
+          {/* WHOLESALE */}
+          <label className="checkbox-row">
+            <input
+              type="checkbox"
+              name="is_wholesale"
+              checked={form.is_wholesale}
+              onChange={handleChange}
+            />
+            Produto com preço atacado?
+          </label>
+
+          {form.is_wholesale && (
+            <input
+              type="number"
+              name="wholesale_price"
+              placeholder="Preço atacado"
+              value={form.wholesale_price}
+              onChange={handleChange}
+            />
+          )}
+
+          {/* KIT */}
+          <label className="checkbox-row">
+            <input
+              type="checkbox"
+              name="is_kit"
+              checked={form.is_kit}
+              onChange={handleChange}
+            />
+            Produto é um kit?
+          </label>
+
           <h4>Imagens</h4>
 
           {form.images.map((img, index) => (
             <div key={index} className="image-field">
               <input
-                placeholder="https://site.com/imagem.jpg ou nome.jpg"
+                placeholder="URL ou nome da imagem"
                 value={img}
                 onChange={(e) =>
                   handleImageChange(index, e.target.value)
                 }
               />
 
-              {img && (
-                <img
-                  src={
-                    img.startsWith("http")
-                      ? img
-                      : `/images/produtos/${img}`
-                  }
-                  alt="preview"
-                  onError={(e) => (e.target.style.display = "none")}
-                />
-              )}
-
               {form.images.length > 1 && (
                 <button
                   type="button"
-                  className="remove-btn"
                   onClick={() => removeImageField(index)}
                 >
                   Remover
@@ -135,7 +199,7 @@ export default function CreateProduct() {
             </div>
           ))}
 
-          <button type="button" onClick={addImageField} className="add-btn">
+          <button type="button" onClick={addImageField}>
             + Adicionar imagem
           </button>
 
@@ -146,9 +210,10 @@ export default function CreateProduct() {
             onChange={handleChange}
           />
 
-          <button type="submit" className="submit-btn">
+          <button type="submit">
             Criar Produto
           </button>
+
         </form>
       </div>
     </div>

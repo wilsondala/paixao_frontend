@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 import styles from "./EditProduct.module.css";
@@ -12,25 +12,30 @@ export default function EditProduct() {
     description: "",
     price: "",
     stock: "",
+    category: "",      // ✅ adiciona category (seu schema tem)
     images: [],
     video_url: "",
   });
 
   const [videoFile, setVideoFile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  // 🔹 Buscar produto pelo ID
+  const fetchUrl = useMemo(() => `/products/${id}`, [id]);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await api.get(`/products/${id}`);
+        const res = await api.get(fetchUrl);
+
         setForm({
-          name: res.data.name || "",
-          description: res.data.description || "",
-          price: res.data.price || "",
-          stock: res.data.stock || "",
-          images: res.data.images || [],
-          video_url: res.data.video_url || "",
+          name: res.data?.name ?? "",
+          description: res.data?.description ?? "",
+          price: res.data?.price != null ? String(res.data.price) : "",
+          stock: res.data?.stock != null ? String(res.data.stock) : "",
+          category: res.data?.category ?? "",
+          images: Array.isArray(res.data?.images) ? res.data.images : [],
+          video_url: res.data?.video_url ?? "",
         });
       } catch (err) {
         console.error("Erro ao buscar produto:", err);
@@ -42,98 +47,122 @@ export default function EditProduct() {
     };
 
     fetchProduct();
-  }, [id, navigate]);
+  }, [fetchUrl, navigate]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddImage = () => {
-    setForm({ ...form, images: [...form.images, ""] });
+    setForm((prev) => ({ ...prev, images: [...prev.images, ""] }));
   };
 
   const handleImageChange = (index, value) => {
-    const updated = [...form.images];
-    updated[index] = value;
-    setForm({ ...form, images: updated });
+    setForm((prev) => {
+      const updated = [...prev.images];
+      updated[index] = value;
+      return { ...prev, images: updated };
+    });
   };
 
   const handleRemoveImage = (index) => {
-    const updated = form.images.filter((_, i) => i !== index);
-    setForm({ ...form, images: updated });
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
 
   const handleVideoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) setVideoFile(file);
+    const file = e.target.files?.[0];
+    setVideoFile(file || null);
   };
+
+  const toNumberSafe = (val) => {
+    const n = Number(String(val).replace(",", "."));
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const normalizeImages = (arr) =>
+    (Array.isArray(arr) ? arr : [])
+      .map((x) => String(x || "").trim())
+      .filter(Boolean);
+
+  async function putWithFallback(urlPrimary, urlFallback, body, config) {
+    try {
+      return await api.put(urlPrimary, body, config);
+    } catch (err) {
+      const status = err?.response?.status;
+      if (status === 404 && urlFallback) {
+        return await api.put(urlFallback, body, config);
+      }
+      throw err;
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (saving) return;
+
+    setSaving(true);
 
     try {
-      const token = localStorage.getItem("token");
+      // ✅ payload exatamente no formato que você mandou
+      const payloadBase = {
+        name: form.name.trim(),
+        description: form.description.trim(),
+        price: toNumberSafe(form.price),
+        stock: toNumberSafe(form.stock),
+        category: form.category.trim() || null,
+        images: normalizeImages(form.images),
+        video_url: form.video_url.trim() || null,
+      };
 
-      const url = `/admin/products/${id}`;
+      const urlAdmin = `/admin/products/${id}`;
+      const urlPublic = `/products/${id}`;
 
       if (videoFile) {
         const formData = new FormData();
-        formData.append("name", form.name);
-        formData.append("description", form.description);
-        formData.append("price", Number(form.price));
-        formData.append("stock", Number(form.stock));
+        formData.append("name", payloadBase.name);
+        formData.append("description", payloadBase.description);
+        formData.append("price", String(payloadBase.price));
+        formData.append("stock", String(payloadBase.stock));
+        if (payloadBase.category) formData.append("category", payloadBase.category);
+        if (payloadBase.video_url) formData.append("video_url", payloadBase.video_url);
+
         formData.append("video", videoFile);
+        payloadBase.images.forEach((img) => formData.append("images", img));
 
-        form.images.forEach((img, i) =>
-          formData.append(`images[${i}]`, img)
-        );
-
-        await api.put(url, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+        await putWithFallback(urlAdmin, urlPublic, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        await api.put(
-          url,
-          {
-            name: form.name,
-            description: form.description,
-            price: Number(form.price),
-            stock: Number(form.stock),
-            images: form.images,
-            video_url: form.video_url,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await putWithFallback(urlAdmin, urlPublic, payloadBase);
       }
 
       alert("Produto atualizado com sucesso!");
       navigate("/admin/products");
-
     } catch (err) {
       console.error("Erro ao atualizar:", err);
 
-      if (err.response?.status === 401) {
+      const status = err?.response?.status;
+
+      if (status === 401) {
         alert("Sessão expirada. Faça login novamente.");
         navigate("/login");
-      } else if (err.response?.status === 403) {
+      } else if (status === 403) {
         alert("Você não tem permissão para editar este produto.");
-      } else if (err.response?.status === 404) {
-        alert("Produto não encontrado ou endpoint incorreto.");
+      } else if (status === 404) {
+        alert("Produto não encontrado / rota PUT não existe.");
       } else {
         alert("Erro ao atualizar produto.");
       }
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loading)
-    return <div className={styles.container}>Carregando...</div>;
+  if (loading) return <div className={styles.container}>Carregando...</div>;
 
   return (
     <div className={styles.container}>
@@ -157,8 +186,9 @@ export default function EditProduct() {
         />
 
         <input
-          type="number"
+          type="text"
           name="price"
+          inputMode="decimal"
           placeholder="Preço"
           value={form.price}
           onChange={handleChange}
@@ -166,33 +196,35 @@ export default function EditProduct() {
         />
 
         <input
-          type="number"
+          type="text"
           name="stock"
+          inputMode="numeric"
           placeholder="Estoque"
           value={form.stock}
           onChange={handleChange}
           required
         />
 
+        <input
+          type="text"
+          name="category"
+          placeholder="Categoria (ex: Perfumaria, Roupas...)"
+          value={form.category}
+          onChange={handleChange}
+        />
+
         <h4>Imagens</h4>
+
         {form.images.map((img, index) => (
-          <div
-            key={index}
-            style={{ display: "flex", gap: "8px", marginBottom: "8px" }}
-          >
+          <div key={index} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
             <input
               type="text"
-              placeholder="URL da imagem"
+              placeholder="URL da imagem ou nome do arquivo"
               value={img}
-              onChange={(e) =>
-                handleImageChange(index, e.target.value)
-              }
+              onChange={(e) => handleImageChange(index, e.target.value)}
               style={{ flex: 1 }}
             />
-            <button
-              type="button"
-              onClick={() => handleRemoveImage(index)}
-            >
+            <button type="button" onClick={() => handleRemoveImage(index)}>
               X
             </button>
           </div>
@@ -212,13 +244,11 @@ export default function EditProduct() {
           onChange={handleChange}
         />
 
-        <input
-          type="file"
-          accept="video/*"
-          onChange={handleVideoUpload}
-        />
+        <input type="file" accept="video/*" onChange={handleVideoUpload} />
 
-        <button type="submit">Salvar Alterações</button>
+        <button type="submit" disabled={saving}>
+          {saving ? "Salvando..." : "Salvar Alterações"}
+        </button>
       </form>
     </div>
   );

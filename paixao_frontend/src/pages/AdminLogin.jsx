@@ -2,24 +2,29 @@ import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { login as loginRequest } from "../api/auth";
+import { useAuth } from "../context/AuthContext"; // ✅ IMPORTANTE
 import styles from "./AdminLogin.module.css";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ usar AuthContext
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ✅ Se já tiver token e for admin, segue pro painel
   const token = localStorage.getItem("token");
   if (token) {
     try {
       const decoded = jwt_decode(token);
-      if (decoded.role?.toLowerCase() === "admin") {
+      if (decoded?.role?.toLowerCase() === "admin") {
         return <Navigate to="/admin/dashboard" replace />;
       }
-    } catch {}
+    } catch {
+      // token inválido -> ignora
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -28,25 +33,44 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
+      // ✅ sua função loginRequest(email,password) precisa retornar { access_token }
       const result = await loginRequest(email, password);
 
-      if (!result?.access_token) {
+      const accessToken = result?.access_token || result?.data?.access_token;
+      if (!accessToken) {
         setError("Token inválido ou usuário não encontrado.");
         return;
       }
 
-      const decoded = jwt_decode(result.access_token);
+      // ✅ valida role no token
+      let decoded;
+      try {
+        decoded = jwt_decode(accessToken);
+      } catch {
+        setError("Token inválido.");
+        return;
+      }
 
-      if (!decoded.role || decoded.role.toLowerCase() !== "admin") {
+      if (!decoded?.role || decoded.role.toLowerCase() !== "admin") {
         setError("Acesso negado: você não é administrador.");
         return;
       }
 
-      localStorage.setItem("token", result.access_token);
-      navigate("/admin/dashboard", { replace: true });
+      // ✅ atualiza AuthContext + salva token
+      const ok = login(accessToken, "admin");
+      if (!ok) {
+        setError("Acesso negado: você não é administrador.");
+        return;
+      }
 
+      navigate("/admin/dashboard", { replace: true });
     } catch (err) {
-      setError(err.message || "Erro ao logar como admin.");
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Erro ao logar como admin.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -54,7 +78,6 @@ export default function AdminLogin() {
 
   return (
     <div className={styles.container}>
-      
       {/* LADO ESQUERDO */}
       <div className={styles.left}>
         <div className={styles.bannerContent}>
@@ -75,6 +98,7 @@ export default function AdminLogin() {
             <label htmlFor="email">Email</label>
             <input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +108,7 @@ export default function AdminLogin() {
             <label htmlFor="password">Senha</label>
             <input
               id="password"
+              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -96,7 +121,6 @@ export default function AdminLogin() {
           </form>
         </div>
       </div>
-
     </div>
   );
 }

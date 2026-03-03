@@ -1,156 +1,84 @@
-/* ==============================
-   EDIT PRODUCT - PREMIUM STYLE
-============================== */
-
 .container {
-  min-height: 100vh;
-  background: var(--bg);
-  padding: 60px 20px 120px;
-  color: var(--text);
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(2, 6, 23, 0.08);
+  padding: 18px;
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 12px;
 }
 
 .container h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.4rem;
-  color: var(--accent);
-  margin-bottom: 40px;
+  margin: 0 0 12px;
+  font-size: 18px;
 }
-
-/* ================= FORM ================= */
-
-.form {
-  width: 100%;
-  max-width: 750px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-shadow: 0 20px 40px var(--shadow);
-  transition: 0.3s ease;
-}
-
-/* ================= INPUTS ================= */
 
 .form input,
 .form textarea {
   width: 100%;
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  font-size: 0.95rem;
-  transition: 0.3s ease;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
 }
 
 .form textarea {
-  min-height: 120px;
+  min-height: 110px;
   resize: vertical;
 }
 
 .form input:focus,
 .form textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1);
+  border-color: rgba(37, 99, 235, 0.65);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
-
-/* ================= TITULOS INTERNOS ================= */
 
 .form h4 {
-  margin-top: 15px;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--accent);
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #64748b;
 }
 
-/* ================= IMAGENS ================= */
-
-.imageRow {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.imageRow input {
-  flex: 1;
-}
-
-.removeButton {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.removeButton:hover {
-  background: #c41e3a;
-  color: white;
-  border-color: #c41e3a;
-}
-
-/* ================= BOTÕES ================= */
-
-.addButton {
-  background: transparent;
-  border: 1px dashed var(--accent);
-  color: var(--accent);
-  padding: 12px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.addButton:hover {
-  background: var(--accent);
-  color: white;
-}
-
-.submitButton {
-  margin-top: 20px;
-  padding: 16px;
-  border-radius: 30px;
+.form button {
   border: none;
-  background: linear-gradient(135deg, var(--primary), #C41E3A);
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: 0.15s ease;
+  font-size: 13px;
 }
 
-.submitButton:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+.form button[type="submit"] {
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
 }
 
-/* ================= RESPONSIVO ================= */
+.form button[type="submit"]:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
 
-@media (max-width: 768px) {
-  .form {
-    padding: 30px 20px;
-  }
+.form button[type="button"] {
+  background: #e2e8f0;
+  color: #0f172a;
+}
 
-  .container h2 {
-    font-size: 1.8rem;
-    text-align: center;
-  }
+.form button[type="button"]:hover {
+  background: #cbd5e1;
+}
 
-  .imageRow {
-    flex-direction: column;
-  }
-
-  .removeButton {
-    width: 100%;
+@media (max-width: 720px) {
+  .container {
+    padding: 14px;
   }
 }

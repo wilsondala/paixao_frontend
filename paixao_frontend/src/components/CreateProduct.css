@@ -1,158 +1,226 @@
+/* ============================================= */
+/*   CREATE PRODUCT - ADMIN (TOP)                */
+/* ============================================= */
+
+:root {
+  --bg: #0b0f17;
+  --card: rgba(255, 255, 255, 0.08);
+  --cardSolid: #111827;
+  --border: rgba(255, 255, 255, 0.12);
+  --text: #e5e7eb;
+  --muted: rgba(229, 231, 235, 0.7);
+  --shadow: 0 22px 70px rgba(0, 0, 0, 0.35);
+
+  --primary: #2563eb;
+  --primaryHover: #1d4ed8;
+
+  --danger: #ef4444;
+  --dangerHover: #dc2626;
+
+  --success: #22c55e;
+
+  --radius: 16px;
+}
+
+/* Wrapper geral */
 .create-product-wrapper {
   min-height: 100vh;
+  padding: 28px 18px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  background: #f4f6f9;
-  padding: 40px 20px;
+  background:
+    radial-gradient(1200px 400px at 30% -10%, rgba(37, 99, 235, 0.25), transparent 60%),
+    radial-gradient(900px 400px at 90% 0%, rgba(34, 197, 94, 0.18), transparent 55%),
+    linear-gradient(180deg, #0b0f17, #070b12);
+  color: var(--text);
 }
 
-/* CARD */
+/* Card */
 .create-product-card {
   width: 100%;
-  max-width: 550px;
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
+  max-width: 880px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.06)
+  );
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 26px 22px;
+  backdrop-filter: blur(10px);
 }
 
+/* Título */
 .create-product-card h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #1e293b;
-  font-size: 24px;
+  margin: 0 0 16px;
+  font-size: 22px;
+  letter-spacing: 0.2px;
 }
 
-/* FORM */
+/* Form */
 .create-product-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
+/* Inputs / Select / Textarea */
 .create-product-form input,
+.create-product-form select,
 .create-product-form textarea {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-  transition: 0.2s;
-}
-
-.create-product-form input:focus,
-.create-product-form textarea:focus {
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(17, 24, 39, 0.8);
+  color: var(--text);
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  font-size: 14px;
+  transition: 0.15s ease;
 }
 
+/* placeholder */
+.create-product-form input::placeholder,
+.create-product-form textarea::placeholder {
+  color: rgba(229, 231, 235, 0.55);
+}
+
+/* Focus */
+.create-product-form input:focus,
+.create-product-form select:focus,
+.create-product-form textarea:focus {
+  border-color: rgba(37, 99, 235, 0.75);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+}
+
+/* Textarea */
 .create-product-form textarea {
   min-height: 100px;
   resize: vertical;
 }
 
-/* IMAGEM */
+/* Linhas com 2 colunas (se você usar .row-2 no JSX) */
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Subtítulos */
+.create-product-form h4 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  color: rgba(229, 231, 235, 0.85);
+  letter-spacing: 0.2px;
+}
+
+/* Campo de imagens */
 .image-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.image-field img {
-  width: 120px;
-  border-radius: 8px;
-}
-
-/* BOTÕES */
-.add-btn {
-  background: #e5e7eb;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(17, 24, 39, 0.55);
+}
+
+/* Preview opcional (se tiver img no JSX antigo) */
+.image-field img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Botões base */
+.create-product-form button {
   border: none;
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.15s ease;
+}
+
+/* Botão adicionar */
+.add-btn {
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
 }
 
 .add-btn:hover {
-  background: #d1d5db;
+  background: rgba(255, 255, 255, 0.14);
 }
 
+/* Botão remover */
 .remove-btn {
-  background: #fee2e2;
-  color: #b91c1c;
-  border: none;
-  padding: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
+  background: rgba(239, 68, 68, 0.14);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 10px 12px;
 }
 
 .remove-btn:hover {
-  background: #fecaca;
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.55);
 }
 
-.submit-btn {
-  background: #2563eb;
+/* Botão submit */
+.submit-btn,
+.create-product-form button[type="submit"] {
+  background: linear-gradient(180deg, var(--primary), var(--primaryHover));
   color: white;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-  margin-top: 10px;
+  margin-top: 6px;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25);
 }
 
-.submit-btn:hover {
-  background: #1e40af;
+.submit-btn:hover,
+.create-product-form button[type="submit"]:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
 }
 
-/* ========================= */
-/* 📱 RESPONSIVIDADE */
-/* ========================= */
+/* Checkbox row (para is_wholesale / is_kit) */
+.checkbox-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(17, 24, 39, 0.55);
+  color: rgba(229, 231, 235, 0.9);
+  font-size: 14px;
+}
 
-/* Tablet */
-@media (max-width: 768px) {
-  .create-product-wrapper {
-    padding: 30px 15px;
-  }
+.checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
 
+/* Responsivo */
+@media (max-width: 720px) {
   .create-product-card {
-    padding: 25px;
+    padding: 18px 14px;
   }
 
-  .create-product-card h2 {
-    font-size: 20px;
-  }
-}
-
-/* Celular */
-@media (max-width: 480px) {
-  .create-product-wrapper {
-    padding: 20px 10px;
+  .row-2 {
+    grid-template-columns: 1fr;
   }
 
-  .create-product-card {
-    padding: 20px;
-    border-radius: 10px;
+  .image-field {
+    grid-template-columns: 1fr;
   }
 
-  .create-product-form input,
-  .create-product-form textarea {
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  .submit-btn {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .image-field img {
-    width: 100px;
+  .remove-btn {
+    width: 100%;
   }
 }

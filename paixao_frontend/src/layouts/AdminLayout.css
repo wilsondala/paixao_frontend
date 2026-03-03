@@ -1,75 +1,159 @@
-/* ================= ADMIN LAYOUT ================= */
+/* ============================
+   ADMIN LAYOUT (RESPONSIVO TOP)
+============================ */
+
 .admin-layout {
-  display: flex;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif; /* ou a fonte do seu projeto */
-  background-color: #f8f9fb;
+  background: #f1f5f9;
+  display: grid;
+  grid-template-columns: 260px 1fr;
 }
 
-/* ================= SIDEBAR ================= */
+/* Sidebar Desktop */
 .admin-sidebar {
-  width: 220px;
-  background-color: #111; /* cor escura elegante */
-  color: white;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  position: fixed; /* sidebar fixa */
+  background: linear-gradient(180deg, #0b1220, #070b12);
+  color: #fff;
+  padding: 18px 14px;
+  position: sticky;
   top: 0;
-  bottom: 0;
-  left: 0;
+  height: 100vh;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 20;
 }
 
 .admin-sidebar h2 {
-  font-size: 22px;
-  margin-bottom: 30px;
-  font-weight: 700;
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.2px;
 }
 
 .admin-sidebar nav {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
 }
 
-.admin-sidebar nav a {
-  color: white;
+.admin-sidebar a {
   text-decoration: none;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.86);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  transition: 0.15s ease;
+  border: 1px solid transparent;
 }
 
-.admin-sidebar nav a:hover {
-  background-color: #333;
+.admin-sidebar a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.10);
 }
 
-/* ================= CONTEÚDO PRINCIPAL ================= */
+/* Conteúdo */
 .admin-content {
-  margin-left: 220px; /* espaço para o sidebar */
-  flex: 1;
-  padding: 30px 40px;
-  background-color: #f8f9fb;
-  min-height: 100vh;
-  overflow-y: auto;
+  padding: 26px 22px;
+  min-width: 0;
 }
 
-/* ================= RESPONSIVO ================= */
-@media (max-width: 768px) {
+/* ----------------------------
+   TOPBAR MOBILE
+---------------------------- */
+.admin-topbar {
+  display: none;
+}
+
+/* ----------------------------
+   RESPONSIVO (<= 960px)
+   Sidebar vira drawer e topbar aparece
+---------------------------- */
+@media (max-width: 960px) {
   .admin-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 54px;
+    padding: 0 12px;
+    background: linear-gradient(180deg, #0b1220, #070b12);
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .admin-menu-btn {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    width: 42px;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .admin-topbar-title {
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+  }
+
+  /* Sidebar como drawer */
   .admin-sidebar {
-    width: 100%;
-    position: relative;
-    padding: 20px 15px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-110%);
+    transition: transform 0.18s ease;
+    z-index: 60;
+    padding-top: 14px;
+  }
+
+  .admin-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .admin-sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .admin-close-btn {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    width: 40px;
+    height: 36px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 55;
   }
 
   .admin-content {
-    margin-left: 0;
-    padding: 20px 15px;
+    padding: 16px 12px;
+  }
+}
+
+/* Extra: mobile pequeno */
+@media (max-width: 420px) {
+  .admin-sidebar {
+    width: 86vw;
   }
 }

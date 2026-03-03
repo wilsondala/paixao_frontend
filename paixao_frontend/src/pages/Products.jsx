@@ -54,6 +54,15 @@ const categories = [
     } finally {
       setLoading(false);
     }
+
+    const data = response.data || [];
+setProducts(data);
+
+if (data.length) {
+  console.log("PRIMEIRO PRODUTO:", data[0]);
+  console.log("IMAGES RAW:", data[0].images);
+  console.log("COVER:", formatMedia(data[0].images?.[0]));
+}
   };
 
   const filteredProducts = useMemo(() => {
@@ -163,3 +172,4 @@ const categories = [
     </div>
   );
 }
+

@@ -88,7 +88,7 @@ async function loadUsers() {
               <td>
                 <span
                   className={
-                    u.role === "ADMIN"
+                    u.role === "Admin"
                       ? styles.admin
                       : styles.customer
                   }

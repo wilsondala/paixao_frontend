@@ -1,12 +1,45 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./AdminLayout.css";
+import "../admin/AdminTheme.css";
 
 export default function AdminLayout() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // fecha menu quando muda de rota (mobile)
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   return (
-    <div className="admin-layout">
-      
-      <aside className="admin-sidebar">
-        <h2>Painel Admin</h2>
+    <div className="admin-scope admin-layout">
+      {/* Topbar Mobile */}
+      <header className="admin-topbar">
+        <button
+          className="admin-menu-btn"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Abrir menu"
+        >
+          ☰
+        </button>
+
+        <div className="admin-topbar-title">Painel Admin</div>
+      </header>
+
+      {/* Sidebar */}
+      <aside className={`admin-sidebar ${open ? "is-open" : ""}`}>
+        <div className="admin-sidebar-head">
+          <h2>Painel Admin</h2>
+
+          <button
+            className="admin-close-btn"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar menu"
+          >
+            ✕
+          </button>
+        </div>
 
         <nav>
           <Link to="/admin/dashboard">Dashboard</Link>
@@ -15,10 +48,12 @@ export default function AdminLayout() {
         </nav>
       </aside>
 
+      {/* Overlay (mobile) */}
+      {open && <div className="admin-overlay" onClick={() => setOpen(false)} />}
+
       <main className="admin-content">
         <Outlet />
       </main>
-
     </div>
   );
 }

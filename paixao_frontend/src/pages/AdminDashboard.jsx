@@ -48,53 +48,52 @@ export default function AdminDashboard() {
     delivered_orders,
     pending_orders,
     total_revenue,
-    users,
   } = dashboardData;
 
-return (
-  <div className={styles.pageWrapper}>
-    <div className={styles.dashboardBox}>
+  return (
+    <div className={styles.pageWrapper}>
+      <div className={styles.dashboardBox}>
 
-      {/* HEADER DESTACADO */}
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Painel Administrativo</h1>
-          <p className={styles.subtitle}>
-            Controle completo da plataforma
-          </p>
+        {/* HEADER */}
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Painel Administrativo</h1>
+            <p className={styles.subtitle}>
+              Controle completo da plataforma
+            </p>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className={styles.logoutButton}
+          >
+            Sair
+          </button>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className={styles.logoutButton}
-        >
-          Sair
-        </button>
-      </div>
+        {/* CARDS */}
+        <div className={styles.cards}>
+          <DashboardCard title="Usuários" value={total_users} />
+          <DashboardCard title="Pedidos" value={total_orders} />
+          <DashboardCard title="Produtos" value={total_products} />
+          <DashboardCard title="Entregues" value={delivered_orders} />
+          <DashboardCard title="Pendentes" value={pending_orders} />
+          <DashboardCard
+            title="Receita Total"
+            value={`R$ ${Number(total_revenue || 0).toFixed(2)}`}
+            highlight
+          />
+        </div>
 
-      {/* CARDS */}
-      <div className={styles.cards}>
-        <DashboardCard title="Usuários" value={total_users} />
-        <DashboardCard title="Pedidos" value={total_orders} />
-        <DashboardCard title="Produtos" value={total_products} />
-        <DashboardCard title="Entregues" value={delivered_orders} />
-        <DashboardCard title="Pendentes" value={pending_orders} />
-        <DashboardCard
-          title="Receita Total"
-          value={`R$ ${Number(total_revenue || 0).toFixed(2)}`}
-          highlight
-        />
-      </div>
+        {/* TABELA */}
+        <div className={styles.tableCard}>
+          <h2>Lista de Usuários</h2>
+          <UsersTable />   {/* ✅ CORRIGIDO AQUI */}
+        </div>
 
-      {/* TABELA */}
-      <div className={styles.tableCard}>
-        <h2>Lista de Usuários</h2>
-        <UsersTable users={users} />
       </div>
-
     </div>
-  </div>
-);
+  );
 }
 
 function DashboardCard({ title, value, highlight }) {

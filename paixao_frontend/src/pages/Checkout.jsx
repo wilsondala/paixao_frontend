@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createOrder } from "../api/orders";
 import AddressMap from "../components/AddressMap";
 import styles from "./Checkout.module.css";
+import { formatMedia } from "../utils/media"; // ✅ ADICIONADO
 
 export default function Checkout() {
   const { cart, total, clearCart } = useCart();
@@ -52,9 +53,9 @@ export default function Checkout() {
       const itemsText = cart
         .map(
           (item) =>
-            `• ${item.name} x${item.quantity} - ${(item.price * item.quantity).toLocaleString(
-              "pt-AO"
-            )} Kz`
+            `• ${item.name} x${item.quantity} - ${(
+              item.price * item.quantity
+            ).toLocaleString("pt-AO")} Kz`
         )
         .join("\n");
 
@@ -114,23 +115,38 @@ ${itemsText}
           <h3 className={styles.sectionTitle}>Resumo do Pedido</h3>
 
           <div className={styles.summaryBox}>
-            {cart.map((item) => (
-              <div key={item.id} className={styles.item}>
-                <img
-                  src={item.image_url || "/placeholder.png"}
-                  alt={item.name}
-                  className={styles.itemImage}
-                />
+            {cart.map((item) => {
+              // ✅ pega imagem de vários formatos possíveis e normaliza para /imagem/produtos/...
+              const cover =
+                formatMedia(
+                  item.image_url ||
+                    item.images?.[0] ||
+                    item.image ||
+                    item.photo ||
+                    item.thumbnail
+                ) || "/placeholder.png";
 
-                <div className={styles.itemInfo}>
-                  {item.name} ×{item.quantity}
-                </div>
+              return (
+                <div key={item.id} className={styles.item}>
+                  <img
+                    src={cover}
+                    alt={item.name}
+                    className={styles.itemImage}
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.png";
+                    }}
+                  />
 
-                <div className={styles.itemPrice}>
-                  {(item.price * item.quantity).toLocaleString("pt-AO")} Kz
+                  <div className={styles.itemInfo}>
+                    {item.name} ×{item.quantity}
+                  </div>
+
+                  <div className={styles.itemPrice}>
+                    {(item.price * item.quantity).toLocaleString("pt-AO")} Kz
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             <div className={styles.total}>
               Total: {total.toLocaleString("pt-AO")} Kz
@@ -153,7 +169,8 @@ ${itemsText}
           </div>
 
           <p className={styles.selectedText}>
-            <strong>Selecionado:</strong> {address || "Nenhum endereço selecionado"}
+            <strong>Selecionado:</strong>{" "}
+            {address || "Nenhum endereço selecionado"}
           </p>
         </div>
 
