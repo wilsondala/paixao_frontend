@@ -1,135 +1,94 @@
-/* Header.module.css - Paixão Angola (Caprichado - Letras Grandes) */
-
-
-
-/* ================= LOGO - MAIOR ================= */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: white;
-  font-weight: 700;
-  min-width: 240px;
-}
-
-.logo img {
-  height: 62px;
-  width: auto;
-}
-
-.logo span {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.15rem;           /* Letra bem maior */
-  letter-spacing: 2px;
-}
-
-/* ================= BUSCA ================= */
-.searchWrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  max-width: 720px;
-}
-
-.categorySelect {
-  padding: 16px 20px;
-  background: white;
-  border: none;
-  border-radius: 8px 0 0 8px;
-  font-size: 1.08rem;
-  color: #333;
-  min-width: 190px;
-  cursor: pointer;
-}
-
-.searchContainer {
-  flex: 1;
-  position: relative;
-}
-
-.searchInput {
+.header {
   width: 100%;
-  padding: 16px 22px;
-  padding-right: 65px;
-  font-size: 1.15rem;
-  border: none;
-  border-radius: 0 8px 8px 0;
-  background: white;
-  color: #333;
-  outline: none;
+  background: #111;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.searchButton {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #E8B923;
-  color: #0A0606;
-  border: none;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  font-size: 1.45rem;
-  cursor: pointer;
-}
-
-/* ================= DIREITA - BOTÕES GRANDES ================= */
-.rightSection {
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+  height: 70px;
   display: flex;
   align-items: center;
-  gap: 26px;
-  font-size: 1.18rem;           /* Letras maiores */
-  white-space: nowrap;
+  justify-content: space-between;
 }
 
-.rightSection a {
-  color: white;
+.logo {
+  font-size: 22px;
+  font-weight: 700;
   text-decoration: none;
+  color: white;
+}
+
+.nav {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+.logout {
+  background: transparent;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
   font-weight: 600;
 }
 
-.loginBtn {
-  background: white;
-  color: #9B1C2C;
-  padding: 12px 34px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.18rem;
+.cart {
+  position: relative;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
 }
 
-.logoutBtn {
-  background: transparent;
-  border: 2px solid white;
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: red;
   color: white;
-  padding: 12px 34px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.18rem;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.menuBtn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: white;
   cursor: pointer;
 }
 
-.logoutBtn:hover {
-  background: white;
-  color: #9B1C2C;
-}
-
-/* Responsividade */
-@media (max-width: 992px) {
-  .searchWrapper {
-    max-width: 460px;
-  }
-}
-
+/* MOBILE */
 @media (max-width: 768px) {
-  .headerContent {
-    gap: 15px;
-    padding: 0 15px;
+  .nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: #111;
+    flex-direction: column;
+    width: 200px;
+    padding: 20px;
+    display: none;
   }
-  
-  .logo span {
-    font-size: 1.75rem;
+
+  .nav.active {
+    display: flex;
+  }
+
+  .menuBtn {
+    display: block;
   }
 }

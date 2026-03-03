@@ -3,7 +3,6 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../api/orders";
 import AddressMap from "../components/AddressMap";
-import MainLayout from "../layouts/MainLayout";
 import styles from "./Checkout.module.css";
 
 export default function Checkout() {
@@ -53,8 +52,9 @@ export default function Checkout() {
       const itemsText = cart
         .map(
           (item) =>
-            `• ${item.name} x${item.quantity} - ${(item.price *
-              item.quantity).toLocaleString("pt-AO")} Kz`
+            `• ${item.name} x${item.quantity} - ${(item.price * item.quantity).toLocaleString(
+              "pt-AO"
+            )} Kz`
         )
         .join("\n");
 
@@ -71,16 +71,12 @@ ${itemsText}
 📍 Endereço: ${address}
 
 💳 Pagamento: ${
-        paymentMethod === "entrega"
-          ? "Pagamento na Entrega"
-          : "Transferência"
+        paymentMethod === "entrega" ? "Pagamento na Entrega" : "Transferência"
       }
 `;
 
       const phone = "5511967864913";
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(
-        message
-      )}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
       clearCart();
       window.open(url, "_blank");
@@ -101,113 +97,90 @@ ${itemsText}
   };
 
   if (cart.length === 0) {
-    return (
-      <MainLayout>
-        <div className={styles.empty}>Seu carrinho está vazio</div>
-      </MainLayout>
-    );
+    return <div className={styles.empty}>Seu carrinho está vazio</div>;
   }
 
   return (
-    <MainLayout>
-      <div className={styles.page}>
-        <div className={styles.card}>
-          <button
-            onClick={() => navigate(-1)}
-            className={styles.backButton}
-          >
-            ← Voltar
-          </button>
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <button onClick={() => navigate(-1)} className={styles.backButton}>
+          ← Voltar
+        </button>
 
-          <h1 className={styles.title}>Finalizar Pedido</h1>
+        <h1 className={styles.title}>Finalizar Pedido</h1>
 
-          {/* ================= RESUMO ================= */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Resumo do Pedido</h3>
+        {/* ================= RESUMO ================= */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Resumo do Pedido</h3>
 
-            <div className={styles.summaryBox}>
-              {cart.map((item) => (
-                <div key={item.id} className={styles.item}>
-                  <img
-                    src={item.image_url || "/placeholder.png"}
-                    alt={item.name}
-                    className={styles.itemImage}
-                  />
+          <div className={styles.summaryBox}>
+            {cart.map((item) => (
+              <div key={item.id} className={styles.item}>
+                <img
+                  src={item.image_url || "/placeholder.png"}
+                  alt={item.name}
+                  className={styles.itemImage}
+                />
 
-                  <div className={styles.itemInfo}>
-                    {item.name} ×{item.quantity}
-                  </div>
-
-                  <div className={styles.itemPrice}>
-                    {(item.price * item.quantity).toLocaleString(
-                      "pt-AO"
-                    )}{" "}
-                    Kz
-                  </div>
+                <div className={styles.itemInfo}>
+                  {item.name} ×{item.quantity}
                 </div>
-              ))}
 
-              <div className={styles.total}>
-                Total: {total.toLocaleString("pt-AO")} Kz
+                <div className={styles.itemPrice}>
+                  {(item.price * item.quantity).toLocaleString("pt-AO")} Kz
+                </div>
               </div>
+            ))}
+
+            <div className={styles.total}>
+              Total: {total.toLocaleString("pt-AO")} Kz
             </div>
           </div>
-
-          {/* ================= ENDEREÇO ================= */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Endereço de Entrega</h3>
-
-            <div className={styles.addressWrapper}>
-              <AddressMap
-                onSelect={(data) => {
-                  setAddress(data.address);
-                  setLat(data.lat);
-                  setLon(data.lon);
-                }}
-              />
-            </div>
-
-            <p className={styles.selectedText}>
-              <strong>Selecionado:</strong>{" "}
-              {address || "Nenhum endereço selecionado"}
-            </p>
-          </div>
-
-          {/* ================= PAGAMENTO ================= */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              Método de Pagamento
-            </h3>
-
-            <select
-              value={paymentMethod}
-              onChange={(e) =>
-                setPaymentMethod(e.target.value)
-              }
-              className={styles.select}
-            >
-              <option value="entrega">
-                Pagamento na Entrega
-              </option>
-              <option value="transferencia">
-                Transferência
-              </option>
-            </select>
-          </div>
-
-          {errorMsg && (
-            <p className={styles.error}>{errorMsg}</p>
-          )}
-
-          <button
-            onClick={handleConfirmOrder}
-            disabled={loading}
-            className={styles.confirmButton}
-          >
-            {loading ? "Processando..." : "Confirmar Pedido"}
-          </button>
         </div>
+
+        {/* ================= ENDEREÇO ================= */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Endereço de Entrega</h3>
+
+          <div className={styles.addressWrapper}>
+            <AddressMap
+              onSelect={(data) => {
+                setAddress(data.address);
+                setLat(data.lat);
+                setLon(data.lon);
+              }}
+            />
+          </div>
+
+          <p className={styles.selectedText}>
+            <strong>Selecionado:</strong> {address || "Nenhum endereço selecionado"}
+          </p>
+        </div>
+
+        {/* ================= PAGAMENTO ================= */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Método de Pagamento</h3>
+
+          <select
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className={styles.select}
+          >
+            <option value="entrega">Pagamento na Entrega</option>
+            <option value="transferencia">Transferência</option>
+          </select>
+        </div>
+
+        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+
+        <button
+          onClick={handleConfirmOrder}
+          disabled={loading}
+          className={styles.confirmButton}
+        >
+          {loading ? "Processando..." : "Confirmar Pedido"}
+        </button>
       </div>
-    </MainLayout>
+    </div>
   );
 }

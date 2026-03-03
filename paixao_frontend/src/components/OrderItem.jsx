@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { confirmOrder, chooseDelivery } from "../services/orders";
+import { confirmOrder, chooseDelivery } from "../api/orders";
 import styles from "./OrderItem.module.css";
 
 export default function OrderItem({ order, onUpdate }) {
@@ -43,17 +43,15 @@ export default function OrderItem({ order, onUpdate }) {
 
       <div className={styles.info}>
         <p><strong>Status:</strong> {order.status}</p>
-        <p className={styles.total}>
-          Total: {order.total_amount} Kz
-        </p>
+        <p className={styles.total}>Total: {order.total_amount} Kz</p>
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
 
       {order.status === "pending" && (
-        <button 
+        <button
           className={`${styles.button} ${styles.confirm}`}
-          onClick={handleConfirm} 
+          onClick={handleConfirm}
           disabled={loading}
         >
           {loading ? "Confirmando..." : "Confirmar pedido"}
@@ -61,9 +59,9 @@ export default function OrderItem({ order, onUpdate }) {
       )}
 
       {order.status === "confirmed" && (
-        <button 
+        <button
           className={`${styles.button} ${styles.delivery}`}
-          onClick={handleDelivery} 
+          onClick={handleDelivery}
           disabled={loading}
         >
           {loading ? "Processando..." : "Escolher entrega"}

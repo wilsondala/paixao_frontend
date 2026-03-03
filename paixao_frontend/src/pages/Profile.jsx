@@ -3,21 +3,28 @@ import { updateProfile } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import styles from "./Profile.module.css";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+function toAbsolutePhotoUrl(photo) {
+  if (!photo) return null;
+  if (photo.startsWith("http")) return photo;
+  return `${API_BASE}${photo}`;
+}
+
 export default function Profile() {
-  const { user, setUser } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const [name, setName] = useState(user?.name || "");
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(user?.photo || null);
+  const [preview, setPreview] = useState(toAbsolutePhotoUrl(user?.photo));
   const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
-    const selectedFile = e.target.files[0];
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
-    }
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile)); // preview local imediato
   };
 
   const handleSave = async () => {
@@ -33,8 +40,20 @@ export default function Profile() {
 
       const response = await updateProfile(formData);
 
-      // Atualiza usuário global
-      setUser(response.data.user);
+      // Backend retorna: { user: ... }
+      const updated = response?.data?.user;
+
+      // Garante URL absoluta para exibir sempre
+      const finalUser = {
+        ...updated,
+        photo: toAbsolutePhotoUrl(updated?.photo),
+      };
+
+      // ✅ atualiza contexto + salva no localStorage
+      updateUser(finalUser);
+
+      // ✅ garante que a tela mostra a foto salva (não só a local)
+      setPreview(finalUser.photo);
 
       alert("Perfil atualizado com sucesso!");
     } catch (error) {
@@ -55,7 +74,7 @@ export default function Profile() {
             {preview ? (
               <img src={preview} alt="Avatar" />
             ) : (
-              name?.charAt(0)?.toUpperCase()
+              (name?.charAt(0) || "U").toUpperCase()
             )}
           </div>
 

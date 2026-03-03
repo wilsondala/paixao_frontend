@@ -1,39 +1,38 @@
-// src/api/orders.js  (ou onde estiver)
-import api from "./client";  // ← mantenha isso, é o seu axios configurado
+import api from "./client";
 
-export const getOrders = async () => {
-  const response = await api.get("/orders");
-  return response.data;
-};
+/**
+ * ORDERS API (centralizado)
+ * Mantém exports usados no projeto:
+ * - OrderDetails.jsx: getOrderById, confirmOrder, updateItemStatus
+ * - Checkout.jsx: createOrder
+ * - OrderList.jsx: getOrders
+ * - SocialProof.jsx: getLatestOrders
+ */
 
-export const confirmOrder = async (id) => {
-  await api.post(`/orders/${id}/confirm`);
-};
+// Lista pedidos (ajuste se seu backend usa outro path)
+export const getOrders = () => api.get("/orders");
 
-export const deliverOrder = async (id) => {
-  await api.post(`/orders/${id}/delivery`, { payment_method: "entrega" });
-};
+// Criar pedido (Checkout)
+export const createOrder = (data) => api.post("/orders", data);
 
-export async function getOrderById(id) {
-  const response = await api.get(`/orders/${id}`);
-  return response.data;
-}
+// Buscar pedido por ID (OrderDetails)
+export const getOrderById = (id) => api.get(`/orders/${id}`);
 
-// 🔥 Corrigido: usa o mesmo 'api' (com baseURL e token automático)
-export async function createOrder(orderData) {
-  try {
-    const response = await api.post("/orders/", orderData); // ← ADICIONE A BARRA
-    return response.data;
-  } catch (error) {
-    console.error("ERRO AO CRIAR PEDIDO:", error.response?.data || error.message);
-    throw error;
-  }
-}
+// Confirmar pedido (admin ou fluxo do pedido)
+// ⚠️ Se seu backend não tiver /confirm, ajuste aqui para o endpoint real.
+export const confirmOrder = (id) => api.put(`/orders/${id}/confirm`);
 
-export async function updateItemStatus(itemId, status) {
-  const response = await api.put(
-    `/orders/items/${itemId}/status`,
-    { status }
-  );
-  return response.data;
-}
+// Atualizar status de item do pedido (OrderDetails)
+// ⚠️ Endpoint pode variar no seu backend. Se der 404, me diga qual rota existe no backend.
+export const updateItemStatus = (orderId, itemId, status) =>
+  api.put(`/orders/${orderId}/items/${itemId}/status`, { status });
+
+// SocialProof: últimas compras
+export const getLatestOrders = () => api.get("/orders/latest");
+
+// (Opcional) marcar entregue — se você usar em algum lugar
+export const deliverOrder = (id) => api.put(`/orders/${id}/deliver`);
+
+// (Opcional) escolher entrega — se você usar em algum lugar
+export const chooseDelivery = (id, delivery_method) =>
+  api.put(`/orders/${id}/delivery`, { delivery_method });

@@ -1,4 +1,4 @@
-import Header from "./Header";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useLocation } from "react-router-dom";
 
@@ -12,9 +12,8 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <Header />
+      <Navbar />
       <main>{children}</main>
-
       {showFooter && <Footer />}
     </>
   );

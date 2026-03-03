@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { 
-  Facebook, 
-  Instagram, 
-  Linkedin, 
-  Youtube, 
-  Mail, 
-  Phone 
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Mail,
+  Phone,
 } from "lucide-react";
 import styles from "./Footer.module.css";
 
@@ -27,8 +27,7 @@ export default function Footer() {
         <div className={styles.column}>
           <h4>Empresa</h4>
           <Link to="/sobre-nos">Sobre Nós</Link>
-          <Link to="/produtos">Produtos</Link>
-          <Link to="/contato">Contato</Link>
+          <Link to="/products">Produtos</Link>
         </div>
 
         {/* CONTATO */}
@@ -51,17 +50,44 @@ export default function Footer() {
           <h4>Redes Sociais</h4>
 
           <div className={styles.socials}>
-            <a href="#"><Facebook size={20} /></a>
-            <a href="#"><Instagram size={20} /></a>
-            <a href="#"><Linkedin size={20} /></a>
-            <a href="#"><Youtube size={20} /></a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Facebook size={20} />
+            </a>
+
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Instagram size={20} />
+            </a>
+
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Linkedin size={20} />
+            </a>
+
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Youtube size={20} />
+            </a>
           </div>
         </div>
 
       </div>
 
       <div className={styles.bottom}>
-        © 2026 Paixão Angola. Todos os direitos reservados.
+        © {new Date().getFullYear()} Paixão Angola. Todos os direitos reservados.
       </div>
     </footer>
   );

@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  getOrderById,
-  confirmOrder,
-  updateItemStatus,
-} from "../api/orders";
-
+import { getOrderById, confirmOrder, updateItemStatus } from "../api/orders";
 import styles from "./OrderDetails.module.css";
 
 export default function OrderDetails() {
@@ -17,7 +12,8 @@ export default function OrderDetails() {
 
   async function loadOrder() {
     try {
-      const data = await getOrderById(id);
+      const res = await getOrderById(id);
+      const data = res?.data ?? res; // compatível caso alguma função já retorne direto
       setOrder(data);
     } catch (err) {
       console.error("Erro ao carregar pedido:", err);
@@ -26,6 +22,7 @@ export default function OrderDetails() {
 
   useEffect(() => {
     loadOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (!order) return <div className={styles.loading}>Carregando pedido...</div>;
@@ -33,16 +30,22 @@ export default function OrderDetails() {
   const status = order.status?.toLowerCase();
 
   async function handleConfirm() {
-    setLoading(true);
-    await confirmOrder(order.id);
-    await loadOrder();
-    setLoading(false);
+    try {
+      setLoading(true);
+      await confirmOrder(order.id);
+      await loadOrder();
+    } catch (e) {
+      console.error("Erro ao confirmar pedido:", e);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleItemStatusChange(itemId, newStatus) {
     try {
       setLoading(true);
-      await updateItemStatus(itemId, newStatus);
+      // ✅ assinatura: (orderId, itemId, status)
+      await updateItemStatus(order.id, itemId, newStatus);
       await loadOrder();
     } catch (error) {
       console.error("Erro ao atualizar item:", error);
@@ -61,18 +64,14 @@ export default function OrderDetails() {
 
       <h2 className={styles.title}>Pedido #{order.id}</h2>
 
-      <div className={`${styles.status} ${styles[status]}`}>
-        {order.status}
-      </div>
+      <div className={`${styles.status} ${styles[status]}`}>{order.status}</div>
 
       {/* TIMELINE */}
       <div className={styles.timeline}>
         {timelineSteps.map((step) => (
           <div
             key={step}
-            className={`${styles.step} ${
-              status === step ? styles.active : ""
-            }`}
+            className={`${styles.step} ${status === step ? styles.active : ""}`}
           >
             {step}
           </div>
@@ -81,9 +80,15 @@ export default function OrderDetails() {
 
       {/* INFORMAÇÕES DO PEDIDO */}
       <div className={styles.card}>
-        <p><strong>Endereço:</strong> {order.delivery_address}</p>
-        <p><strong>Total:</strong> R$ {order.total_amount}</p>
-        <p><strong>Pagamento:</strong> {order.payment_method}</p>
+        <p>
+          <strong>Endereço:</strong> {order.delivery_address}
+        </p>
+        <p>
+          <strong>Total:</strong> R$ {order.total_amount}
+        </p>
+        <p>
+          <strong>Pagamento:</strong> {order.payment_method}
+        </p>
       </div>
 
       {/* ITENS */}
@@ -91,49 +96,41 @@ export default function OrderDetails() {
         <div className={styles.card}>
           <h3 className={styles.sectionTitle}>Itens do Pedido</h3>
 
-          {order.items.map((item) => {
-            return (
-              <div key={item.id} className={styles.itemRow}>
-                <div>
-                  <strong>{item.product?.name}</strong>
-                  <div className={styles.itemInfo}>
-                    Quantidade: {item.quantity} <br />
-                    Preço: R$ {item.price}
-                  </div>
-                </div>
-
-                <div className={styles.itemActions}>
-                  <button
-                    onClick={() =>
-                      handleItemStatusChange(item.id, "preparing")
-                    }
-                    disabled={loading || item.status !== "pending"}
-                  >
-                    Preparar
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleItemStatusChange(item.id, "delivered")
-                    }
-                    disabled={loading || item.status !== "preparing"}
-                  >
-                    Entregar
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      handleItemStatusChange(item.id, "canceled")
-                    }
-                    disabled={loading}
-                    className={styles.cancelBtn}
-                  >
-                    Cancelar
-                  </button>
+          {order.items.map((item) => (
+            <div key={item.id} className={styles.itemRow}>
+              <div>
+                <strong>{item.product?.name}</strong>
+                <div className={styles.itemInfo}>
+                  Quantidade: {item.quantity} <br />
+                  Preço: R$ {item.price}
                 </div>
               </div>
-            );
-          })}
+
+              <div className={styles.itemActions}>
+                <button
+                  onClick={() => handleItemStatusChange(item.id, "preparing")}
+                  disabled={loading || item.status !== "pending"}
+                >
+                  Preparar
+                </button>
+
+                <button
+                  onClick={() => handleItemStatusChange(item.id, "delivered")}
+                  disabled={loading || item.status !== "preparing"}
+                >
+                  Entregar
+                </button>
+
+                <button
+                  onClick={() => handleItemStatusChange(item.id, "canceled")}
+                  disabled={loading}
+                  className={styles.cancelBtn}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

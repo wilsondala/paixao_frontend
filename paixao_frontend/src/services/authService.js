@@ -7,17 +7,11 @@ export const loginUser = (formData) =>
   });
 
 // REGISTER
-export const registerUser = (data) =>
-  api.post("/auth/register", data);
+export const registerUser = (data) => api.post("/auth/register", data);
 
-// UPDATE PROFILE
+// UPDATE PROFILE (multipart/form-data)
 export const updateProfile = (formData) =>
-  api.put("/auth/update-profile", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  api.put("/auth/update-profile", formData);
 
-// GET USER LOGADO
-export const getMe = () =>
-  api.get("/auth/me");
+// GET USER LOGADO (se você ainda não criou no backend, não use por enquanto)
+export const getMe = () => api.get("/auth/me");

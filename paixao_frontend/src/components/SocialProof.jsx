@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLatestOrders } from "../services/orderService";
+import { getLatestOrders } from "../api/orders";
 
 export default function SocialProof() {
   const [orders, setOrders] = useState([]);

@@ -1,242 +1,141 @@
-/* ===================== PAGE ===================== */
 .page {
-  min-height: 100dvh;
-  background: linear-gradient(to bottom, #f4f4f4, #e9e9e9);
-  overflow-x: hidden; /* remove scroll horizontal indesejado */
+  background: #f6f7fb;
+  padding: 30px 20px 60px;
 }
 
-/* ===================== HERO ===================== */
-.hero {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden; /* impede estourar lateral */
+/* ================= CATEGORIAS ================= */
+.categoriesSection {
+  max-width: 1200px;
+  margin: 0 auto 30px;
 }
 
-.heroSlide {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  position: relative;
+.categoriesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
 
+.categoriesHeader h2 {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0e1a2b;
+}
+
+.clearBtn {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.categoriesRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.categoryCard {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-}
-
-.heroContent {
-  width: 100%;
-  max-width: 720px;
-  padding: 20px 16px;
-}
-.heroContent h1 {
-  font-size: 44px;
-  margin-bottom: 16px;
+  gap: 10px;
+  cursor: pointer;
   font-weight: 700;
+  transition: 0.2s ease;
 }
 
-.heroContent p {
-  font-size: 18px;
-  margin-bottom: 24px;
-  opacity: 0.9;
-}
-
-.heroButton {
-  display: inline-block;
-  padding: 14px 30px;
-  background: white;
-  color: black;
-  border-radius: 9999px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.heroButton:hover {
-  background: black;
-  color: white;
+.categoryCard:hover {
   transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* ===================== MAIN ===================== */
-.main {
+.active {
+  border: 2px solid #e8b923;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+/* ================= PRODUTOS ================= */
+.productsSection {
   max-width: 1200px;
-  margin: 80px auto;
-  padding: 0 20px;
+  margin: 0 auto;
 }
 
-.title {
-  text-align: center;
-  font-size: 30px;
-  margin-bottom: 50px;
-  font-weight: 700;
-  color: #111;
-}
-
-/* ===================== GRID ===================== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
 }
 
-/* ===================== CARD ===================== */
 .card {
-  background: white;
+  background: #fff;
   border-radius: 18px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  transition: 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.1);
 }
 
-/* ===================== IMAGE ===================== */
 .imageContainer {
-  width: 100%;
-  height: 280px;
-  overflow: hidden;
-  background: #f1f1f1;
-
-  position: relative; /* necessário pras badges */
+  position: relative;
+  aspect-ratio: 1/1;
+  background: #f3f4f6;
 }
 
-.image {
+.imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
 }
 
-.card:hover .image {
-  transform: scale(1.1);
-}
-
-/* ===================== BADGES ===================== */
-.badgeKit,
-.badgeWholesale {
+.badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 2;
-
-  padding: 6px 10px;
+  background: #e8b923;
+  color: #111;
+  padding: 5px 10px;
   border-radius: 999px;
-
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  font-weight: 900;
 }
 
-.badgeWholesale {
-  left: auto;
-  right: 10px;
-}
-
-/* ===================== INFO ===================== */
 .info {
-  padding: 20px;
-  text-align: center;
+  padding: 14px;
 }
 
 .info h3 {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #0e1a2b;
 }
 
 .price {
-  font-size: 16px;
-  font-weight: 700;
-  color: #111;
+  font-size: 15px;
+  font-weight: 900;
+  color: #e8b923;
 }
 
-.wholesalePrice {
-  margin-top: 6px;
-  font-weight: 800;
-}
-
-/* ===================== STATES ===================== */
 .center {
   text-align: center;
-  margin-top: 40px;
-  font-size: 16px;
 }
 
 .error {
-  text-align: center;
   color: red;
-  margin-top: 40px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 100%;
-}
-
-.primaryBtn,
-.whatsappBtn {
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-weight: 700;
-  text-decoration: none;
-
-  max-width: 100%;
-  white-space: nowrap;
-}
-/* ===================== RESPONSIVO ===================== */
-@media (max-width: 768px) {
-  .buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .primaryBtn,
-  .whatsappBtn {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    height: 300px;
-  }
-
-  .heroContent h1 {
-    font-size: 28px;
-  }
-
-  .heroContent p {
-    font-size: 14px;
-  }
-
-  .imageContainer {
-    height: 220px;
-  }
-
-  .badgeKit,
-  .badgeWholesale {
-    top: 8px;
-    padding: 5px 9px;
-    font-size: 11px;
-  }
+  text-align: center;
 }
