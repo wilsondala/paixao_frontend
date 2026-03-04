@@ -29,6 +29,7 @@
   z-index: 2;
   text-align: center;
   color: white;
+  padding: 0 16px;
 }
 
 .heroContent h1 {
@@ -43,17 +44,28 @@
 }
 
 /* ================= CONTAINER ================= */
+/* ✅ vira coluna para permitir "relacionados" embaixo */
 .container {
   max-width: 1200px;
   margin: 60px auto;
   display: flex;
-  gap: 60px;
+  flex-direction: column;
+  gap: 40px;
   padding: 0 20px;
+}
+
+/* ✅ linha real do produto: galeria + info */
+.contentRow {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  min-width: 0;
 }
 
 /* ================= GALLERY ================= */
 .gallery {
   flex: 1;
+  min-width: 0;
 }
 
 .mainImage {
@@ -69,12 +81,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
+.video {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+/* ✅ miniaturas viram "carrossel" no mobile */
 .thumbnailContainer {
   display: flex;
   gap: 10px;
   margin-top: 15px;
+  flex-wrap: wrap;
 }
 
 .thumbnail {
@@ -84,21 +107,60 @@
   border-radius: 10px;
   cursor: pointer;
   opacity: 0.6;
-  transition: 0.3s;
+  transition: 0.2s;
+  border: 2px solid transparent;
 }
 
 .thumbnail:hover {
   opacity: 1;
 }
 
-.active {
+.thumbBtn {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: 0.2s;
+}
+
+.thumbBtn:hover {
   opacity: 1;
-  border: 2px solid black;
+}
+
+.thumbVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.playIcon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.active {
+  opacity: 1 !important;
+  border: 2px solid black !important;
 }
 
 /* ================= INFO ================= */
 .info {
   flex: 1;
+  min-width: 0;
 }
 
 .info h2 {
@@ -118,6 +180,12 @@
   color: #555;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .buyButton {
   padding: 14px 30px;
   border-radius: 30px;
@@ -126,11 +194,103 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 
 .buyButton:hover {
   background: #333;
+}
+
+.backButton {
+  background: #f1f1f1;
+  color: #333;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.backButton:hover {
+  background: #e5e5e5;
+}
+
+/* ================= RELACIONADOS ================= */
+.relatedSection {
+  width: 100%;
+}
+
+.relatedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.relatedHeader h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.relatedCard {
+  text-align: left;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.relatedCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.relatedImgWrap {
+  width: 100%;
+  height: 140px;
+  background: #f2f2f2;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.relatedImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.relatedInfo {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.relatedName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.relatedPrice {
+  font-size: 13px;
+  font-weight: 800;
+  color: #000;
 }
 
 /* ================= STATES ================= */
@@ -141,8 +301,9 @@
 
 /* ================= RESPONSIVO ================= */
 @media (max-width: 900px) {
-  .container {
+  .contentRow {
     flex-direction: column;
+    gap: 24px;
   }
 
   .mainImage {
@@ -155,5 +316,36 @@
 
   .heroContent h1 {
     font-size: 26px;
+  }
+
+  /* ✅ carrossel de miniaturas no mobile */
+  .thumbnailContainer {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .thumbnailContainer::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .relatedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .buyButton,
+  .backButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .mainImage {
+    height: 300px;
+  }
+
+  .relatedImgWrap {
+    height: 120px;
   }
 }

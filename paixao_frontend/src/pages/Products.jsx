@@ -13,6 +13,35 @@ function normalizeText(value) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+// ⭐ componente simples de estrelas (sem CSS extra)
+function Stars({ value, count }) {
+  const v = Number(value);
+  const c = Number(count);
+
+  if (!Number.isFinite(v) || v <= 0 || !Number.isFinite(c) || c <= 0) {
+    return <div style={{ marginTop: 6, color: "#777", fontSize: 12 }}>Sem avaliações</div>;
+  }
+
+  const clamped = Math.max(0, Math.min(5, v));
+  const full = Math.floor(clamped);
+  const half = clamped - full >= 0.5;
+
+  const stars = Array.from({ length: 5 }, (_, i) => {
+    if (i < full) return "★";
+    if (i === full && half) return "⯪";
+    return "☆";
+  }).join("");
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+      <span style={{ fontSize: 13 }}>{stars}</span>
+      <span style={{ fontSize: 11, color: "#666" }}>
+        {clamped.toFixed(1)} ({c})
+      </span>
+    </div>
+  );
+}
+
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,53 +55,50 @@ export default function Products() {
   const isWholesale = params.get("is_wholesale") === "true";
   const isKit = params.get("is_kit") === "true";
 
-const categories = [
-  { label: "Roupas", value: "Roupas", emoji: "👗" },
-
-  // ✅ Perfumaria -> filtra os produtos da category "Beleza"
-  { label: "Perfumaria", value: "Beleza", emoji: "🧴" },
-
-  { label: "Calçados", value: "Calçado", emoji: "👟" },
-  { label: "Praia", value: "Praia", emoji: "🏖️" },
-  { label: "Outros", value: "Outros", emoji: "✨" },
-  { label: "Atacado", query: "is_wholesale=true", emoji: "📦" },
-  { label: "Kits", query: "is_kit=true", emoji: "🎁" },
-];
+  const categories = [
+    { label: "Roupas", value: "Roupas", emoji: "👗" },
+    { label: "Perfumaria", value: "Beleza", emoji: "🧴" },
+    { label: "Calçados", value: "Calçado", emoji: "👟" },
+    { label: "Praia", value: "Praia", emoji: "🏖️" },
+    { label: "Outros", value: "Outros", emoji: "✨" },
+    { label: "Atacado", query: "is_wholesale=true", emoji: "📦" },
+    { label: "Kits", query: "is_kit=true", emoji: "🎁" },
+  ];
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
+
       const response = await getProducts();
-      setProducts(response.data || []);
+      const data = response?.data || [];
+
+      setProducts(data);
       setError(null);
+
+      if (data.length) {
+        console.log("PRIMEIRO PRODUTO:", data[0]);
+        console.log("IMAGES RAW:", data[0].images);
+        console.log("COVER:", formatMedia(data[0].images?.[0]));
+      }
     } catch (err) {
+      console.error(err);
       setError("Erro ao carregar produtos.");
+      setProducts([]);
     } finally {
       setLoading(false);
     }
-
-    const data = response.data || [];
-setProducts(data);
-
-if (data.length) {
-  console.log("PRIMEIRO PRODUTO:", data[0]);
-  console.log("IMAGES RAW:", data[0].images);
-  console.log("COVER:", formatMedia(data[0].images?.[0]));
-}
   };
 
   const filteredProducts = useMemo(() => {
     const cat = normalizeText(category);
 
     return products.filter((p) => {
-      const okCategory = category
-        ? normalizeText(p.category) === cat
-        : true;
-
+      const okCategory = category ? normalizeText(p.category) === cat : true;
       const okWholesale = isWholesale ? p.is_wholesale === true : true;
       const okKit = isKit ? p.is_kit === true : true;
 
@@ -119,9 +145,7 @@ if (data.length) {
               <button
                 key={c.label}
                 onClick={() => goCategory(c)}
-                className={`${styles.categoryCard} ${
-                  active ? styles.active : ""
-                }`}
+                className={`${styles.categoryCard} ${active ? styles.active : ""}`}
               >
                 <div className={styles.icon}>{c.emoji}</div>
                 <span>{c.label}</span>
@@ -146,20 +170,22 @@ if (data.length) {
               >
                 <div className={styles.imageContainer}>
                   <img
-                    src={
-                      formatMedia(product.images?.[0]) ||
-                      "/placeholder.png"
-                    }
+                    src={formatMedia(product.images?.[0]) || "/placeholder.png"}
                     alt={product.name}
                   />
 
-                  {product.is_kit && (
-                    <span className={styles.badge}>KIT</span>
-                  )}
+                  {product.is_kit && <span className={styles.badge}>KIT</span>}
                 </div>
 
                 <div className={styles.info}>
                   <h3>{product.name}</h3>
+
+                  {/* ⭐ avaliação no card */}
+                  <Stars
+                    value={product.rating_avg ?? product.rating ?? product.stars}
+                    count={product.rating_count ?? product.reviews_count ?? 0}
+                  />
+
                   <p className={styles.price}>
                     R$ {Number(product.price).toFixed(2)}
                   </p>
@@ -172,4 +198,3 @@ if (data.length) {
     </div>
   );
 }
-

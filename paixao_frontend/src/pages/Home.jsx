@@ -79,22 +79,22 @@ export default function Home() {
 
         <div className={styles.wholesaleGrid}>
           <div className={styles.card}>
-            <h3>Óleo 100ml</h3>
+            <h3>Óleo paixão de 100ml</h3>
             <p>
-              <strong className={styles.highlightPrice}>12 unidades</strong> — 72.000 Kz
+              <strong className={styles.highlightPrice}>12 unidades</strong> — 66.000 Kz
             </p>
             <p>
-              <strong className={styles.highlightPrice}>24 unidades</strong> — 144.000 Kz
+              <strong className={styles.highlightPrice}>24 unidades</strong> — 132.000 Kz
             </p>
           </div>
 
           <div className={styles.card}>
-            <h3>Creme 200ml</h3>
+            <h3>Creme paixão de 200ml</h3>
             <p>
-              <strong className={styles.highlightPrice}>12 unidades</strong> — 60.000 Kz
+              <strong className={styles.highlightPrice}>12 unidades de 200ml </strong> — 54.000 Kz
             </p>
             <p>
-              <strong className={styles.highlightPrice}>24 unidades</strong> — 120.000 Kz
+              <strong className={styles.highlightPrice}>24 unidades</strong> — 108.000 Kz
             </p>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function Home() {
           <div className={styles.finalVideo}>
             <div className={styles.videoRatio}>
               <video autoPlay loop muted playsInline className={styles.videoCover}>
-                <source src="/video/nossos kits.mp4" type="video/mp4" />
+                <source src="/video/nossoskits.mp4" type="video/mp4" />
                 Seu navegador não suporta o elemento de vídeo.
               </video>
             </div>

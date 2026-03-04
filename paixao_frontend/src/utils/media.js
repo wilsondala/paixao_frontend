@@ -16,7 +16,7 @@ export const formatMedia = (file) => {
         file = parsed[0];
       }
     } catch (err) {
-      console.warn("Erro ao converter JSON de imagem:", err);
+      console.warn("Erro ao converter JSON de mídia:", err);
     }
   }
 
@@ -24,22 +24,32 @@ export const formatMedia = (file) => {
 
   if (!file) return "";
 
-  // URL externa (http ou https)
+  // URL externa
   if (file.startsWith("http://") || file.startsWith("https://")) {
-    return file;
+    return encodeURI(file);
   }
 
   // Já começa com /
   if (file.startsWith("/")) {
-    return file;
+    return encodeURI(file);
   }
 
-  // Já contém pasta correta
-  if (file.startsWith("imagem/produtos") || file.startsWith("images/produtos")) {
-    return `/${file}`;
+  // Detecta extensão do arquivo
+  const ext = file.split(".").pop()?.toLowerCase();
+
+  const videoExtensions = ["mp4", "webm", "ogg"];
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+
+  // 🎥 Vídeo
+  if (videoExtensions.includes(ext)) {
+    return encodeURI(`/video/${file}`);
   }
 
-  // Apenas nome do arquivo
-  // ⚠️ AJUSTE AQUI SE SUA PASTA FOR DIFERENTE
-  return `/imagem/produtos/${file}`;
+  // 🖼️ Imagem
+  if (imageExtensions.includes(ext)) {
+    return encodeURI(`/imagem/produtos/${file}`);
+  }
+
+  // fallback
+  return encodeURI(`/${file}`);
 };

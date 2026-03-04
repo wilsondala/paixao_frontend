@@ -12,7 +12,7 @@ export default function EditProduct() {
     description: "",
     price: "",
     stock: "",
-    category: "",      // ✅ adiciona category (seu schema tem)
+    category: "",
     images: [],
     video_url: "",
   });
@@ -21,6 +21,8 @@ export default function EditProduct() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // ✅ Como o axios baseURL deve ser .../api/v1,
+  // aqui a gente usa apenas o path da rota.
   const fetchUrl = useMemo(() => `/products/${id}`, [id]);
 
   useEffect(() => {
@@ -88,18 +90,22 @@ export default function EditProduct() {
       .map((x) => String(x || "").trim())
       .filter(Boolean);
 
-  async function putWithFallback(urlPrimary, urlFallback, body, config) {
-    try {
-      return await api.put(urlPrimary, body, config);
-    } catch (err) {
-      const status = err?.response?.status;
-      if (status === 404 && urlFallback) {
-        return await api.put(urlFallback, body, config);
-      }
-      throw err;
-    }
-  }
+  // ✅ normaliza video_url:
+  // - "kitBaunilha.mp4" -> "/video/kitBaunilha.mp4"
+  // - "/video/kitBaunilha.mp4" -> mantém
+  // - "https://..." -> mantém
+  const normalizeVideoUrl = (raw) => {
+    const v = String(raw || "").trim();
+    if (!v) return null;
 
+    if (v.startsWith("http://") || v.startsWith("https://")) return v;
+    if (v.startsWith("/")) return v;
+    return `/video/${v}`;
+  };
+
+  // ✅ Sem fallback pra rota pública em UPDATE:
+  // edição é ação de ADMIN, então faz sentido usar só /admin.
+  // (o fallback escondia problema de rota e gera confusão)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (saving) return;
@@ -107,7 +113,6 @@ export default function EditProduct() {
     setSaving(true);
 
     try {
-      // ✅ payload exatamente no formato que você mandou
       const payloadBase = {
         name: form.name.trim(),
         description: form.description.trim(),
@@ -115,12 +120,12 @@ export default function EditProduct() {
         stock: toNumberSafe(form.stock),
         category: form.category.trim() || null,
         images: normalizeImages(form.images),
-        video_url: form.video_url.trim() || null,
+        video_url: normalizeVideoUrl(form.video_url),
       };
 
-      const urlAdmin = `/admin/products/${id}`;
-      const urlPublic = `/products/${id}`;
+      const urlAdmin = `/products/${id}`;
 
+      // ✅ Só usa multipart se realmente tiver arquivo de vídeo
       if (videoFile) {
         const formData = new FormData();
         formData.append("name", payloadBase.name);
@@ -130,14 +135,17 @@ export default function EditProduct() {
         if (payloadBase.category) formData.append("category", payloadBase.category);
         if (payloadBase.video_url) formData.append("video_url", payloadBase.video_url);
 
+        // backend precisa aceitar "video" como UploadFile
         formData.append("video", videoFile);
+
+        // imagens continuam como strings
         payloadBase.images.forEach((img) => formData.append("images", img));
 
-        await putWithFallback(urlAdmin, urlPublic, formData, {
+        await api.put(urlAdmin, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        await putWithFallback(urlAdmin, urlPublic, payloadBase);
+        await api.put(urlAdmin, payloadBase);
       }
 
       alert("Produto atualizado com sucesso!");
@@ -239,7 +247,7 @@ export default function EditProduct() {
         <input
           type="text"
           name="video_url"
-          placeholder="URL do vídeo (opcional)"
+          placeholder="Vídeo: URL ou nome do arquivo (ex: kitBaunilha.mp4)"
           value={form.video_url}
           onChange={handleChange}
         />

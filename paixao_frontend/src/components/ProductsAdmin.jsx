@@ -28,7 +28,7 @@ export default function ProductsAdmin() {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`/admin/products/${id}`);
+      await api.delete(`/products/${id}`);
       fetchProducts();
     } catch (err) {
       console.error("Erro ao excluir produto:", err);
