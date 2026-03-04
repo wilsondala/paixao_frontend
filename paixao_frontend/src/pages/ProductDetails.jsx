@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getProductById, getProducts } from "../services/productService";
 import { useCart } from "../context/CartContext";
 import styles from "./ProductDetails.module.css";
+import ProductReview from "../components/ProductReview";
 import { formatMedia } from "../utils/media";
 
 // ✅ formata URL de vídeo (parecido com formatMedia)
@@ -32,16 +33,23 @@ function formatVideo(file) {
   return `/uploads/produtos/${file}`;
 }
 
-// ⭐ componente simples de estrelas (sem depender de CSS extra)
-function Stars({ value, count }) {
+// ⭐ estrelas (clicável)
+function Stars({ value, count, onClick }) {
   const v = Number(value);
   const c = Number(count);
 
-  if (!Number.isFinite(v) || v <= 0 || !Number.isFinite(c) || c <= 0) {
+  const hasReviews = Number.isFinite(v) && v > 0 && Number.isFinite(c) && c > 0;
+
+  if (!hasReviews) {
     return (
-      <div style={{ marginTop: 6, color: "#666", fontSize: 13 }}>
-        Sem avaliações ainda
-      </div>
+      <button
+        type="button"
+        onClick={onClick}
+        className={styles.starsBtn}
+        title="Ver avaliações"
+      >
+        Sem avaliações ainda • Ver avaliações
+      </button>
     );
   }
 
@@ -56,12 +64,17 @@ function Stars({ value, count }) {
   }).join("");
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
-      <span style={{ fontSize: 14 }}>{stars}</span>
-      <span style={{ fontSize: 12, color: "#666" }}>
-        {clamped.toFixed(1)} ({c})
+    <button
+      type="button"
+      onClick={onClick}
+      className={styles.starsBtn}
+      title="Ver avaliações"
+    >
+      <span className={styles.starsIcon}>{stars}</span>
+      <span className={styles.starsText}>
+        {clamped.toFixed(1)} ({c}) • Ver avaliações
       </span>
-    </div>
+    </button>
   );
 }
 
@@ -71,15 +84,16 @@ export default function ProductDetails() {
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
-
-  // ✅ midia selecionada pode ser "image" ou "video"
-  const [selected, setSelected] = useState(null); // { type: "image"|"video", src: "..." }
-
+  const [selected, setSelected] = useState(null); // { type, src }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // ✅ relacionados
   const [related, setRelated] = useState([]);
+
+  // ✅ avaliações
+  const [showReviews, setShowReviews] = useState(false);
+  const reviewsRef = useRef(null);
 
   useEffect(() => {
     fetchProduct();
@@ -89,30 +103,26 @@ export default function ProductDetails() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
+
       const response = await getProductById(id);
       const data = response.data;
 
       setProduct(data);
 
-      // ✅ define seleção inicial:
+      // ✅ seleção inicial
       const videoSrc = formatVideo(data?.video_url);
       const firstImage = data?.images?.[0];
 
-      if (videoSrc) {
-        setSelected({ type: "video", src: videoSrc });
-      } else if (firstImage) {
-        setSelected({ type: "image", src: firstImage });
-      } else {
-        setSelected(null);
-      }
+      if (videoSrc) setSelected({ type: "video", src: videoSrc });
+      else if (firstImage) setSelected({ type: "image", src: firstImage });
+      else setSelected(null);
 
       setError(null);
 
-      // ✅ carrega relacionados (mesma categoria, exceto o atual)
+      // ✅ relacionados (mesma categoria)
       try {
         const listRes = await getProducts();
         const all = Array.isArray(listRes.data) ? listRes.data : [];
-
         const currentCat = String(data?.category || "").trim().toLowerCase();
 
         const filtered = all
@@ -141,7 +151,6 @@ export default function ProductDetails() {
     if (!product) return [];
 
     const items = [];
-
     const v = formatVideo(product.video_url);
     if (v) items.push({ type: "video", src: v });
 
@@ -157,6 +166,27 @@ export default function ProductDetails() {
     const img = product?.images?.[0];
     return img ? `url(${formatMedia(img)})` : "none";
   }, [product]);
+
+  // ✅ abre avaliações e rola
+  const openReviews = () => {
+    setShowReviews(true);
+    setTimeout(() => {
+      reviewsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  };
+
+  // ✅ fallback rating
+  const ratingAvg = product?.rating_avg ?? 0;
+  const ratingCount = product?.rating_count ?? 0;
+
+  // ✅ submit avaliação (aqui depois você integra no backend)
+  const handleSubmitReview = (review) => {
+    console.log("Avaliação enviada:", review);
+
+    // Exemplo (futuro): chamar API e depois recarregar
+    // await createReview(id, review)
+    // await fetchProduct()
+  };
 
   return (
     <div className={styles.page}>
@@ -177,197 +207,187 @@ export default function ProductDetails() {
 
         {!loading && product && (
           <>
-            {/* ✅ mantém o layout original (gallery + info) */}
-            <div className={styles.gallery}>
-              {/* ✅ MAIN VIEWER */}
-              <div className={styles.mainImage}>
-                {selected?.type === "video" ? (
-                  <video
-                    src={selected.src}
-                    controls
-                    preload="metadata"
-                    style={{ width: "100%", height: "100%", borderRadius: 16 }}
-                  />
-                ) : (
-                  <img src={formatMedia(selected?.src)} alt={product.name} />
-                )}
-              </div>
+            <div className={styles.contentRow}>
+              {/* ====== GALERIA ====== */}
+              <div className={styles.gallery}>
+                <div className={styles.mainImage}>
+                  {selected?.type === "video" ? (
+                    <video
+                      src={selected.src}
+                      controls
+                      preload="metadata"
+                      className={styles.video}
+                    />
+                  ) : (
+                    <img src={formatMedia(selected?.src)} alt={product.name} />
+                  )}
+                </div>
 
-              {/* ✅ THUMBNAILS */}
-              <div className={styles.thumbnailContainer}>
-                {mediaItems.map((m, index) => {
-                  const isActive =
-                    selected?.type === m.type &&
-                    String(selected?.src) === String(m.src);
+                <div className={styles.thumbnailContainer}>
+                  {mediaItems.map((m, index) => {
+                    const isActive =
+                      selected?.type === m.type &&
+                      String(selected?.src) === String(m.src);
 
-                  if (m.type === "video") {
+                    if (m.type === "video") {
+                      return (
+                        <button
+                          key={`video-${index}`}
+                          type="button"
+                          onClick={() => setSelected(m)}
+                          className={`${styles.thumbBtn} ${
+                            isActive ? styles.active : ""
+                          }`}
+                          aria-label="Ver vídeo"
+                          title="Ver vídeo"
+                        >
+                          <video
+                            src={m.src}
+                            preload="metadata"
+                            muted
+                            playsInline
+                            className={styles.thumbVideo}
+                          />
+                          <span className={styles.playIcon}>▶</span>
+                        </button>
+                      );
+                    }
+
                     return (
-                      <button
-                        key={`video-${index}`}
-                        type="button"
+                      <img
+                        key={`img-${index}`}
+                        src={formatMedia(m.src)}
+                        alt="thumb"
                         onClick={() => setSelected(m)}
                         className={`${styles.thumbnail} ${
                           isActive ? styles.active : ""
                         }`}
-                        style={{
-                          position: "relative",
-                          padding: 0,
-                          border: "none",
-                          background: "transparent",
-                        }}
-                        aria-label="Ver vídeo"
-                        title="Ver vídeo"
-                      >
-                        <video
-                          src={m.src}
-                          preload="metadata"
-                          muted
-                          playsInline
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            borderRadius: 10,
-                          }}
-                        />
-                        <span
-                          style={{
-                            position: "absolute",
-                            inset: 0,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 22,
-                            color: "white",
-                            textShadow: "0 2px 8px rgba(0,0,0,0.7)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          ▶
-                        </span>
-                      </button>
+                      />
                     );
-                  }
+                  })}
+                </div>
+              </div>
 
-                  return (
-                    <img
-                      key={`img-${index}`}
-                      src={formatMedia(m.src)}
-                      alt="thumb"
-                      onClick={() => setSelected(m)}
-                      className={`${styles.thumbnail} ${
-                        isActive ? styles.active : ""
-                      }`}
-                    />
-                  );
-                })}
+              {/* ====== INFO ====== */}
+              <div className={styles.info}>
+                <h2>{product.name}</h2>
+
+                <p className={styles.price}>R$ {Number(product.price).toFixed(2)}</p>
+
+                {/* ⭐ Avaliações clicáveis */}
+                <Stars value={ratingAvg} count={ratingCount} onClick={openReviews} />
+
+                <p className={styles.description}>{product.description}</p>
+
+                <div className={styles.actions}>
+                  <button
+                    className={styles.buyButton}
+                    onClick={() => addToCart(product)}
+                  >
+                    Adicionar ao Carrinho
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.backButton}
+                    onClick={() => navigate("/products")}
+                  >
+                    Voltar para compras
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className={styles.info}>
-              <h2>{product.name}</h2>
-
-              <p className={styles.price}>
-                R$ {Number(product.price).toFixed(2)}
-              </p>
-
-              {/* ⭐ Avaliação */}
-              <Stars
-                value={product.rating_avg ?? product.rating ?? product.stars}
-                count={product.rating_count ?? product.reviews_count ?? 0}
-              />
-
-              <p className={styles.description}>{product.description}</p>
-
-              {/* ✅ botões lado a lado sem CSS novo */}
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <button
-                  className={styles.buyButton}
-                  onClick={() => addToCart(product)}
-                >
-                  Adicionar ao Carrinho
-                </button>
+            {/* ✅ AVALIAÇÕES ABAIXO DO PRODUTO */}
+            <section ref={reviewsRef} className={styles.reviewsSection}>
+              <div className={styles.reviewsHeader}>
+                <h3>Avaliações</h3>
 
                 <button
                   type="button"
-                  className={styles.backButton}
-                  onClick={() => navigate("/products")}
+                  className={styles.toggleReviewsBtn}
+                  onClick={() => setShowReviews((p) => !p)}
                 >
-                  Voltar para compras
+                  {showReviews ? "Fechar" : "Ver"}
                 </button>
               </div>
-            </div>
+
+              {showReviews && (
+                <div className={styles.reviewsBox}>
+                  <div className={styles.reviewsMeta}>
+                    <span>
+                      <strong>Média:</strong> {Number(ratingAvg || 0).toFixed(1)}
+                    </span>
+                    <span>
+                      <strong>Total:</strong> {Number(ratingCount || 0)}
+                    </span>
+                  </div>
+
+                  {/* ✅ lista (quando backend devolver reviews) */}
+                  {Array.isArray(product?.reviews) && product.reviews.length > 0 ? (
+                    <div className={styles.reviewsList}>
+                      {product.reviews.map((r, idx) => (
+                        <div key={idx} className={styles.reviewItem}>
+                          <div className={styles.reviewTop}>
+                            <strong>{r?.name || "Cliente"}</strong>
+                            <span className={styles.reviewStars}>
+                              {"★".repeat(Number(r?.stars || 5)).padEnd(5, "☆")}
+                            </span>
+                          </div>
+                          <p className={styles.reviewText}>{r?.comment || "—"}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className={styles.noReviews}>
+                      Este produto ainda não tem avaliações. Seja o primeiro ⭐
+                    </p>
+                  )}
+
+                  {/* ✅ FORMULÁRIO DE AVALIAÇÃO (ESTRELAS + COMENTÁRIO) */}
+                  <ProductReview onSubmit={handleSubmitReview} />
+                </div>
+              )}
+            </section>
+
+            {/* ✅ RELACIONADOS EMBAIXO */}
+            {related.length > 0 && (
+              <section className={styles.relatedSection}>
+                <div className={styles.relatedHeader}>
+                  <h3>Produtos relacionados</h3>
+                </div>
+
+                <div className={styles.relatedGrid}>
+                  {related.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className={styles.relatedCard}
+                      onClick={() => navigate(`/products/${p.id}`)}
+                      title={p.name}
+                    >
+                      <div className={styles.relatedImgWrap}>
+                        <img
+                          src={formatMedia(p.images?.[0]) || "/placeholder.png"}
+                          alt={p.name}
+                          className={styles.relatedImg}
+                        />
+                      </div>
+
+                      <div className={styles.relatedInfo}>
+                        <span className={styles.relatedName}>{p.name}</span>
+                        <span className={styles.relatedPrice}>
+                          R$ {Number(p.price).toFixed(2)}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
           </>
         )}
       </div>
-
-      {/* ✅ Relacionados sempre embaixo (sem mexer no layout do container) */}
-      {!loading && product && related.length > 0 && (
-        <section
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto 70px",
-            padding: "0 20px",
-          }}
-        >
-          <h3 style={{ margin: "10px 0 16px" }}>Produtos relacionados</h3>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: 14,
-            }}
-          >
-            {related.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => navigate(`/products/${p.id}`)}
-                style={{
-                  border: "1px solid rgba(0,0,0,0.08)",
-                  borderRadius: 14,
-                  background: "white",
-                  padding: 10,
-                  textAlign: "left",
-                  cursor: "pointer",
-                }}
-                title={p.name}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: 140,
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    background: "#f1f1f1",
-                    marginBottom: 10,
-                  }}
-                >
-                  <img
-                    src={formatMedia(p.images?.[0]) || "/placeholder.png"}
-                    alt={p.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </div>
-
-                <div style={{ display: "grid", gap: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>{p.name}</span>
-                  <span style={{ fontSize: 13 }}>
-                    R$ {Number(p.price).toFixed(2)}
-                  </span>
-
-                  {/* ⭐ avaliação no card também */}
-                  <Stars
-                    value={p.rating_avg ?? p.rating ?? p.stars}
-                    count={p.rating_count ?? p.reviews_count ?? 0}
-                  />
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
