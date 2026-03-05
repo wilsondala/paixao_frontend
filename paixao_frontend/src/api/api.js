@@ -1,18 +1,17 @@
 // src/api/api.js
 import axios from "axios";
 
-// 🔥 Detecta ambiente corretamente
 const isDev = import.meta.env.DEV;
 
+// ✅ Base do backend (sem barra no final)
 const baseURL = isDev
-  ? "http://127.0.0.1:8000"
-  : import.meta.env.VITE_API_URL;
+  ? "http://127.0.0.1:8000/api/v1"
+  : (import.meta.env.VITE_API_URL || "").replace(/\/+$/, ""); // remove / no fim
 
 if (!baseURL) {
-  throw new Error("API URL não definida.");
+  throw new Error("API URL não definida. Configure VITE_API_URL no .env");
 }
 
-// Instância Axios
 const api = axios.create({
   baseURL,
   timeout: 60000,
@@ -21,15 +20,11 @@ const api = axios.create({
   },
 });
 
-// 🔐 INTERCEPTOR PARA ENVIAR TOKEN AUTOMATICAMENTE
+// 🔐 Interceptor para enviar token automaticamente
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)

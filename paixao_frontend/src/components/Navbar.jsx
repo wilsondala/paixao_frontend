@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect, useMemo } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { Instagram, Search } from "lucide-react";
 import styles from "./Navbar.module.css";
 
 function resolveAvatarUrl(photo) {
@@ -23,13 +24,23 @@ const CATEGORIES = [
   { label: "Calçado", to: "/products?category=Calçado" },
 ];
 
+function buildProductsUrl(params = {}) {
+  const qs = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && String(v).trim() !== "") {
+      qs.set(k, String(v));
+    }
+  });
+  return `/products?${qs.toString()}`;
+}
+
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
-  const [productsDropdown, setProductsDropdown] = useState(false);
+  const [openMobile, setOpenMobile] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   const [q, setQ] = useState("");
 
-  const dropdownRef = useRef(null);
+  const accountRef = useRef(null);
   const productsRef = useRef(null);
 
   const navigate = useNavigate();
@@ -39,7 +50,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   const totalItems = useMemo(
-    () => cart.reduce((t, i) => t + (i.quantity || 0), 0),
+    () => (Array.isArray(cart) ? cart : []).reduce((t, i) => t + (Number(i?.quantity) || 0), 0),
     [cart]
   );
 
@@ -54,6 +65,11 @@ export default function Navbar() {
 
   const avatarSrc = useMemo(() => resolveAvatarUrl(user?.photo), [user?.photo]);
 
+  const userInitial =
+    user?.name?.charAt(0)?.toUpperCase() ||
+    user?.email?.charAt(0)?.toUpperCase() ||
+    "U";
+
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -66,142 +82,132 @@ export default function Navbar() {
     navigate(`/products?q=${encodeURIComponent(term)}`);
   };
 
+  // fecha dropdowns ao clicar fora
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdown(false);
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setAccountOpen(false);
       }
       if (productsRef.current && !productsRef.current.contains(event.target)) {
-        setProductsDropdown(false);
+        setProductsOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ao navegar, fecha tudo
   useEffect(() => {
-    setOpen(false);
-    setDropdown(false);
-    setProductsDropdown(false);
+    setOpenMobile(false);
+    setAccountOpen(false);
+    setProductsOpen(false);
   }, [location.pathname, location.search]);
-
-  const userInitial =
-    user?.name?.charAt(0)?.toUpperCase() ||
-    user?.email?.charAt(0)?.toUpperCase() ||
-    "U";
 
   return (
     <header className={styles.header}>
-      {/* ===== TOPBAR ===== */}
+      {/* ===== TOP BAR (social) ===== */}
       <div className={styles.topbar}>
         <div className={styles.topbarInner}>
-          <span>ATENDIMENTO VIA CHAT</span>
-          <span className={styles.sep}>|</span>
-          <span>BAIXE JÁ NOSSO APLICATIVO</span>
-          <span className={styles.sep}>|</span>
-          <span>RASTREIO</span>
-
           <a
-            className={styles.ig}
-            href="https://instagram.com"
+            className={styles.socialLink}
+            href="https://instagram.com/paixao.angola2024"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            title="Instagram"
           >
-            IG
+            <Instagram size={18} />
           </a>
         </div>
       </div>
 
-      {/* ===== MAINBAR (logo + busca + ações) ===== */}
+      {/* ===== MAIN HEADER (logo + search + actions) ===== */}
       <nav className={styles.navbar}>
         <div className={styles.inner}>
-          <div className={styles.logo}>
-            <Link to="/">
-              PAIXÃO <span>ANGOLA</span>
-            </Link>
-          </div>
+          <Link to="/" className={styles.logo} aria-label="Ir para a Home">
+            <span className={styles.logoTop}>PAIXÃO</span>
+            <span className={styles.logoBottom}>ANGOLA</span>
+          </Link>
 
-          {/* BUSCA (igual modelo) */}
           <form className={styles.searchWrap} onSubmit={submitSearch}>
             <input
-              className={styles.search}
+              className={styles.searchInput}
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="O que você está procurando?"
+              aria-label="Buscar produtos"
             />
             <button className={styles.searchBtn} type="submit" aria-label="Buscar">
-              🔎
+              <Search size={18} />
             </button>
           </form>
 
-          {/* AÇÕES (conta / carrinho / menu mobile) */}
           <div className={styles.actions}>
             {user ? (
               <>
                 <Link to="/cart" className={styles.cart} title="Carrinho">
-                  🛒
+                  <span className={styles.cartIcon} aria-hidden="true">🛒</span>
                   <span className={styles.cartTotal}>R$ {totalPrice.toFixed(2)}</span>
-                  {totalItems > 0 && (
-                    <span className={styles.badge}>{totalItems}</span>
-                  )}
+                  {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
                 </Link>
 
-                <div className={styles.avatarContainer} ref={dropdownRef}>
-                  <div
-                    className={styles.avatar}
-                    onClick={() => setDropdown((v) => !v)}
-                    title="Minha conta"
-                    role="button"
-                    tabIndex={0}
+                <div className={styles.account} ref={accountRef}>
+                  <button
+                    type="button"
+                    className={styles.avatarBtn}
+                    onClick={() => setAccountOpen((v) => !v)}
+                    aria-label="Minha conta"
+                    aria-expanded={accountOpen}
                   >
                     {avatarSrc ? (
                       <img src={avatarSrc} alt="Avatar" className={styles.avatarImg} />
                     ) : (
-                      userInitial
+                      <span className={styles.avatarFallback}>{userInitial}</span>
                     )}
-                  </div>
+                  </button>
 
-                  {dropdown && (
-                    <div className={styles.dropdown}>
+                  {accountOpen && (
+                    <div className={styles.accountDropdown} role="menu">
                       <div className={styles.userInfo}>
-                        <strong>{user.name}</strong>
-                        <small>{user.email}</small>
+                        <strong className={styles.userName}>{user?.name || "Usuário"}</strong>
+                        <small className={styles.userEmail}>{user?.email}</small>
                       </div>
 
-                      <Link to="/profile">Meu Perfil</Link>
-
+                      <Link className={styles.ddLink} to="/profile">Meu Perfil</Link>
                       {user?.role === "admin" && (
-                        <Link to="/admin">Admin</Link>
+                        <Link className={styles.ddLink} to="/admin">Admin</Link>
                       )}
 
-                      <button onClick={handleLogout}>Sair</button>
+                      <button className={styles.ddButton} onClick={handleLogout}>
+                        Sair
+                      </button>
                     </div>
                   )}
                 </div>
               </>
             ) : (
               <>
-                <Link to="/login" className={styles.linkBtn}>
+                <Link to="/login" className={styles.btnGhost}>
                   Entrar
                 </Link>
 
-                <Link to="/register" className={styles.registerBtn}>
+                <Link to="/register" className={styles.btnPrimary}>
                   Cadastrar
                 </Link>
 
                 <Link to="/cart" className={styles.cart} title="Carrinho">
-                  🛒
-                  {totalItems > 0 && (
-                    <span className={styles.badge}>{totalItems}</span>
-                  )}
+                  <span className={styles.cartIcon} aria-hidden="true">🛒</span>
+                  {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
                 </Link>
               </>
             )}
 
             <button
+              type="button"
               className={styles.toggle}
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => setOpenMobile((v) => !v)}
               aria-label="Abrir menu"
+              aria-expanded={openMobile}
             >
               ☰
             </button>
@@ -210,71 +216,99 @@ export default function Navbar() {
       </nav>
 
       {/* ===== CATEGORIES BAR ===== */}
-      <div className={styles.categoriesBar}>
-        <div className={styles.categoriesInner}>
-          {/* PRODUTOS dropdown (mantido) */}
-          <div className={styles.productsContainer} ref={productsRef}>
+      <div className={styles.menuBar}>
+        <div className={styles.menuInner}>
+          {/* Produtos dropdown */}
+          <div className={styles.products} ref={productsRef}>
             <button
               type="button"
-              className={styles.productsButton}
-              onClick={() => setProductsDropdown((v) => !v)}
+              className={styles.dropdownBtn}
+              onClick={() => setProductsOpen((v) => !v)}
+              aria-expanded={productsOpen}
             >
-              Produtos ▾
+              Produtos <span className={styles.caret}>▾</span>
             </button>
 
-            {productsDropdown && (
-              <div className={styles.productsDropdown}>
-                <div className={styles.categoryGroup}>
+            {productsOpen && (
+              <div className={styles.dropdownMenu}>
+                <div className={styles.group}>
                   <strong>Roupas</strong>
-                  <Link to="/products?category=Roupas&subcategory=Feminino">Feminino</Link>
-                  <Link to="/products?category=Roupas&subcategory=Masculino">Masculino</Link>
+                  <Link to={buildProductsUrl({ category: "Roupas", subcategory: "Feminino" })} onClick={() => setProductsOpen(false)}>
+                    Feminino
+                  </Link>
+                  <Link to={buildProductsUrl({ category: "Roupas", subcategory: "Masculino" })} onClick={() => setProductsOpen(false)}>
+                    Masculino
+                  </Link>
                 </div>
 
-                <div className={styles.categoryGroup}>
+                <div className={styles.group}>
                   <strong>Beleza</strong>
-                  <Link to="/products?category=Beleza&subcategory=Hidratante">Hidratante</Link>
-                  <Link to="/products?category=Beleza&subcategory=Óleo">Óleo</Link>
-                  <Link to="/products?category=Beleza&subcategory=Kit">Kits</Link>
+                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Hidratante" })} onClick={() => setProductsOpen(false)}>
+                    Hidratante
+                  </Link>
+                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Oleo" })} onClick={() => setProductsOpen(false)}>
+                    Óleo
+                  </Link>
+                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Kit" })} onClick={() => setProductsOpen(false)}>
+                    Kits
+                  </Link>
                 </div>
 
-                <div className={styles.categoryGroup}>
+                <div className={styles.group}>
                   <strong>Calçado</strong>
-                  <Link to="/products?category=Calçado&subcategory=Masculino">Masculino</Link>
-                  <Link to="/products?category=Calçado&subcategory=Feminino">Feminino</Link>
+                  <Link to={buildProductsUrl({ category: "Calçado", subcategory: "Masculino" })} onClick={() => setProductsOpen(false)}>
+                    Masculino
+                  </Link>
+                  <Link to={buildProductsUrl({ category: "Calçado", subcategory: "Feminino" })} onClick={() => setProductsOpen(false)}>
+                    Feminino
+                  </Link>
                 </div>
 
-                <div className={styles.categoryGroup}>
+                <div className={styles.group}>
                   <strong>Especiais</strong>
-                  <Link to="/products?is_wholesale=true">Atacado</Link>
-                  <Link to="/products?is_kit=true">Apenas Kits</Link>
-                  <Link to="/products">Ver todos</Link>
+                  <Link to={buildProductsUrl({ is_wholesale: "true" })} onClick={() => setProductsOpen(false)}>
+                    Atacado
+                  </Link>
+                  <Link to={buildProductsUrl({ is_kit: "true" })} onClick={() => setProductsOpen(false)}>
+                    Apenas Kits
+                  </Link>
+                  <Link to="/products" onClick={() => setProductsOpen(false)}>
+                    Ver todos
+                  </Link>
                 </div>
               </div>
             )}
           </div>
 
-          {/* categorias rápidas (faixa) */}
+          {/* links rápidos */}
           {CATEGORIES.map((c) => (
-            <Link key={c.label} to={c.to} className={styles.catLink}>
+            <Link key={c.label} to={c.to} className={styles.menuLink}>
               {c.label.toUpperCase()}
             </Link>
           ))}
 
-          <Link to="/sobre-nos" className={styles.catLink}>
+          <Link to="/sobre-nos" className={styles.menuLink}>
             SOBRE NÓS
           </Link>
         </div>
       </div>
 
-      {/* ===== MOBILE MENU (reaproveita links) ===== */}
-      <div className={`${styles.mobileMenu} ${open ? styles.active : ""}`}>
-        <Link to="/products" onClick={() => setOpen(false)}>Produtos</Link>
-        <Link to="/sobre-nos" onClick={() => setOpen(false)}>Sobre Nós</Link>
-        {user && <Link to="/profile" onClick={() => setOpen(false)}>Meu Perfil</Link>}
-        {user?.role === "admin" && <Link to="/admin" onClick={() => setOpen(false)}>Admin</Link>}
-        {!user && <Link to="/login" onClick={() => setOpen(false)}>Entrar</Link>}
-        {!user && <Link to="/register" onClick={() => setOpen(false)}>Cadastrar</Link>}
-        {user && <button onClick={handleLogout} className={styles.mobileLogout}>Sair</button>}
+      {/* ===== MOBILE MENU ===== */}
+      <div className={`${styles.mobileMenu} ${openMobile ? styles.active : ""}`}>
+        <Link to="/products">Produtos</Link>
+        <Link to="/sobre-nos">Sobre Nós</Link>
+
+        {user && <Link to="/profile">Meu Perfil</Link>}
+        {user?.role === "admin" && <Link to="/admin">Admin</Link>}
+
+        {!user && <Link to="/login">Entrar</Link>}
+        {!user && <Link to="/register">Cadastrar</Link>}
+
+        {user && (
+          <button onClick={handleLogout} className={styles.mobileLogout}>
+            Sair
+          </button>
+        )}
       </div>
     </header>
   );

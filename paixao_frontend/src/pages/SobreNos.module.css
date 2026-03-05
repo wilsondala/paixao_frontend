@@ -1,115 +1,237 @@
-.container {
+/* ====== PAIXÃO ANGOLA - SOBRE NÓS (Luxo) ====== */
+
+.container{
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fb, #eef1f6);
+  background: #0a0606;
+  color: #f5ede0;
+
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-}
 
-.content {
-  max-width: 1200px;
-  display: flex;
-  gap: 80px;
-  align-items: center;
-}
-
-/* ================= IMAGEM ================= */
-
-.imageSection {
+  padding: 86px 20px 70px;
   position: relative;
-  flex: 1;
-  display: flex;
-  justify-content: center;
 }
 
-.imageGlow {
+/* Botão Voltar/Fechar */
+.backButton{
+  position: absolute;
+  top: 22px;
+  left: 22px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(232,185,35,0.25);
+
+  color: #f5ede0;
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.backButton:hover{
+  background: rgba(155,28,44,0.22);
+  border-color: rgba(155,28,44,0.55);
+  transform: translateY(-1px);
+}
+
+/* Grid principal */
+.content{
+  max-width: 1200px;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+/* ===== Imagem ===== */
+.imageSection{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image{
+  width: 100%;
+  max-width: 380px;
+
+  border-radius: 20px;
+  border: 2px solid rgba(232,185,35,0.3);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(232,185,35,0.15);
+
+  position: relative;
+  z-index: 2;
+}
+
+.imageGlow{
   position: absolute;
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(0,0,0,0.15), transparent);
-  border-radius: 50%;
-  filter: blur(40px);
+
+  background: radial-gradient(circle,
+    rgba(232,185,35,0.35),
+    transparent 70%
+  );
+
+  filter: blur(60px);
   z-index: 1;
 }
 
-.image {
-  width: 300px;
-  height: 380px;
-  object-fit: cover;
-  border-radius: 20px;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+/* ===== Texto ===== */
+.textSection{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-/* ================= TEXTO ================= */
-
-.textSection {
-  flex: 1.5;
-}
-
-.badge {
+/* badge */
+.badge{
   display: inline-block;
-  background: black;
-  color: white;
-  padding: 6px 14px;
-  border-radius: 30px;
+  width: fit-content;
+
+  background: #9b1c2c;
+  color: #f5ede0;
+
+  padding: 7px 14px;
+  border-radius: 999px;
+
   font-size: 12px;
-  letter-spacing: 1px;
-  margin-bottom: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
-.name {
-  font-size: 32px;
-  margin-bottom: 10px;
+/* nome */
+.name{
+  font-size: 36px;
+  font-weight: 1000;
+  letter-spacing: .02em;
+  margin: 0;
 }
 
-.subtitle {
+/* subtítulo */
+.subtitle{
   font-size: 18px;
-  color: #555;
-  margin-bottom: 25px;
+  color: #e8b923;
+  font-weight: 800;
+  margin: 0 0 6px 0;
 }
 
-.textSection p {
-  margin-bottom: 18px;
-  line-height: 1.7;
-  color: #444;
+/* parágrafos */
+.textSection p{
+  line-height: 1.75;
+  font-size: 15px;
+  color: rgba(245,237,224,0.85);
+  margin: 0;
 }
 
-/* ================= VALORES ================= */
+.textSection strong{
+  color: #f5ede0;
+}
 
-.values {
-  margin-top: 30px;
+/* ===== Valores ===== */
+.values{
+  margin-top: 18px;
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
 }
 
-.values h4 {
-  margin-bottom: 5px;
-  font-size: 16px;
+.valueCard{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(232,185,35,0.18);
+  border-radius: 14px;
+  padding: 18px;
+
+  transition: all .25s ease;
 }
 
-.values p {
+.valueCard:hover{
+  transform: translateY(-4px);
+  border-color: rgba(232,185,35,0.45);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.45),
+    0 0 22px rgba(232,185,35,0.12);
+}
+
+.valueCard h4{
+  margin: 0 0 8px 0;
+  color: #e8b923;
+
   font-size: 14px;
-  color: #666;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 1000;
 }
 
-/* ================= RESPONSIVO ================= */
+.valueCard p{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(245,237,224,0.84);
+}
 
-@media (max-width: 900px) {
-  .content {
-    flex-direction: column;
-    text-align: center;
+/* ===== Responsivo ===== */
+@media (max-width: 1000px){
+  .container{
+    padding: 76px 16px 60px;
   }
 
-  .values {
+  .content{
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 50px;
+  }
+
+  .image{
+    max-width: 300px;
+  }
+
+  .values{
     grid-template-columns: 1fr;
   }
 
-  .image {
-    width: 240px;
-    height: 320px;
+  .badge{
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px){
+  .backButton{
+    top: 16px;
+    left: 16px;
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  .name{
+    font-size: 28px;
+  }
+
+  .subtitle{
+    font-size: 16px;
+  }
+
+  .textSection p{
+    font-size: 14px;
+  }
+
+  .imageGlow{
+    width: 260px;
+    height: 260px;
   }
 }

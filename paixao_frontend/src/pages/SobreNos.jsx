@@ -1,11 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./SobreNos.module.css";
 
 export default function SobreNos() {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
+      {/* ✅ Botão voltar/fechar (profissional) */}
+      <button
+        type="button"
+        className={styles.backButton}
+        onClick={() => navigate(-1)}
+        aria-label="Voltar"
+        title="Voltar"
+      >
+        ← Voltar
+      </button>
 
+      <div className={styles.content}>
         {/* ================= IMAGEM ================= */}
         <div className={styles.imageSection}>
           <div className={styles.imageGlow}></div>
@@ -20,54 +33,47 @@ export default function SobreNos() {
         <div className={styles.textSection}>
           <span className={styles.badge}>Fundador & CEO</span>
 
-          <h1 className={styles.name}>
-            Wilson dos Santos Kahango Dala
-          </h1>
+          <h1 className={styles.name}>Wilson dos Santos Kahango Dala</h1>
 
-          <h2 className={styles.subtitle}>
-            Transformando visão em inovação
-          </h2>
+          <h2 className={styles.subtitle}>Transformando visão em inovação</h2>
 
           <p>
             A <strong>Paixão Angola</strong> nasceu em 2024 com um propósito claro:
-            construir uma marca moderna, sólida e orientada para o futuro.
-            Mais do que vender produtos, a empresa foi criada para oferecer
-            experiência, qualidade e conexão com o cliente.
+            construir uma marca moderna, sólida e orientada para o futuro. Mais do
+            que vender produtos, a empresa foi criada para oferecer experiência,
+            qualidade e conexão com o cliente.
           </p>
 
           <p>
-            Fundada por Wilson dos Santos Kahango Dala, a Paixão representa
-            disciplina, visão estratégica e compromisso com excelência.
-            Cada detalhe — do atendimento à tecnologia utilizada —
-            reflete a busca constante por evolução e inovação.
+            Fundada por Wilson dos Santos Kahango Dala, a Paixão representa disciplina,
+            visão estratégica e compromisso com excelência. Cada detalhe — do atendimento
+            à tecnologia utilizada — reflete a busca constante por evolução e inovação.
           </p>
 
           <p>
-            Acreditamos que marcas fortes não são construídas apenas com
-            produtos, mas com propósito. Por isso, investimos continuamente
-            em tecnologia, experiência do usuário e melhoria de processos,
-            criando um ecossistema preparado para crescer de forma
-            sustentável e escalável.
+            Acreditamos que marcas fortes não são construídas apenas com produtos, mas com
+            propósito. Por isso, investimos continuamente em tecnologia, experiência do
+            usuário e melhoria de processos, criando um ecossistema preparado para crescer
+            de forma sustentável e escalável.
           </p>
 
           <div className={styles.values}>
-            <div>
+            <div className={styles.valueCard}>
               <h4>Missão</h4>
               <p>Oferecer produtos de qualidade com excelência no atendimento.</p>
             </div>
 
-            <div>
+            <div className={styles.valueCard}>
               <h4>Visão</h4>
               <p>Tornar-se referência em inovação e experiência digital.</p>
             </div>
 
-            <div>
+            <div className={styles.valueCard}>
               <h4>Valores</h4>
               <p>Disciplina, transparência, evolução e compromisso.</p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
