@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./Home.module.css";
+import TestimonialsSection from "../components/TestimonialsSection";
+import NewsletterBar from "../components/NewsletterBar";
 
 export default function Home() {
   return (
@@ -139,6 +141,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ================= DEPOIMENTOS (estilo print) ================= */}
+      <TestimonialsSection />
+
+      {/* ================= NEWSLETTER (faixa estilo print) ================= */}
+      <NewsletterBar />
     </div>
   );
 }

@@ -1,0 +1,102 @@
+.bar{
+  width: 100%;
+  background: #9aa093; /* verde/cinza do modelo */
+  padding: 26px 0;
+  box-shadow: 0 -10px 30px rgba(0,0,0,.06) inset;
+}
+
+.inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  display: grid;
+  grid-template-columns: 460px 1fr 1fr 190px;
+  gap: 14px;
+  align-items: center;
+}
+
+.title{
+  margin: 0;
+  color: #fff;
+  font-weight: 1000;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+/* inputs iguais ao modelo (altura, borda, cor, leve transparência) */
+.inner input{
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.18);
+  outline: none;
+
+  background: rgba(255,255,255,.18);
+  color: #fff;
+
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.inner input::placeholder{
+  color: rgba(255,255,255,.75);
+  font-weight: 600;
+}
+
+.inner input:focus{
+  border-color: rgba(255,255,255,.55);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.14);
+}
+
+/* botão mais “premium” */
+.inner button{
+  height: 44px;
+  background: #000;
+  color: #fff;
+  border: 0;
+  padding: 0 14px;
+  border-radius: 10px;
+
+  cursor: pointer;
+  font-weight: 1000;
+  letter-spacing: .03em;
+
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.inner button:hover{
+  transform: translateY(-1px);
+  opacity: .95;
+}
+
+.inner button:disabled{
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsivo */
+@media (max-width: 980px){
+  .bar{ padding: 22px 0; }
+
+  .inner{
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .title{
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .inner input,
+  .inner button{
+    width: 100%;
+    height: 46px;
+  }
+}
