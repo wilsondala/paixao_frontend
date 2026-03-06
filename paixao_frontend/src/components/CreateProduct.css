@@ -52,11 +52,21 @@
   backdrop-filter: blur(10px);
 }
 
-/* Título */
-.create-product-card h2 {
-  margin: 0 0 16px;
+/* Header */
+.create-product-header {
+  margin-bottom: 18px;
+}
+
+.create-product-header h2 {
+  margin: 0 0 8px;
   font-size: 22px;
   letter-spacing: 0.2px;
+}
+
+.create-product-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 /* Form */
@@ -64,6 +74,19 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Field group */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(229, 231, 235, 0.92);
 }
 
 /* Inputs / Select / Textarea */
@@ -101,8 +124,15 @@
   resize: vertical;
 }
 
-/* Linhas com 2 colunas (se você usar .row-2 no JSX) */
+/* Linhas com 2 colunas */
 .row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Checkbox grid */
+.switches-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
@@ -110,10 +140,27 @@
 
 /* Subtítulos */
 .create-product-form h4 {
-  margin: 14px 0 6px;
+  margin: 0;
   font-size: 14px;
   color: rgba(229, 231, 235, 0.85);
   letter-spacing: 0.2px;
+}
+
+/* Divisor */
+.section-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 0 2px;
+}
+
+/* Header imagens */
+.images-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
 }
 
 /* Campo de imagens */
@@ -128,7 +175,7 @@
   background: rgba(17, 24, 39, 0.55);
 }
 
-/* Preview opcional (se tiver img no JSX antigo) */
+/* Preview opcional */
 .image-field img {
   width: 52px;
   height: 52px;
@@ -187,7 +234,14 @@
   transform: translateY(-1px);
 }
 
-/* Checkbox row (para is_wholesale / is_kit) */
+.submit-btn:disabled,
+.create-product-form button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Checkbox row */
 .checkbox-row {
   display: flex;
   gap: 10px;
@@ -200,10 +254,15 @@
   font-size: 14px;
 }
 
+.checkbox-row span {
+  font-weight: 600;
+}
+
 .checkbox-row input[type="checkbox"] {
   width: 18px;
   height: 18px;
   accent-color: var(--primary);
+  flex-shrink: 0;
 }
 
 /* Responsivo */
@@ -212,7 +271,8 @@
     padding: 18px 14px;
   }
 
-  .row-2 {
+  .row-2,
+  .switches-grid {
     grid-template-columns: 1fr;
   }
 
@@ -221,6 +281,14 @@
   }
 
   .remove-btn {
+    width: 100%;
+  }
+
+  .images-header {
+    align-items: stretch;
+  }
+
+  .add-btn {
     width: 100%;
   }
 }

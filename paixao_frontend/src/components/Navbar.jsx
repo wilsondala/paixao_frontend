@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { Instagram, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import styles from "./Navbar.module.css";
 
 function resolveAvatarUrl(photo) {
@@ -14,24 +14,58 @@ function resolveAvatarUrl(photo) {
   return photo;
 }
 
-const CATEGORIES = [
-  { label: "Todos os modelos", to: "/products" },
+function normalizeText(value) {
+  return (value || "")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function shouldNavigateToAllProducts(term) {
+  const normalized = normalizeText(term);
+
+  const allTerms = new Set([
+    "todos",
+    "tudo",
+    "todo",
+    "todas",
+    "todos os produtos",
+    "todos os modelos",
+    "ver tudo",
+    "ver todos",
+    "mostrar tudo",
+    "mostrar todos",
+    "all",
+    "produtos",
+    "modelos",
+  ]);
+
+  return allTerms.has(normalized);
+}
+
+const QUICK_CATEGORIES = [
+  { label: "Todos os Modelos", to: "/products" },
   { label: "Atacado", to: "/products?is_wholesale=true" },
   { label: "Apenas Kits", to: "/products?is_kit=true" },
-  { label: "Hidratante", to: "/products?category=Beleza&subcategory=Hidratante" },
-  { label: "Óleo", to: "/products?category=Beleza&subcategory=Óleo" },
+  { label: "Hidratante", to: "/products?category=Perfumaria&subcategory=Hidratante" },
+  { label: "Óleo", to: "/products?category=Perfumaria&subcategory=Óleo" },
   { label: "Roupas", to: "/products?category=Roupas" },
-  { label: "Calçado", to: "/products?category=Calçado" },
+  { label: "Calçados", to: "/products?category=Calçados" },
 ];
 
 function buildProductsUrl(params = {}) {
   const qs = new URLSearchParams();
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== undefined && v !== null && String(v).trim() !== "") {
-      qs.set(k, String(v));
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && String(value).trim() !== "") {
+      qs.set(key, String(value));
     }
   });
-  return `/products?${qs.toString()}`;
+
+  const query = qs.toString();
+  return query ? `/products?${query}` : "/products";
 }
 
 export default function Navbar() {
@@ -49,10 +83,10 @@ export default function Navbar() {
   const { cart = [] } = useCart();
   const { user, logout } = useAuth();
 
-  const totalItems = useMemo(
-    () => (Array.isArray(cart) ? cart : []).reduce((t, i) => t + (Number(i?.quantity) || 0), 0),
-    [cart]
-  );
+  const totalItems = useMemo(() => {
+    const items = Array.isArray(cart) ? cart : [];
+    return items.reduce((total, item) => total + (Number(item?.quantity) || 0), 0);
+  }, [cart]);
 
   const totalPrice = useMemo(() => {
     const items = Array.isArray(cart) ? cart : [];
@@ -77,51 +111,67 @@ export default function Navbar() {
 
   const submitSearch = (e) => {
     e.preventDefault();
+
     const term = q.trim();
-    if (!term) return navigate("/products");
+
+    if (!term || shouldNavigateToAllProducts(term)) {
+      navigate("/products");
+      return;
+    }
+
     navigate(`/products?q=${encodeURIComponent(term)}`);
   };
 
-  // fecha dropdowns ao clicar fora
+  const handleProductsToggle = () => {
+    setProductsOpen((prev) => !prev);
+  };
+
+  const handleProductsClose = () => {
+    setProductsOpen(false);
+  };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (accountRef.current && !accountRef.current.contains(event.target)) {
         setAccountOpen(false);
       }
+
       if (productsRef.current && !productsRef.current.contains(event.target)) {
         setProductsOpen(false);
       }
     }
+
+    function handleEsc(event) {
+      if (event.key === "Escape") {
+        setAccountOpen(false);
+        setProductsOpen(false);
+        setOpenMobile(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEsc);
+    };
   }, []);
 
-  // ao navegar, fecha tudo
   useEffect(() => {
     setOpenMobile(false);
     setAccountOpen(false);
     setProductsOpen(false);
   }, [location.pathname, location.search]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const currentQuery = params.get("q") || "";
+    setQ(currentQuery);
+  }, [location.search]);
+
   return (
     <header className={styles.header}>
-      {/* ===== TOP BAR (social) ===== */}
-      <div className={styles.topbar}>
-        <div className={styles.topbarInner}>
-          <a
-            className={styles.socialLink}
-            href="https://instagram.com/paixao.angola2024"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            title="Instagram"
-          >
-            <Instagram size={18} />
-          </a>
-        </div>
-      </div>
-
-      {/* ===== MAIN HEADER (logo + search + actions) ===== */}
       <nav className={styles.navbar}>
         <div className={styles.inner}>
           <Link to="/" className={styles.logo} aria-label="Ir para a Home">
@@ -146,16 +196,24 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link to="/cart" className={styles.cart} title="Carrinho">
-                  <span className={styles.cartIcon} aria-hidden="true">🛒</span>
-                  <span className={styles.cartTotal}>R$ {totalPrice.toFixed(2)}</span>
-                  {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
+                  <span className={styles.cartIcon} aria-hidden="true">
+                    🛒
+                  </span>
+
+                  <span className={styles.cartTotal}>
+                    R$ {totalPrice.toFixed(2)}
+                  </span>
+
+                  {totalItems > 0 && (
+                    <span className={styles.badge}>{totalItems}</span>
+                  )}
                 </Link>
 
                 <div className={styles.account} ref={accountRef}>
                   <button
                     type="button"
                     className={styles.avatarBtn}
-                    onClick={() => setAccountOpen((v) => !v)}
+                    onClick={() => setAccountOpen((prev) => !prev)}
                     aria-label="Minha conta"
                     aria-expanded={accountOpen}
                   >
@@ -169,16 +227,27 @@ export default function Navbar() {
                   {accountOpen && (
                     <div className={styles.accountDropdown} role="menu">
                       <div className={styles.userInfo}>
-                        <strong className={styles.userName}>{user?.name || "Usuário"}</strong>
+                        <strong className={styles.userName}>
+                          {user?.name || "Usuário"}
+                        </strong>
                         <small className={styles.userEmail}>{user?.email}</small>
                       </div>
 
-                      <Link className={styles.ddLink} to="/profile">Meu Perfil</Link>
+                      <Link className={styles.ddLink} to="/profile">
+                        Meu Perfil
+                      </Link>
+
                       {user?.role === "admin" && (
-                        <Link className={styles.ddLink} to="/admin">Admin</Link>
+                        <Link className={styles.ddLink} to="/admin">
+                          Admin
+                        </Link>
                       )}
 
-                      <button className={styles.ddButton} onClick={handleLogout}>
+                      <button
+                        type="button"
+                        className={styles.ddButton}
+                        onClick={handleLogout}
+                      >
                         Sair
                       </button>
                     </div>
@@ -196,8 +265,12 @@ export default function Navbar() {
                 </Link>
 
                 <Link to="/cart" className={styles.cart} title="Carrinho">
-                  <span className={styles.cartIcon} aria-hidden="true">🛒</span>
-                  {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
+                  <span className={styles.cartIcon} aria-hidden="true">
+                    🛒
+                  </span>
+                  {totalItems > 0 && (
+                    <span className={styles.badge}>{totalItems}</span>
+                  )}
                 </Link>
               </>
             )}
@@ -205,7 +278,7 @@ export default function Navbar() {
             <button
               type="button"
               className={styles.toggle}
-              onClick={() => setOpenMobile((v) => !v)}
+              onClick={() => setOpenMobile((prev) => !prev)}
               aria-label="Abrir menu"
               aria-expanded={openMobile}
             >
@@ -215,87 +288,135 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* ===== CATEGORIES BAR ===== */}
       <div className={styles.menuBar}>
         <div className={styles.menuInner}>
-          {/* Produtos dropdown */}
-          <div className={styles.products} ref={productsRef}>
+          <div className={styles.productsDropdown} ref={productsRef}>
             <button
               type="button"
-              className={styles.dropdownBtn}
-              onClick={() => setProductsOpen((v) => !v)}
+              className={`${styles.dropdownBtn} ${
+                productsOpen ? styles.dropdownBtnActive : ""
+              }`}
+              onClick={handleProductsToggle}
               aria-expanded={productsOpen}
+              aria-haspopup="true"
             >
-              Produtos <span className={styles.caret}>▾</span>
+              <span>Produtos</span>
+              <span
+                className={`${styles.caret} ${
+                  productsOpen ? styles.caretOpen : ""
+                }`}
+              >
+                ▾
+              </span>
             </button>
 
             {productsOpen && (
               <div className={styles.dropdownMenu}>
-                <div className={styles.group}>
-                  <strong>Roupas</strong>
-                  <Link to={buildProductsUrl({ category: "Roupas", subcategory: "Feminino" })} onClick={() => setProductsOpen(false)}>
-                    Feminino
-                  </Link>
-                  <Link to={buildProductsUrl({ category: "Roupas", subcategory: "Masculino" })} onClick={() => setProductsOpen(false)}>
-                    Masculino
-                  </Link>
-                </div>
+                <Link
+                  className={styles.dropdownItem}
+                  to="/products"
+                  onClick={handleProductsClose}
+                >
+                  Todos os modelos
+                </Link>
 
-                <div className={styles.group}>
-                  <strong>Beleza</strong>
-                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Hidratante" })} onClick={() => setProductsOpen(false)}>
-                    Hidratante
-                  </Link>
-                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Oleo" })} onClick={() => setProductsOpen(false)}>
-                    Óleo
-                  </Link>
-                  <Link to={buildProductsUrl({ category: "Beleza", subcategory: "Kit" })} onClick={() => setProductsOpen(false)}>
-                    Kits
-                  </Link>
-                </div>
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ is_wholesale: "true" })}
+                  onClick={handleProductsClose}
+                >
+                  Atacado
+                </Link>
 
-                <div className={styles.group}>
-                  <strong>Calçado</strong>
-                  <Link to={buildProductsUrl({ category: "Calçado", subcategory: "Masculino" })} onClick={() => setProductsOpen(false)}>
-                    Masculino
-                  </Link>
-                  <Link to={buildProductsUrl({ category: "Calçado", subcategory: "Feminino" })} onClick={() => setProductsOpen(false)}>
-                    Feminino
-                  </Link>
-                </div>
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ is_kit: "true" })}
+                  onClick={handleProductsClose}
+                >
+                  Apenas Kits
+                </Link>
 
-                <div className={styles.group}>
-                  <strong>Especiais</strong>
-                  <Link to={buildProductsUrl({ is_wholesale: "true" })} onClick={() => setProductsOpen(false)}>
-                    Atacado
-                  </Link>
-                  <Link to={buildProductsUrl({ is_kit: "true" })} onClick={() => setProductsOpen(false)}>
-                    Apenas Kits
-                  </Link>
-                  <Link to="/products" onClick={() => setProductsOpen(false)}>
-                    Ver todos
-                  </Link>
-                </div>
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({
+                    category: "Perfumaria",
+                    subcategory: "Hidratante",
+                  })}
+                  onClick={handleProductsClose}
+                >
+                  Hidratante
+                </Link>
+
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({
+                    category: "Perfumaria",
+                    subcategory: "Óleo",
+                  })}
+                  onClick={handleProductsClose}
+                >
+                  Óleo
+                </Link>
+
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ category: "Roupas" })}
+                  onClick={handleProductsClose}
+                >
+                  Roupas
+                </Link>
+
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ category: "Calçados" })}
+                  onClick={handleProductsClose}
+                >
+                  Calçados
+                </Link>
               </div>
             )}
           </div>
 
-          {/* links rápidos */}
-          {CATEGORIES.map((c) => (
-            <Link key={c.label} to={c.to} className={styles.menuLink}>
-              {c.label.toUpperCase()}
-            </Link>
-          ))}
+          <div className={styles.menuLinks}>
+            {QUICK_CATEGORIES.map((category) => (
+              <Link
+                key={category.label}
+                to={category.to}
+                className={styles.menuLink}
+              >
+                {category.label.toUpperCase()}
+              </Link>
+            ))}
 
-          <Link to="/sobre-nos" className={styles.menuLink}>
-            SOBRE NÓS
-          </Link>
+            <Link to="/sobre-nos" className={styles.menuLink}>
+              SOBRE NÓS
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* ===== MOBILE MENU ===== */}
       <div className={`${styles.mobileMenu} ${openMobile ? styles.active : ""}`}>
-        <Link to="/products">Produtos</Link>
+        <Link to="/products">Todos os Produtos</Link>
+        <Link to={buildProductsUrl({ is_wholesale: "true" })}>Atacado</Link>
+        <Link to={buildProductsUrl({ is_kit: "true" })}>Apenas Kits</Link>
+        <Link
+          to={buildProductsUrl({
+            category: "Perfumaria",
+            subcategory: "Hidratante",
+          })}
+        >
+          Hidratante
+        </Link>
+        <Link
+          to={buildProductsUrl({
+            category: "Perfumaria",
+            subcategory: "Óleo",
+          })}
+        >
+          Óleo
+        </Link>
+        <Link to={buildProductsUrl({ category: "Roupas" })}>Roupas</Link>
+        <Link to={buildProductsUrl({ category: "Calçados" })}>Calçados</Link>
         <Link to="/sobre-nos">Sobre Nós</Link>
 
         {user && <Link to="/profile">Meu Perfil</Link>}
@@ -305,7 +426,7 @@ export default function Navbar() {
         {!user && <Link to="/register">Cadastrar</Link>}
 
         {user && (
-          <button onClick={handleLogout} className={styles.mobileLogout}>
+          <button type="button" onClick={handleLogout} className={styles.mobileLogout}>
             Sair
           </button>
         )}

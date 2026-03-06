@@ -1,6 +1,7 @@
 .page {
   background: #f6f7fb;
   padding: 30px 20px 60px;
+  min-height: 100vh;
 }
 
 /* ================= CATEGORIAS ================= */
@@ -12,28 +13,43 @@
 .categoriesHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  gap: 16px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .categoriesHeader h2 {
   font-size: 20px;
   font-weight: 900;
   color: #0e1a2b;
+  margin: 0;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: #667085;
+  font-size: 14px;
 }
 
 .clearBtn {
   background: #fff;
   border: 1px solid #ddd;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.clearBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
 }
 
 .categoriesRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
   gap: 12px;
 }
 
@@ -46,27 +62,52 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
   transition: 0.2s ease;
+  color: #0e1a2b;
 }
 
 .categoryCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .active {
   border: 2px solid #e8b923;
+  background: #fffaf0;
 }
 
 .icon {
   font-size: 20px;
+  flex-shrink: 0;
 }
 
 /* ================= PRODUTOS ================= */
 .productsSection {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.productsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.productsTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+  color: #0e1a2b;
+}
+
+.resultsCount {
+  margin-top: 6px;
+  color: #667085;
+  font-size: 14px;
 }
 
 .grid {
@@ -81,18 +122,19 @@
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
   transition: 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
 }
 
 .imageContainer {
   position: relative;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   background: #f3f4f6;
 }
 
@@ -102,12 +144,27 @@
   object-fit: cover;
 }
 
-.badge {
+.badges {
   position: absolute;
   top: 10px;
   left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
   background: #e8b923;
   color: #111;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.badgeSecondary {
+  background: #0e1a2b;
+  color: #fff;
   padding: 5px 10px;
   border-radius: 999px;
   font-size: 12px;
@@ -118,24 +175,107 @@
   padding: 14px;
 }
 
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.metaTag {
+  background: #f3f4f6;
+  color: #344054;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .info h3 {
   font-size: 14px;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin: 0 0 6px;
   color: #0e1a2b;
+  line-height: 1.4;
 }
 
 .price {
-  font-size: 15px;
+  margin-top: 10px;
+  font-size: 16px;
   font-weight: 900;
   color: #e8b923;
 }
 
 .center {
   text-align: center;
+  padding: 30px 0;
+  color: #475467;
 }
 
 .error {
-  color: red;
+  color: #b42318;
   text-align: center;
+  padding: 30px 0;
+  font-weight: 700;
+}
+
+.emptyState {
+  background: #fff;
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState h3 {
+  margin: 0 0 8px;
+  color: #0e1a2b;
+}
+
+.emptyState p {
+  margin: 0 0 16px;
+  color: #667085;
+}
+
+
+/* ================= RESPONSIVO ================= */
+@media (max-width: 768px) {
+  .page {
+    padding: 24px 14px 50px;
+  }
+
+  .categoriesRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .productsTitle {
+    font-size: 20px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .categoryCard {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .categoriesRow {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info h3 {
+    font-size: 13px;
+  }
+
+  .price {
+    font-size: 15px;
+  }
 }

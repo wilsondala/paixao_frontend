@@ -3,6 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 import styles from "./EditProduct.module.css";
 
+const CATEGORY_OPTIONS = {
+  Roupas: ["Feminino", "Masculino", "Infantil", "Moda Praia"],
+  Perfumaria: ["Óleo", "Hidratante", "Perfume", "Kit"],
+  Calçados: ["Feminino", "Masculino", "Infantil"],
+  Praia: ["Biquíni", "Saída de Praia", "Chinelo", "Acessórios"],
+  Outros: ["Diversos"],
+  Atacado: ["Lote", "Revenda"],
+  Kits: ["Kit Promocional", "Kit Presente", "Kit Beleza"],
+};
+
 export default function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,6 +23,10 @@ export default function EditProduct() {
     price: "",
     stock: "",
     category: "",
+    subcategory: "",
+    is_wholesale: false,
+    wholesale_price: "",
+    is_kit: false,
     images: [],
     video_url: "",
   });
@@ -21,9 +35,11 @@ export default function EditProduct() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // ✅ Como o axios baseURL deve ser .../api/v1,
-  // aqui a gente usa apenas o path da rota.
   const fetchUrl = useMemo(() => `/products/${id}`, [id]);
+
+  const subcategoryOptions = useMemo(() => {
+    return CATEGORY_OPTIONS[form.category] || [];
+  }, [form.category]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,7 +52,14 @@ export default function EditProduct() {
           price: res.data?.price != null ? String(res.data.price) : "",
           stock: res.data?.stock != null ? String(res.data.stock) : "",
           category: res.data?.category ?? "",
-          images: Array.isArray(res.data?.images) ? res.data.images : [],
+          subcategory: res.data?.subcategory ?? "",
+          is_wholesale: Boolean(res.data?.is_wholesale),
+          wholesale_price:
+            res.data?.wholesale_price != null
+              ? String(res.data.wholesale_price)
+              : "",
+          is_kit: Boolean(res.data?.is_kit),
+          images: Array.isArray(res.data?.images) ? res.data.images : [""],
           video_url: res.data?.video_url ?? "",
         });
       } catch (err) {
@@ -51,13 +74,41 @@ export default function EditProduct() {
     fetchProduct();
   }, [fetchUrl, navigate]);
 
+  useEffect(() => {
+    if (!subcategoryOptions.length) return;
+
+    const exists = subcategoryOptions.includes(form.subcategory);
+
+    if (!exists && form.subcategory) {
+      setForm((prev) => ({
+        ...prev,
+        subcategory: "",
+      }));
+    }
+  }, [form.category, form.subcategory, subcategoryOptions]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+
+    setForm((prev) => {
+      const updated = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      if (name === "is_wholesale" && !checked) {
+        updated.wholesale_price = "";
+      }
+
+      return updated;
+    });
   };
 
   const handleAddImage = () => {
-    setForm((prev) => ({ ...prev, images: [...prev.images, ""] }));
+    setForm((prev) => ({
+      ...prev,
+      images: [...prev.images, ""],
+    }));
   };
 
   const handleImageChange = (index, value) => {
@@ -69,10 +120,13 @@ export default function EditProduct() {
   };
 
   const handleRemoveImage = (index) => {
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
+    setForm((prev) => {
+      const nextImages = prev.images.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        images: nextImages.length ? nextImages : [""],
+      };
+    });
   };
 
   const handleVideoUpload = (e) => {
@@ -90,10 +144,6 @@ export default function EditProduct() {
       .map((x) => String(x || "").trim())
       .filter(Boolean);
 
-  // ✅ normaliza video_url:
-  // - "kitBaunilha.mp4" -> "/video/kitBaunilha.mp4"
-  // - "/video/kitBaunilha.mp4" -> mantém
-  // - "https://..." -> mantém
   const normalizeVideoUrl = (raw) => {
     const v = String(raw || "").trim();
     if (!v) return null;
@@ -103,9 +153,6 @@ export default function EditProduct() {
     return `/video/${v}`;
   };
 
-  // ✅ Sem fallback pra rota pública em UPDATE:
-  // edição é ação de ADMIN, então faz sentido usar só /admin.
-  // (o fallback escondia problema de rota e gera confusão)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (saving) return;
@@ -119,26 +166,37 @@ export default function EditProduct() {
         price: toNumberSafe(form.price),
         stock: toNumberSafe(form.stock),
         category: form.category.trim() || null,
+        subcategory: form.subcategory.trim() || "",
+        is_wholesale: form.is_wholesale,
+        wholesale_price:
+          form.is_wholesale && form.wholesale_price !== ""
+            ? toNumberSafe(form.wholesale_price)
+            : null,
+        is_kit: form.is_kit,
         images: normalizeImages(form.images),
         video_url: normalizeVideoUrl(form.video_url),
       };
 
       const urlAdmin = `/products/${id}`;
 
-      // ✅ Só usa multipart se realmente tiver arquivo de vídeo
       if (videoFile) {
         const formData = new FormData();
         formData.append("name", payloadBase.name);
         formData.append("description", payloadBase.description);
         formData.append("price", String(payloadBase.price));
         formData.append("stock", String(payloadBase.stock));
-        if (payloadBase.category) formData.append("category", payloadBase.category);
-        if (payloadBase.video_url) formData.append("video_url", payloadBase.video_url);
 
-        // backend precisa aceitar "video" como UploadFile
+        if (payloadBase.category) formData.append("category", payloadBase.category);
+        formData.append("subcategory", payloadBase.subcategory);
+        formData.append("is_wholesale", String(payloadBase.is_wholesale));
+        if (payloadBase.wholesale_price != null) {
+          formData.append("wholesale_price", String(payloadBase.wholesale_price));
+        }
+        formData.append("is_kit", String(payloadBase.is_kit));
+
+        if (payloadBase.video_url) formData.append("video_url", payloadBase.video_url);
         formData.append("video", videoFile);
 
-        // imagens continuam como strings
         payloadBase.images.forEach((img) => formData.append("images", img));
 
         await api.put(urlAdmin, formData, {
@@ -170,91 +228,202 @@ export default function EditProduct() {
     }
   };
 
-  if (loading) return <div className={styles.container}>Carregando...</div>;
+  if (loading) {
+    return <div className={styles.container}>Carregando...</div>;
+  }
 
   return (
     <div className={styles.container}>
-      <h2>Editar Produto</h2>
+      <div className={styles.header}>
+        <h2>Editar Produto</h2>
+        <p>Atualize os dados mantendo a compatibilidade com o backend atual.</p>
+      </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="name">Nome</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              placeholder="Nome"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <textarea
-          name="description"
-          placeholder="Descrição"
-          value={form.description}
-          onChange={handleChange}
-        />
+          <div className={styles.field}>
+            <label htmlFor="category">Categoria</label>
+            <select
+              id="category"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="Roupas">Roupas</option>
+              <option value="Perfumaria">Perfumaria</option>
+              <option value="Calçados">Calçados</option>
+              <option value="Praia">Praia</option>
+              <option value="Outros">Outros</option>
+              <option value="Atacado">Atacado</option>
+              <option value="Kits">Kits</option>
+            </select>
+          </div>
+        </div>
 
-        <input
-          type="text"
-          name="price"
-          inputMode="decimal"
-          placeholder="Preço"
-          value={form.price}
-          onChange={handleChange}
-          required
-        />
+        <div className={styles.field}>
+          <label htmlFor="description">Descrição</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Descrição"
+            value={form.description}
+            onChange={handleChange}
+          />
+        </div>
 
-        <input
-          type="text"
-          name="stock"
-          inputMode="numeric"
-          placeholder="Estoque"
-          value={form.stock}
-          onChange={handleChange}
-          required
-        />
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="subcategory">Subcategoria</label>
+            <select
+              id="subcategory"
+              name="subcategory"
+              value={form.subcategory}
+              onChange={handleChange}
+            >
+              <option value="">Selecione uma subcategoria</option>
+              {subcategoryOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <input
-          type="text"
-          name="category"
-          placeholder="Categoria (ex: Perfumaria, Roupas...)"
-          value={form.category}
-          onChange={handleChange}
-        />
+          <div className={styles.field}>
+            <label htmlFor="video_url">Vídeo</label>
+            <input
+              id="video_url"
+              type="text"
+              name="video_url"
+              placeholder="URL ou nome do arquivo (ex: kitBaunilha.mp4)"
+              value={form.video_url}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <h4>Imagens</h4>
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="price">Preço</label>
+            <input
+              id="price"
+              type="text"
+              name="price"
+              inputMode="decimal"
+              placeholder="Preço"
+              value={form.price}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="stock">Estoque</label>
+            <input
+              id="stock"
+              type="text"
+              name="stock"
+              inputMode="numeric"
+              placeholder="Estoque"
+              value={form.stock}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className={styles.switches}>
+          <label className={styles.checkboxRow}>
+            <input
+              type="checkbox"
+              name="is_wholesale"
+              checked={form.is_wholesale}
+              onChange={handleChange}
+            />
+            <span>Produto com preço atacado?</span>
+          </label>
+
+          <label className={styles.checkboxRow}>
+            <input
+              type="checkbox"
+              name="is_kit"
+              checked={form.is_kit}
+              onChange={handleChange}
+            />
+            <span>Produto é um kit?</span>
+          </label>
+        </div>
+
+        {form.is_wholesale && (
+          <div className={styles.field}>
+            <label htmlFor="wholesale_price">Preço atacado</label>
+            <input
+              id="wholesale_price"
+              type="text"
+              name="wholesale_price"
+              inputMode="decimal"
+              placeholder="Preço atacado"
+              value={form.wholesale_price}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+
+        <div className={styles.sectionTitle}>
+          <h4>Imagens</h4>
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={handleAddImage}
+          >
+            + Adicionar imagem
+          </button>
+        </div>
 
         {form.images.map((img, index) => (
-          <div key={index} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+          <div key={index} className={styles.imageRow}>
             <input
               type="text"
               placeholder="URL da imagem ou nome do arquivo"
               value={img}
               onChange={(e) => handleImageChange(index, e.target.value)}
-              style={{ flex: 1 }}
             />
-            <button type="button" onClick={() => handleRemoveImage(index)}>
-              X
+            <button
+              type="button"
+              className={styles.removeButton}
+              onClick={() => handleRemoveImage(index)}
+            >
+              Remover
             </button>
           </div>
         ))}
 
-        <button type="button" onClick={handleAddImage}>
-          + Adicionar imagem
-        </button>
-
-        <h4>Vídeo</h4>
+        <div className={styles.sectionTitle}>
+          <h4>Upload de vídeo</h4>
+        </div>
 
         <input
-          type="text"
-          name="video_url"
-          placeholder="Vídeo: URL ou nome do arquivo (ex: kitBaunilha.mp4)"
-          value={form.video_url}
-          onChange={handleChange}
+          className={styles.fileInput}
+          type="file"
+          accept="video/*"
+          onChange={handleVideoUpload}
         />
 
-        <input type="file" accept="video/*" onChange={handleVideoUpload} />
-
-        <button type="submit" disabled={saving}>
+        <button type="submit" className={styles.submitButton} disabled={saving}>
           {saving ? "Salvando..." : "Salvar Alterações"}
         </button>
       </form>

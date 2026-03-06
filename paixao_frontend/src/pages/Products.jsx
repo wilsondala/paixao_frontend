@@ -13,13 +13,100 @@ function normalizeText(value) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-// ⭐ componente simples de estrelas (sem CSS extra)
+function isGenericSearchTerm(term) {
+  const normalized = normalizeText(term);
+
+  const genericTerms = new Set([
+    "",
+    "todos",
+    "tudo",
+    "todo",
+    "todas",
+    "todos os produtos",
+    "todos os modelos",
+    "ver tudo",
+    "ver todos",
+    "mostrar tudo",
+    "mostrar todos",
+    "all",
+    "produtos",
+    "modelos",
+  ]);
+
+  return genericTerms.has(normalized);
+}
+
+function matchesText(product, term) {
+  if (!term || isGenericSearchTerm(term)) return true;
+
+  const normalizedTerm = normalizeText(term);
+
+  const fields = [
+    product?.name,
+    product?.description,
+    product?.category,
+    product?.subcategory,
+  ];
+
+  return fields.some((field) =>
+    normalizeText(field).includes(normalizedTerm)
+  );
+}
+
+function matchesCategory(productCategory, selectedCategory) {
+  if (!selectedCategory) return true;
+
+  const productCat = normalizeText(productCategory);
+  const selectedCat = normalizeText(selectedCategory);
+
+  const aliases = {
+    roupas: ["roupa", "roupas"],
+    perfumaria: ["perfumaria", "beleza"],
+    calcados: ["calcados", "calçados", "calcado", "calçado"],
+    praia: ["praia"],
+    outros: ["outros", "outro"],
+    atacado: ["atacado"],
+    kits: ["kits", "kit"],
+  };
+
+  const selectedGroup = aliases[selectedCat] || [selectedCat];
+  return selectedGroup.includes(productCat);
+}
+
+function matchesSubcategory(productSubcategory, selectedSubcategory) {
+  if (!selectedSubcategory) return true;
+
+  const productSub = normalizeText(productSubcategory);
+  const selectedSub = normalizeText(selectedSubcategory);
+
+  const aliases = {
+    oleo: ["oleo", "óleo"],
+    hidratante: ["hidratante", "hidratantes"],
+    perfume: ["perfume", "perfumes"],
+    kit: ["kit", "kits"],
+    feminino: ["feminino", "feminina"],
+    masculino: ["masculino", "masculina"],
+    infantil: ["infantil"],
+    lote: ["lote", "lotes"],
+    revenda: ["revenda"],
+    diversos: ["diversos", "diverso"],
+  };
+
+  const selectedGroup = aliases[selectedSub] || [selectedSub];
+  return selectedGroup.includes(productSub);
+}
+
+// ⭐ componente simples de estrelas
 function Stars({ value, count }) {
   const v = Number(value);
   const c = Number(count);
 
   if (!Number.isFinite(v) || v <= 0 || !Number.isFinite(c) || c <= 0) {
-    return <div style={{ marginTop: 6, color: "#777", fontSize: 12 }}>Sem avaliações</div>;
+    return (
+      <div style={{ marginTop: 6, color: "#777", fontSize: 12 }}>
+        Sem avaliações
+      </div>
+    );
   }
 
   const clamped = Math.max(0, Math.min(5, v));
@@ -49,25 +136,83 @@ export default function Products() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const params = new URLSearchParams(location.search);
 
-  const category = params.get("category");
+  const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
+  const category = params.get("category") || "";
+  const subcategory = params.get("subcategory") || "";
+  const q = params.get("q") || "";
   const isWholesale = params.get("is_wholesale") === "true";
   const isKit = params.get("is_kit") === "true";
 
   const categories = [
-    { label: "Roupas", value: "Roupas", emoji: "👗" },
-    { label: "Perfumaria", value: "Beleza", emoji: "🧴" },
-    { label: "Calçados", value: "Calçado", emoji: "👟" },
-    { label: "Praia", value: "Praia", emoji: "🏖️" },
-    { label: "Outros", value: "Outros", emoji: "✨" },
-    { label: "Atacado", query: "is_wholesale=true", emoji: "📦" },
-    { label: "Kits", query: "is_kit=true", emoji: "🎁" },
+    {
+      label: "Todos",
+      action: () => navigate("/products"),
+      emoji: "🛍️",
+    },
+    {
+      label: "Atacado",
+      action: () => navigate("/products?is_wholesale=true"),
+      emoji: "📦",
+      active: isWholesale,
+    },
+    {
+      label: "Kits",
+      action: () => navigate("/products?is_kit=true"),
+      emoji: "🎁",
+      active: isKit,
+    },
+    {
+      label: "Hidratante",
+      action: () =>
+        navigate("/products?category=Perfumaria&subcategory=Hidratante"),
+      emoji: "🧴",
+      active:
+        normalizeText(category) === "perfumaria" &&
+        normalizeText(subcategory) === "hidratante",
+    },
+    {
+      label: "Óleo",
+      action: () =>
+        navigate("/products?category=Perfumaria&subcategory=Óleo"),
+      emoji: "✨",
+      active:
+        normalizeText(category) === "perfumaria" &&
+        normalizeText(subcategory) === "oleo",
+    },
+    {
+      label: "Roupas",
+      action: () => navigate("/products?category=Roupas"),
+      emoji: "👗",
+      active: normalizeText(category) === "roupas",
+    },
+    {
+      label: "Calçados",
+      action: () => navigate("/products?category=Calçados"),
+      emoji: "👟",
+      active:
+        normalizeText(category) === "calcados" ||
+        normalizeText(category) === "calçados" ||
+        normalizeText(category) === "calcado" ||
+        normalizeText(category) === "calçado",
+    },
+    {
+      label: "Praia",
+      action: () => navigate("/products?category=Praia"),
+      emoji: "🏖️",
+      active: normalizeText(category) === "praia",
+    },
+    {
+      label: "Outros",
+      action: () => navigate("/products?category=Outros"),
+      emoji: "✨",
+      active: normalizeText(category) === "outros",
+    },
   ];
 
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProducts = async () => {
@@ -79,12 +224,6 @@ export default function Products() {
 
       setProducts(data);
       setError(null);
-
-      if (data.length) {
-        console.log("PRIMEIRO PRODUTO:", data[0]);
-        console.log("IMAGES RAW:", data[0].images);
-        console.log("COVER:", formatMedia(data[0].images?.[0]));
-      }
     } catch (err) {
       console.error(err);
       setError("Erro ao carregar produtos.");
@@ -95,39 +234,40 @@ export default function Products() {
   };
 
   const filteredProducts = useMemo(() => {
-    const cat = normalizeText(category);
+    return products.filter((product) => {
+      const okCategory = matchesCategory(product.category, category);
+      const okSubcategory = matchesSubcategory(product.subcategory, subcategory);
+      const okWholesale = isWholesale ? product.is_wholesale === true : true;
+      const okKit = isKit ? product.is_kit === true : true;
+      const okSearch = matchesText(product, q);
 
-    return products.filter((p) => {
-      const okCategory = category ? normalizeText(p.category) === cat : true;
-      const okWholesale = isWholesale ? p.is_wholesale === true : true;
-      const okKit = isKit ? p.is_kit === true : true;
-
-      return okCategory && okWholesale && okKit;
+      return okCategory && okSubcategory && okWholesale && okKit && okSearch;
     });
-  }, [products, category, isWholesale, isKit]);
-
-  const goCategory = (catItem) => {
-    const newParams = new URLSearchParams();
-
-    if (catItem.query) {
-      const [k, v] = catItem.query.split("=");
-      newParams.set(k, v);
-    } else if (catItem.value) {
-      newParams.set("category", catItem.value);
-    }
-
-    navigate(`/products?${newParams.toString()}`);
-  };
+  }, [products, category, subcategory, isWholesale, isKit, q]);
 
   const clearFilters = () => navigate("/products");
 
+  const title = useMemo(() => {
+    if (q && !isGenericSearchTerm(q)) return `Resultado para "${q}"`;
+    if (isWholesale) return "Produtos no Atacado";
+    if (isKit) return "Apenas Kits";
+    if (subcategory && category) return `${subcategory} - ${category}`;
+    if (category) return category;
+    return "Todos os Produtos";
+  }, [q, isWholesale, isKit, subcategory, category]);
+
   return (
     <div className={styles.page}>
-      {/* ================= CATEGORIAS ================= */}
       <section className={styles.categoriesSection}>
         <div className={styles.categoriesHeader}>
-          <h2>Categorias</h2>
-          {(category || isWholesale || isKit) && (
+          <div>
+            <h2>Categorias</h2>
+            <p className={styles.subtitle}>
+              Navegue por setor e encontre o produto ideal
+            </p>
+          </div>
+
+          {(category || subcategory || isWholesale || isKit || q) && (
             <button onClick={clearFilters} className={styles.clearBtn}>
               Limpar filtros
             </button>
@@ -135,32 +275,53 @@ export default function Products() {
         </div>
 
         <div className={styles.categoriesRow}>
-          {categories.map((c) => {
-            const active =
-              (c.value && c.value === category) ||
-              (c.query === "is_wholesale=true" && isWholesale) ||
-              (c.query === "is_kit=true" && isKit);
+          {categories.map((item) => {
+            const isActive =
+              item.label === "Todos"
+                ? !category && !subcategory && !isWholesale && !isKit && !q
+                : !!item.active;
 
             return (
               <button
-                key={c.label}
-                onClick={() => goCategory(c)}
-                className={`${styles.categoryCard} ${active ? styles.active : ""}`}
+                key={item.label}
+                type="button"
+                onClick={item.action}
+                className={`${styles.categoryCard} ${isActive ? styles.active : ""}`}
               >
-                <div className={styles.icon}>{c.emoji}</div>
-                <span>{c.label}</span>
+                <div className={styles.icon}>{item.emoji}</div>
+                <span>{item.label}</span>
               </button>
             );
           })}
         </div>
       </section>
 
-      {/* ================= PRODUTOS ================= */}
       <section className={styles.productsSection}>
+        <div className={styles.productsHeader}>
+          <div>
+            <h2 className={styles.productsTitle}>{title}</h2>
+            <p className={styles.resultsCount}>
+              {filteredProducts.length} produto(s) encontrado(s)
+            </p>
+          </div>
+        </div>
+
         {loading && <p className={styles.center}>Carregando...</p>}
         {error && <p className={styles.error}>{error}</p>}
 
-        {!loading && !error && (
+        {!loading && !error && filteredProducts.length === 0 && (
+          <div className={styles.emptyState}>
+            <h3>Nenhum produto encontrado</h3>
+            <p>
+              Tente mudar a categoria, remover filtros ou buscar outro termo.
+            </p>
+            <button type="button" className={styles.clearBtn} onClick={clearFilters}>
+              Ver todos os produtos
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && filteredProducts.length > 0 && (
           <div className={styles.grid}>
             {filteredProducts.map((product) => (
               <Link
@@ -174,20 +335,33 @@ export default function Products() {
                     alt={product.name}
                   />
 
-                  {product.is_kit && <span className={styles.badge}>KIT</span>}
+                  <div className={styles.badges}>
+                    {product.is_kit && <span className={styles.badge}>KIT</span>}
+                    {product.is_wholesale && (
+                      <span className={styles.badgeSecondary}>ATACADO</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className={styles.info}>
+                  <div className={styles.meta}>
+                    {product.category && (
+                      <span className={styles.metaTag}>{product.category}</span>
+                    )}
+                    {product.subcategory && (
+                      <span className={styles.metaTag}>{product.subcategory}</span>
+                    )}
+                  </div>
+
                   <h3>{product.name}</h3>
 
-                  {/* ⭐ avaliação no card */}
                   <Stars
                     value={product.rating_avg ?? product.rating ?? product.stars}
                     count={product.rating_count ?? product.reviews_count ?? 0}
                   />
 
                   <p className={styles.price}>
-                    R$ {Number(product.price).toFixed(2)}
+                    R$ {Number(product.price || 0).toFixed(2)}
                   </p>
                 </div>
               </Link>
