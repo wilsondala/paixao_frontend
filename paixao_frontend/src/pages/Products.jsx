@@ -36,66 +36,6 @@ function isGenericSearchTerm(term) {
   return genericTerms.has(normalized);
 }
 
-function matchesText(product, term) {
-  if (!term || isGenericSearchTerm(term)) return true;
-
-  const normalizedTerm = normalizeText(term);
-
-  const fields = [
-    product?.name,
-    product?.description,
-    product?.category,
-    product?.subcategory,
-  ];
-
-  return fields.some((field) =>
-    normalizeText(field).includes(normalizedTerm)
-  );
-}
-
-function matchesCategory(productCategory, selectedCategory) {
-  if (!selectedCategory) return true;
-
-  const productCat = normalizeText(productCategory);
-  const selectedCat = normalizeText(selectedCategory);
-
-  const aliases = {
-    roupas: ["roupa", "roupas"],
-    perfumaria: ["perfumaria", "beleza"],
-    calcados: ["calcados", "calçados", "calcado", "calçado"],
-    praia: ["praia"],
-    outros: ["outros", "outro"],
-    atacado: ["atacado"],
-    kits: ["kits", "kit"],
-  };
-
-  const selectedGroup = aliases[selectedCat] || [selectedCat];
-  return selectedGroup.includes(productCat);
-}
-
-function matchesSubcategory(productSubcategory, selectedSubcategory) {
-  if (!selectedSubcategory) return true;
-
-  const productSub = normalizeText(productSubcategory);
-  const selectedSub = normalizeText(selectedSubcategory);
-
-  const aliases = {
-    oleo: ["oleo", "óleo"],
-    hidratante: ["hidratante", "hidratantes"],
-    perfume: ["perfume", "perfumes"],
-    kit: ["kit", "kits"],
-    feminino: ["feminino", "feminina"],
-    masculino: ["masculino", "masculina"],
-    infantil: ["infantil"],
-    lote: ["lote", "lotes"],
-    revenda: ["revenda"],
-    diversos: ["diversos", "diverso"],
-  };
-
-  const selectedGroup = aliases[selectedSub] || [selectedSub];
-  return selectedGroup.includes(productSub);
-}
-
 // ⭐ componente simples de estrelas
 function Stars({ value, count }) {
   const v = Number(value);
@@ -145,6 +85,18 @@ export default function Products() {
   const isWholesale = params.get("is_wholesale") === "true";
   const isKit = params.get("is_kit") === "true";
 
+  const apiFilters = useMemo(() => {
+    const filters = {};
+
+    if (category) filters.category = category;
+    if (subcategory) filters.subcategory = subcategory;
+    if (isWholesale) filters.is_wholesale = true;
+    if (isKit) filters.is_kit = true;
+    if (q && !isGenericSearchTerm(q)) filters.q = q;
+
+    return filters;
+  }, [category, subcategory, isWholesale, isKit, q]);
+
   const categories = [
     {
       label: "Todos",
@@ -191,11 +143,9 @@ export default function Products() {
       label: "Calçados",
       action: () => navigate("/products?category=Calçados"),
       emoji: "👟",
-      active:
-        normalizeText(category) === "calcados" ||
-        normalizeText(category) === "calçados" ||
-        normalizeText(category) === "calcado" ||
-        normalizeText(category) === "calçado",
+      active: ["calcados", "calçados", "calcado", "calçado"].includes(
+        normalizeText(category)
+      ),
     },
     {
       label: "Praia",
@@ -212,38 +162,26 @@ export default function Products() {
   ];
 
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const response = await getProducts(apiFilters);
+        const data = response?.data || [];
+
+        setProducts(Array.isArray(data) ? data : []);
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Erro ao carregar produtos.");
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-
-      const response = await getProducts();
-      const data = response?.data || [];
-
-      setProducts(data);
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError("Erro ao carregar produtos.");
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const okCategory = matchesCategory(product.category, category);
-      const okSubcategory = matchesSubcategory(product.subcategory, subcategory);
-      const okWholesale = isWholesale ? product.is_wholesale === true : true;
-      const okKit = isKit ? product.is_kit === true : true;
-      const okSearch = matchesText(product, q);
-
-      return okCategory && okSubcategory && okWholesale && okKit && okSearch;
-    });
-  }, [products, category, subcategory, isWholesale, isKit, q]);
+  }, [apiFilters]);
 
   const clearFilters = () => navigate("/products");
 
@@ -255,6 +193,13 @@ export default function Products() {
     if (category) return category;
     return "Todos os Produtos";
   }, [q, isWholesale, isKit, subcategory, category]);
+
+  const isAllActive =
+    !category &&
+    !subcategory &&
+    !isWholesale &&
+    !isKit &&
+    (!q || isGenericSearchTerm(q));
 
   return (
     <div className={styles.page}>
@@ -276,10 +221,7 @@ export default function Products() {
 
         <div className={styles.categoriesRow}>
           {categories.map((item) => {
-            const isActive =
-              item.label === "Todos"
-                ? !category && !subcategory && !isWholesale && !isKit && !q
-                : !!item.active;
+            const isActive = item.label === "Todos" ? isAllActive : !!item.active;
 
             return (
               <button
@@ -301,7 +243,7 @@ export default function Products() {
           <div>
             <h2 className={styles.productsTitle}>{title}</h2>
             <p className={styles.resultsCount}>
-              {filteredProducts.length} produto(s) encontrado(s)
+              {products.length} produto(s) encontrado(s)
             </p>
           </div>
         </div>
@@ -309,7 +251,7 @@ export default function Products() {
         {loading && <p className={styles.center}>Carregando...</p>}
         {error && <p className={styles.error}>{error}</p>}
 
-        {!loading && !error && filteredProducts.length === 0 && (
+        {!loading && !error && products.length === 0 && (
           <div className={styles.emptyState}>
             <h3>Nenhum produto encontrado</h3>
             <p>
@@ -321,9 +263,9 @@ export default function Products() {
           </div>
         )}
 
-        {!loading && !error && filteredProducts.length > 0 && (
+        {!loading && !error && products.length > 0 && (
           <div className={styles.grid}>
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <Link
                 key={product.id}
                 to={`/products/${product.id}`}

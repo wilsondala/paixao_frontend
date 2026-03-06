@@ -1,8 +1,11 @@
 import api from "../api/api";
 
-export async function getProducts() {
-  return await api.get("/products");
+export function getProducts(params = {}) {
+  return api.get("/products", { params });
 }
-export async function getProductById(id) {
-  return await api.get(`/products/${id}`);
+
+export function getProductById(id) {
+  return api.get(`/products/${id}`);
 }
+
+
