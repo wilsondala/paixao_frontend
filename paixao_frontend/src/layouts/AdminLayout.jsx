@@ -7,14 +7,12 @@ export default function AdminLayout() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  // fecha menu quando muda de rota (mobile)
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
   return (
     <div className="admin-scope admin-layout">
-      {/* Topbar Mobile */}
       <header className="admin-topbar">
         <button
           className="admin-menu-btn"
@@ -27,7 +25,6 @@ export default function AdminLayout() {
         <div className="admin-topbar-title">Painel Admin</div>
       </header>
 
-      {/* Sidebar */}
       <aside className={`admin-sidebar ${open ? "is-open" : ""}`}>
         <div className="admin-sidebar-head">
           <h2>Painel Admin</h2>
@@ -45,10 +42,10 @@ export default function AdminLayout() {
           <Link to="/admin/dashboard">Dashboard</Link>
           <Link to="/admin/create-product">Criar Produto</Link>
           <Link to="/admin/products">Produtos</Link>
+          <Link to="/admin/newsletter">Newsletter</Link>
         </nav>
       </aside>
 
-      {/* Overlay (mobile) */}
       {open && <div className="admin-overlay" onClick={() => setOpen(false)} />}
 
       <main className="admin-content">

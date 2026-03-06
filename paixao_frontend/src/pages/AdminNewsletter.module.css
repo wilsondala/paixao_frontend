@@ -1,0 +1,252 @@
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 12px;
+  color: var(--text);
+}
+
+.header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #f5ede0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+.subtitle {
+  margin: 6px 0 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(245, 237, 224, 0.72);
+}
+
+.search {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin: 12px 0 14px 0;
+}
+
+.input {
+  height: 40px;
+  border-radius: 12px;
+  padding: 0 12px;
+  border: 1px solid rgba(232, 185, 35, 0.22);
+  background: rgba(15, 10, 10, 0.72);
+  color: var(--text);
+  outline: none;
+}
+
+.input:focus {
+  border-color: rgba(232, 185, 35, 0.6);
+  box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.12);
+}
+
+.btn,
+.exportBtn,
+.pageBtn {
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 14px;
+  cursor: pointer;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, var(--primary), #7d1220);
+  box-shadow: 0 10px 22px rgba(155, 28, 44, 0.25);
+}
+
+.exportBtn {
+  background: linear-gradient(90deg, rgba(232, 185, 35, 0.95), rgba(232, 185, 35, 0.75));
+  color: #1a0f0f;
+}
+
+.btn:disabled,
+.exportBtn:disabled,
+.pageBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.msg {
+  margin: 12px 0 14px 0;
+  padding: 12px 16px;
+
+  border-radius: 14px;
+
+  background: rgba(232, 185, 35, 0.12);
+  border: 1px solid rgba(232, 185, 35, 0.35);
+
+  color: #e8b923;
+  font-weight: 700;
+  font-size: 14px;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.msg::before {
+  content: "✔ ";
+  margin-right: 4px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(232, 185, 35, 0.18);
+  background: rgba(15, 10, 10, 0.75);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.table th,
+.table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(232, 185, 35, 0.10);
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  color: rgba(245, 237, 224, 0.85);
+  font-weight: 900;
+}
+
+.email {
+  font-weight: 700;
+}
+
+.empty {
+  color: rgba(245, 237, 224, 0.65);
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.pageInfo {
+  color: rgba(245, 237, 224, 0.75);
+}
+
+
+.campaignCard {
+  margin: 14px 0 16px 0;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(232, 185, 35, 0.18);
+  background: rgba(15, 10, 10, 0.75);
+  box-sizing: border-box;
+}
+
+.campaignTitle {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.campaignForm {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(232, 185, 35, 0.22);
+  background: rgba(15, 10, 10, 0.72);
+  color: var(--text);
+  outline: none;
+}
+
+.input {
+  height: 42px;
+}
+
+.textarea {
+  display: block;
+  min-height: 120px;
+  max-height: 260px;
+  resize: vertical;
+  line-height: 1.5;
+  overflow-y: auto;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: rgba(232, 185, 35, 0.6);
+  box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.12);
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.sendBtn {
+  width: 100%;
+  height: 42px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 14px;
+  cursor: pointer;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #1a0f0f;
+  background: linear-gradient(90deg, rgba(232, 185, 35, 0.95), rgba(232, 185, 35, 0.75));
+  box-shadow: 0 10px 22px rgba(232, 185, 35, 0.18);
+}
+
+.sendBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+
+  .input,
+  .textarea,
+  .sendBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .search {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .exportBtn {
+    width: 100%;
+  }
+}

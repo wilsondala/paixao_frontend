@@ -26,7 +26,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
 import ProductsAdmin from "./components/ProductsAdmin";
-
+import AdminNewsletter from "./pages/AdminNewsletter";
 export default function App() {
   return (
     <>
@@ -135,6 +135,7 @@ export default function App() {
           <Route path="create-product" element={<CreateProduct />} />
           <Route path="products" element={<ProductsAdmin />} />
           <Route path="edit-product/:id" element={<EditProduct />} />
+          <Route path="newsletter" element={<AdminNewsletter />} /> 
         </Route>
 
         {/* ================= FALLBACK ================= */}
