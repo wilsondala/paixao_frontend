@@ -26,6 +26,37 @@ const INITIAL_FORM = {
   video_url: "",
 };
 
+function normalizePublicPath(filePath, type = "video") {
+  if (!filePath) return "";
+
+  let value = String(filePath).trim();
+  if (!value) return "";
+
+  if (/^https?:\/\//i.test(value)) return value;
+
+  value = value.replace(/\\/g, "/");
+
+  const publicIndex = value.toLowerCase().indexOf("/public/");
+  if (publicIndex !== -1) {
+    value = value.slice(publicIndex + "/public".length);
+    return value.startsWith("/") ? value : `/${value}`;
+  }
+
+  if (value.startsWith("/")) return value;
+
+  if (type === "video") {
+    if (value.startsWith("video/")) return `/${value}`;
+    return `/video/${value}`;
+  }
+
+  if (type === "image") {
+    if (value.startsWith("imagem/")) return `/${value}`;
+    return `/imagem/produtos/${value}`;
+  }
+
+  return value;
+}
+
 export default function CreateProduct() {
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitting, setSubmitting] = useState(false);
@@ -33,6 +64,10 @@ export default function CreateProduct() {
   const subcategoryOptions = useMemo(() => {
     return CATEGORY_OPTIONS[form.category] || [];
   }, [form.category]);
+
+  const previewVideoUrl = useMemo(() => {
+    return normalizePublicPath(form.video_url, "video");
+  }, [form.video_url]);
 
   useEffect(() => {
     if (!subcategoryOptions.length) return;
@@ -56,23 +91,9 @@ export default function CreateProduct() {
         [name]: type === "checkbox" ? checked : value,
       };
 
-      // mantém a lógica do backend e ajuda o admin visualmente
       if (name === "category") {
-        if (value === "Atacado") {
-          updated.is_wholesale = true;
-        }
-
-        if (value === "Kits") {
-          updated.is_kit = true;
-        }
-
-        if (value !== "Atacado" && prev.category === "Atacado") {
-          updated.is_wholesale = prev.is_wholesale;
-        }
-
-        if (value !== "Kits" && prev.category === "Kits") {
-          updated.is_kit = prev.is_kit;
-        }
+        if (value === "Atacado") updated.is_wholesale = true;
+        if (value === "Kits") updated.is_kit = true;
       }
 
       if (name === "is_wholesale" && !checked) {
@@ -131,12 +152,15 @@ export default function CreateProduct() {
         price: Number(form.price),
         stock: Number(form.stock),
         is_wholesale: form.is_wholesale,
-        wholesale_price: form.is_wholesale && form.wholesale_price !== ""
-          ? Number(form.wholesale_price)
-          : null,
+        wholesale_price:
+          form.is_wholesale && form.wholesale_price !== ""
+            ? Number(form.wholesale_price)
+            : null,
         is_kit: form.is_kit,
-        images: form.images.filter((img) => img.trim() !== ""),
-        video_url: form.video_url.trim(),
+        images: form.images
+          .map((img) => normalizePublicPath(img, "image"))
+          .filter((img) => img.trim() !== ""),
+        video_url: normalizePublicPath(form.video_url, "video"),
       });
 
       alert("Produto criado com sucesso!");
@@ -220,13 +244,17 @@ export default function CreateProduct() {
             </div>
 
             <div className="field-group">
-              <label htmlFor="video_url">URL do vídeo</label>
+              <label htmlFor="stock">Estoque</label>
               <input
-                id="video_url"
-                name="video_url"
-                placeholder="https://..."
-                value={form.video_url}
+                id="stock"
+                type="number"
+                name="stock"
+                placeholder="0"
+                value={form.stock}
                 onChange={handleChange}
+                required
+                min="0"
+                step="1"
               />
             </div>
           </div>
@@ -248,17 +276,13 @@ export default function CreateProduct() {
             </div>
 
             <div className="field-group">
-              <label htmlFor="stock">Estoque</label>
+              <label htmlFor="video_url">Vídeo do produto</label>
               <input
-                id="stock"
-                type="number"
-                name="stock"
-                placeholder="0"
-                value={form.stock}
+                id="video_url"
+                name="video_url"
+                placeholder="Ex: /video/kitAvela.mp4"
+                value={form.video_url}
                 onChange={handleChange}
-                required
-                min="0"
-                step="1"
               />
             </div>
           </div>
@@ -301,6 +325,37 @@ export default function CreateProduct() {
             </div>
           )}
 
+          <div className="video-box">
+            <div className="video-box-header">
+              <h4>Preview do vídeo</h4>
+              <span className="helper-text">
+                Exemplo correto: /video/kitAvela.mp4
+              </span>
+            </div>
+
+            {form.video_url.trim() ? (
+              <div className="video-preview">
+                <video
+                  key={previewVideoUrl}
+                  controls
+                  preload="metadata"
+                  className="video-player"
+                >
+                  <source src={previewVideoUrl} type="video/mp4" />
+                  Seu navegador não suporta vídeo.
+                </video>
+
+                <div className="video-preview-info">
+                  <span><strong>Prévia:</strong> {previewVideoUrl}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="video-empty">
+                Informe um vídeo para visualizar aqui.
+              </div>
+            )}
+          </div>
+
           <div className="section-divider" />
 
           <div className="images-header">
@@ -313,7 +368,7 @@ export default function CreateProduct() {
           {form.images.map((img, index) => (
             <div key={index} className="image-field">
               <input
-                placeholder="URL ou nome da imagem"
+                placeholder="Ex: /imagem/produtos/Baunilha.jpg"
                 value={img}
                 onChange={(e) => handleImageChange(index, e.target.value)}
               />

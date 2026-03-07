@@ -45,6 +45,18 @@ function shouldNavigateToAllProducts(term) {
   return allTerms.has(normalized);
 }
 
+const QUICK_CATEGORIES = [
+  { label: "Todos os Modelos", to: "/products" },
+  { label: "Atacado", to: "/products?is_wholesale=true" },
+  { label: "Apenas Kits", to: "/products?is_kit=true" },
+  { label: "Hidratante", to: "/products?category=Perfumaria&subcategory=Hidratante" },
+  { label: "Óleo", to: "/products?category=Perfumaria&subcategory=Óleo" },
+  { label: "Roupas", to: "/products?category=Roupas" },
+  { label: "Calçados", to: "/products?category=Calçados" },
+  { label: "Praia", to: "/products?category=Praia" },
+  { label: "Outros", to: "/products?category=Outros" },
+];
+
 function buildProductsUrl(params = {}) {
   const qs = new URLSearchParams();
 
@@ -58,38 +70,12 @@ function buildProductsUrl(params = {}) {
   return query ? `/products?${query}` : "/products";
 }
 
-const QUICK_CATEGORIES = [
-  { label: "Todos os Modelos", to: "/products" },
-  { label: "Atacado", to: buildProductsUrl({ is_wholesale: "true" }) },
-  { label: "Apenas Kits", to: buildProductsUrl({ is_kit: "true" }) },
-  {
-    label: "Hidratante",
-    to: buildProductsUrl({
-      category: "Perfumaria",
-      subcategory: "Hidratante",
-    }),
-  },
-  {
-    label: "Óleo",
-    to: buildProductsUrl({
-      category: "Perfumaria",
-      subcategory: "Óleo",
-    }),
-  },
-  { label: "Roupas", to: buildProductsUrl({ category: "Roupas" }) },
-  { label: "Calçados", to: buildProductsUrl({ category: "Calçados" }) },
-  { label: "Praia", to: buildProductsUrl({ category: "Praia" }) },
-  { label: "Outros", to: buildProductsUrl({ category: "Outros" }) },
-];
-
 export default function Navbar() {
   const [openMobile, setOpenMobile] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
   const [q, setQ] = useState("");
 
   const accountRef = useRef(null);
-  const productsRef = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -136,30 +122,17 @@ export default function Navbar() {
     navigate(`/products?q=${encodeURIComponent(term)}`);
   };
 
-  const handleProductsToggle = () => {
-    setProductsOpen((prev) => !prev);
-  };
-
-  const closeAllMenus = () => {
-    setProductsOpen(false);
-    setAccountOpen(false);
-    setOpenMobile(false);
-  };
-
   useEffect(() => {
     function handleClickOutside(event) {
       if (accountRef.current && !accountRef.current.contains(event.target)) {
         setAccountOpen(false);
       }
-
-      if (productsRef.current && !productsRef.current.contains(event.target)) {
-        setProductsOpen(false);
-      }
     }
 
     function handleEsc(event) {
       if (event.key === "Escape") {
-        closeAllMenus();
+        setAccountOpen(false);
+        setOpenMobile(false);
       }
     }
 
@@ -173,7 +146,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    closeAllMenus();
+    setOpenMobile(false);
+    setAccountOpen(false);
   }, [location.pathname, location.search]);
 
   useEffect(() => {
@@ -194,7 +168,7 @@ export default function Navbar() {
           <form className={styles.searchWrap} onSubmit={submitSearch}>
             <input
               className={styles.searchInput}
-              value={q}
+              value={q || ""}
               onChange={(e) => setQ(e.target.value)}
               placeholder="O que você está procurando?"
               aria-label="Buscar produtos"
@@ -205,65 +179,67 @@ export default function Navbar() {
           </form>
 
           <div className={styles.actions}>
-            <Link to="/cart" className={styles.cart} title="Carrinho">
-              <span className={styles.cartIcon} aria-hidden="true">
-                🛒
-              </span>
-
-              <span className={styles.cartTotal}>
-                R$ {totalPrice.toFixed(2)}
-              </span>
-
-              {totalItems > 0 && (
-                <span className={styles.badge}>{totalItems}</span>
-              )}
-            </Link>
-
             {user ? (
-              <div className={styles.account} ref={accountRef}>
-                <button
-                  type="button"
-                  className={styles.avatarBtn}
-                  onClick={() => setAccountOpen((prev) => !prev)}
-                  aria-label="Minha conta"
-                  aria-expanded={accountOpen}
-                >
-                  {avatarSrc ? (
-                    <img src={avatarSrc} alt="Avatar" className={styles.avatarImg} />
-                  ) : (
-                    <span className={styles.avatarFallback}>{userInitial}</span>
+              <>
+                <Link to="/cart" className={styles.cart} title="Carrinho">
+                  <span className={styles.cartIcon} aria-hidden="true">
+                    🛒
+                  </span>
+
+                  <span className={styles.cartTotal}>
+                    R$ {totalPrice.toFixed(2)}
+                  </span>
+
+                  {totalItems > 0 && (
+                    <span className={styles.badge}>{totalItems}</span>
                   )}
-                </button>
+                </Link>
 
-                {accountOpen && (
-                  <div className={styles.accountDropdown} role="menu">
-                    <div className={styles.userInfo}>
-                      <strong className={styles.userName}>
-                        {user?.name || "Usuário"}
-                      </strong>
-                      <small className={styles.userEmail}>{user?.email}</small>
-                    </div>
-
-                    <Link className={styles.ddLink} to="/profile">
-                      Meu Perfil
-                    </Link>
-
-                    {user?.role === "admin" && (
-                      <Link className={styles.ddLink} to="/admin">
-                        Admin
-                      </Link>
+                <div className={styles.account} ref={accountRef}>
+                  <button
+                    type="button"
+                    className={styles.avatarBtn}
+                    onClick={() => setAccountOpen((prev) => !prev)}
+                    aria-label="Minha conta"
+                    aria-expanded={accountOpen}
+                  >
+                    {avatarSrc ? (
+                      <img src={avatarSrc} alt="Avatar" className={styles.avatarImg} />
+                    ) : (
+                      <span className={styles.avatarFallback}>{userInitial}</span>
                     )}
+                  </button>
 
-                    <button
-                      type="button"
-                      className={styles.ddButton}
-                      onClick={handleLogout}
-                    >
-                      Sair
-                    </button>
-                  </div>
-                )}
-              </div>
+                  {accountOpen && (
+                    <div className={styles.accountDropdown} role="menu">
+                      <div className={styles.userInfo}>
+                        <strong className={styles.userName}>
+                          {user?.name || "Usuário"}
+                        </strong>
+                        <small className={styles.userEmail}>{user?.email}</small>
+                      </div>
+
+                      <Link className={styles.ddLink} to="/profile">
+                        Meu Perfil
+                      </Link>
+
+                      {user?.role === "admin" && (
+                        <Link className={styles.ddLink} to="/admin">
+                          Admin
+                        </Link>
+                      )}
+
+                      <button
+                        type="button"
+                        className={styles.ddButton}
+                        onClick={handleLogout}
+                      >
+                        Sair
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
               <>
                 <Link to="/login" className={styles.btnGhost}>
@@ -272,6 +248,15 @@ export default function Navbar() {
 
                 <Link to="/register" className={styles.btnPrimary}>
                   Cadastrar
+                </Link>
+
+                <Link to="/cart" className={styles.cart} title="Carrinho">
+                  <span className={styles.cartIcon} aria-hidden="true">
+                    🛒
+                  </span>
+                  {totalItems > 0 && (
+                    <span className={styles.badge}>{totalItems}</span>
+                  )}
                 </Link>
               </>
             )}
@@ -291,109 +276,6 @@ export default function Navbar() {
 
       <div className={styles.menuBar}>
         <div className={styles.menuInner}>
-          <div className={styles.productsDropdown} ref={productsRef}>
-            <button
-              type="button"
-              className={`${styles.dropdownBtn} ${
-                productsOpen ? styles.dropdownBtnActive : ""
-              }`}
-              onClick={handleProductsToggle}
-              aria-expanded={productsOpen}
-              aria-haspopup="true"
-            >
-              <span>Produtos</span>
-              <span
-                className={`${styles.caret} ${
-                  productsOpen ? styles.caretOpen : ""
-                }`}
-              >
-                ▾
-              </span>
-            </button>
-
-            {productsOpen && (
-              <div className={styles.dropdownMenu}>
-                <Link
-                  className={styles.dropdownItem}
-                  to="/products"
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Todos os modelos
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ is_wholesale: "true" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Atacado
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ is_kit: "true" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Apenas Kits
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({
-                    category: "Perfumaria",
-                    subcategory: "Hidratante",
-                  })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Hidratante
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({
-                    category: "Perfumaria",
-                    subcategory: "Óleo",
-                  })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Óleo
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ category: "Roupas" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Roupas
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ category: "Calçados" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Calçados
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ category: "Praia" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Praia
-                </Link>
-
-                <Link
-                  className={styles.dropdownItem}
-                  to={buildProductsUrl({ category: "Outros" })}
-                  onClick={() => setProductsOpen(false)}
-                >
-                  Outros
-                </Link>
-              </div>
-            )}
-          </div>
-
           <div className={styles.menuLinks}>
             {QUICK_CATEGORIES.map((category) => (
               <Link
@@ -413,12 +295,29 @@ export default function Navbar() {
       </div>
 
       <div className={`${styles.mobileMenu} ${openMobile ? styles.active : ""}`}>
-        {QUICK_CATEGORIES.map((item) => (
-          <Link key={item.label} to={item.to}>
-            {item.label}
-          </Link>
-        ))}
-
+        <Link to="/products">Todos os Produtos</Link>
+        <Link to={buildProductsUrl({ is_wholesale: "true" })}>Atacado</Link>
+        <Link to={buildProductsUrl({ is_kit: "true" })}>Apenas Kits</Link>
+        <Link
+          to={buildProductsUrl({
+            category: "Perfumaria",
+            subcategory: "Hidratante",
+          })}
+        >
+          Hidratante
+        </Link>
+        <Link
+          to={buildProductsUrl({
+            category: "Perfumaria",
+            subcategory: "Óleo",
+          })}
+        >
+          Óleo
+        </Link>
+        <Link to={buildProductsUrl({ category: "Roupas" })}>Roupas</Link>
+        <Link to={buildProductsUrl({ category: "Calçados" })}>Calçados</Link>
+        <Link to={buildProductsUrl({ category: "Praia" })}>Praia</Link>
+        <Link to={buildProductsUrl({ category: "Outros" })}>Outros</Link>
         <Link to="/sobre-nos">Sobre Nós</Link>
 
         {user && <Link to="/profile">Meu Perfil</Link>}
@@ -428,11 +327,7 @@ export default function Navbar() {
         {!user && <Link to="/register">Cadastrar</Link>}
 
         {user && (
-          <button
-            type="button"
-            onClick={handleLogout}
-            className={styles.mobileLogout}
-          >
+          <button type="button" onClick={handleLogout} className={styles.mobileLogout}>
             Sair
           </button>
         )}
