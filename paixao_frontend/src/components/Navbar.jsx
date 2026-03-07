@@ -45,16 +45,6 @@ function shouldNavigateToAllProducts(term) {
   return allTerms.has(normalized);
 }
 
-const QUICK_CATEGORIES = [
-  { label: "Todos os Modelos", to: "/products" },
-  { label: "Atacado", to: "/products?is_wholesale=true" },
-  { label: "Apenas Kits", to: "/products?is_kit=true" },
-  { label: "Hidratante", to: "/products?category=Perfumaria&subcategory=Hidratante" },
-  { label: "Óleo", to: "/products?category=Perfumaria&subcategory=Óleo" },
-  { label: "Roupas", to: "/products?category=Roupas" },
-  { label: "Calçados", to: "/products?category=Calçados" },
-];
-
 function buildProductsUrl(params = {}) {
   const qs = new URLSearchParams();
 
@@ -67,6 +57,30 @@ function buildProductsUrl(params = {}) {
   const query = qs.toString();
   return query ? `/products?${query}` : "/products";
 }
+
+const QUICK_CATEGORIES = [
+  { label: "Todos os Modelos", to: "/products" },
+  { label: "Atacado", to: buildProductsUrl({ is_wholesale: "true" }) },
+  { label: "Apenas Kits", to: buildProductsUrl({ is_kit: "true" }) },
+  {
+    label: "Hidratante",
+    to: buildProductsUrl({
+      category: "Perfumaria",
+      subcategory: "Hidratante",
+    }),
+  },
+  {
+    label: "Óleo",
+    to: buildProductsUrl({
+      category: "Perfumaria",
+      subcategory: "Óleo",
+    }),
+  },
+  { label: "Roupas", to: buildProductsUrl({ category: "Roupas" }) },
+  { label: "Calçados", to: buildProductsUrl({ category: "Calçados" }) },
+  { label: "Praia", to: buildProductsUrl({ category: "Praia" }) },
+  { label: "Outros", to: buildProductsUrl({ category: "Outros" }) },
+];
 
 export default function Navbar() {
   const [openMobile, setOpenMobile] = useState(false);
@@ -126,8 +140,10 @@ export default function Navbar() {
     setProductsOpen((prev) => !prev);
   };
 
-  const handleProductsClose = () => {
+  const closeAllMenus = () => {
     setProductsOpen(false);
+    setAccountOpen(false);
+    setOpenMobile(false);
   };
 
   useEffect(() => {
@@ -143,9 +159,7 @@ export default function Navbar() {
 
     function handleEsc(event) {
       if (event.key === "Escape") {
-        setAccountOpen(false);
-        setProductsOpen(false);
-        setOpenMobile(false);
+        closeAllMenus();
       }
     }
 
@@ -159,9 +173,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setOpenMobile(false);
-    setAccountOpen(false);
-    setProductsOpen(false);
+    closeAllMenus();
   }, [location.pathname, location.search]);
 
   useEffect(() => {
@@ -193,67 +205,65 @@ export default function Navbar() {
           </form>
 
           <div className={styles.actions}>
+            <Link to="/cart" className={styles.cart} title="Carrinho">
+              <span className={styles.cartIcon} aria-hidden="true">
+                🛒
+              </span>
+
+              <span className={styles.cartTotal}>
+                R$ {totalPrice.toFixed(2)}
+              </span>
+
+              {totalItems > 0 && (
+                <span className={styles.badge}>{totalItems}</span>
+              )}
+            </Link>
+
             {user ? (
-              <>
-                <Link to="/cart" className={styles.cart} title="Carrinho">
-                  <span className={styles.cartIcon} aria-hidden="true">
-                    🛒
-                  </span>
-
-                  <span className={styles.cartTotal}>
-                    R$ {totalPrice.toFixed(2)}
-                  </span>
-
-                  {totalItems > 0 && (
-                    <span className={styles.badge}>{totalItems}</span>
+              <div className={styles.account} ref={accountRef}>
+                <button
+                  type="button"
+                  className={styles.avatarBtn}
+                  onClick={() => setAccountOpen((prev) => !prev)}
+                  aria-label="Minha conta"
+                  aria-expanded={accountOpen}
+                >
+                  {avatarSrc ? (
+                    <img src={avatarSrc} alt="Avatar" className={styles.avatarImg} />
+                  ) : (
+                    <span className={styles.avatarFallback}>{userInitial}</span>
                   )}
-                </Link>
+                </button>
 
-                <div className={styles.account} ref={accountRef}>
-                  <button
-                    type="button"
-                    className={styles.avatarBtn}
-                    onClick={() => setAccountOpen((prev) => !prev)}
-                    aria-label="Minha conta"
-                    aria-expanded={accountOpen}
-                  >
-                    {avatarSrc ? (
-                      <img src={avatarSrc} alt="Avatar" className={styles.avatarImg} />
-                    ) : (
-                      <span className={styles.avatarFallback}>{userInitial}</span>
-                    )}
-                  </button>
-
-                  {accountOpen && (
-                    <div className={styles.accountDropdown} role="menu">
-                      <div className={styles.userInfo}>
-                        <strong className={styles.userName}>
-                          {user?.name || "Usuário"}
-                        </strong>
-                        <small className={styles.userEmail}>{user?.email}</small>
-                      </div>
-
-                      <Link className={styles.ddLink} to="/profile">
-                        Meu Perfil
-                      </Link>
-
-                      {user?.role === "admin" && (
-                        <Link className={styles.ddLink} to="/admin">
-                          Admin
-                        </Link>
-                      )}
-
-                      <button
-                        type="button"
-                        className={styles.ddButton}
-                        onClick={handleLogout}
-                      >
-                        Sair
-                      </button>
+                {accountOpen && (
+                  <div className={styles.accountDropdown} role="menu">
+                    <div className={styles.userInfo}>
+                      <strong className={styles.userName}>
+                        {user?.name || "Usuário"}
+                      </strong>
+                      <small className={styles.userEmail}>{user?.email}</small>
                     </div>
-                  )}
-                </div>
-              </>
+
+                    <Link className={styles.ddLink} to="/profile">
+                      Meu Perfil
+                    </Link>
+
+                    {user?.role === "admin" && (
+                      <Link className={styles.ddLink} to="/admin">
+                        Admin
+                      </Link>
+                    )}
+
+                    <button
+                      type="button"
+                      className={styles.ddButton}
+                      onClick={handleLogout}
+                    >
+                      Sair
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link to="/login" className={styles.btnGhost}>
@@ -262,15 +272,6 @@ export default function Navbar() {
 
                 <Link to="/register" className={styles.btnPrimary}>
                   Cadastrar
-                </Link>
-
-                <Link to="/cart" className={styles.cart} title="Carrinho">
-                  <span className={styles.cartIcon} aria-hidden="true">
-                    🛒
-                  </span>
-                  {totalItems > 0 && (
-                    <span className={styles.badge}>{totalItems}</span>
-                  )}
                 </Link>
               </>
             )}
@@ -315,7 +316,7 @@ export default function Navbar() {
                 <Link
                   className={styles.dropdownItem}
                   to="/products"
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Todos os modelos
                 </Link>
@@ -323,7 +324,7 @@ export default function Navbar() {
                 <Link
                   className={styles.dropdownItem}
                   to={buildProductsUrl({ is_wholesale: "true" })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Atacado
                 </Link>
@@ -331,7 +332,7 @@ export default function Navbar() {
                 <Link
                   className={styles.dropdownItem}
                   to={buildProductsUrl({ is_kit: "true" })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Apenas Kits
                 </Link>
@@ -342,7 +343,7 @@ export default function Navbar() {
                     category: "Perfumaria",
                     subcategory: "Hidratante",
                   })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Hidratante
                 </Link>
@@ -353,7 +354,7 @@ export default function Navbar() {
                     category: "Perfumaria",
                     subcategory: "Óleo",
                   })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Óleo
                 </Link>
@@ -361,7 +362,7 @@ export default function Navbar() {
                 <Link
                   className={styles.dropdownItem}
                   to={buildProductsUrl({ category: "Roupas" })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Roupas
                 </Link>
@@ -369,9 +370,25 @@ export default function Navbar() {
                 <Link
                   className={styles.dropdownItem}
                   to={buildProductsUrl({ category: "Calçados" })}
-                  onClick={handleProductsClose}
+                  onClick={() => setProductsOpen(false)}
                 >
                   Calçados
+                </Link>
+
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ category: "Praia" })}
+                  onClick={() => setProductsOpen(false)}
+                >
+                  Praia
+                </Link>
+
+                <Link
+                  className={styles.dropdownItem}
+                  to={buildProductsUrl({ category: "Outros" })}
+                  onClick={() => setProductsOpen(false)}
+                >
+                  Outros
                 </Link>
               </div>
             )}
@@ -396,27 +413,12 @@ export default function Navbar() {
       </div>
 
       <div className={`${styles.mobileMenu} ${openMobile ? styles.active : ""}`}>
-        <Link to="/products">Todos os Produtos</Link>
-        <Link to={buildProductsUrl({ is_wholesale: "true" })}>Atacado</Link>
-        <Link to={buildProductsUrl({ is_kit: "true" })}>Apenas Kits</Link>
-        <Link
-          to={buildProductsUrl({
-            category: "Perfumaria",
-            subcategory: "Hidratante",
-          })}
-        >
-          Hidratante
-        </Link>
-        <Link
-          to={buildProductsUrl({
-            category: "Perfumaria",
-            subcategory: "Óleo",
-          })}
-        >
-          Óleo
-        </Link>
-        <Link to={buildProductsUrl({ category: "Roupas" })}>Roupas</Link>
-        <Link to={buildProductsUrl({ category: "Calçados" })}>Calçados</Link>
+        {QUICK_CATEGORIES.map((item) => (
+          <Link key={item.label} to={item.to}>
+            {item.label}
+          </Link>
+        ))}
+
         <Link to="/sobre-nos">Sobre Nós</Link>
 
         {user && <Link to="/profile">Meu Perfil</Link>}
@@ -426,7 +428,11 @@ export default function Navbar() {
         {!user && <Link to="/register">Cadastrar</Link>}
 
         {user && (
-          <button type="button" onClick={handleLogout} className={styles.mobileLogout}>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className={styles.mobileLogout}
+          >
             Sair
           </button>
         )}

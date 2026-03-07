@@ -36,7 +36,6 @@ function isGenericSearchTerm(term) {
   return genericTerms.has(normalized);
 }
 
-// ⭐ componente simples de estrelas
 function Stars({ value, count }) {
   const v = Number(value);
   const c = Number(count);
@@ -73,6 +72,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -97,69 +97,45 @@ export default function Products() {
     return filters;
   }, [category, subcategory, isWholesale, isKit, q]);
 
-  const categories = [
-    {
-      label: "Todos",
-      action: () => navigate("/products"),
-      emoji: "🛍️",
-    },
-    {
-      label: "Atacado",
-      action: () => navigate("/products?is_wholesale=true"),
-      emoji: "📦",
-      active: isWholesale,
-    },
-    {
-      label: "Kits",
-      action: () => navigate("/products?is_kit=true"),
-      emoji: "🎁",
-      active: isKit,
-    },
-    {
-      label: "Hidratante",
-      action: () =>
-        navigate("/products?category=Perfumaria&subcategory=Hidratante"),
-      emoji: "🧴",
-      active:
-        normalizeText(category) === "perfumaria" &&
-        normalizeText(subcategory) === "hidratante",
-    },
-    {
-      label: "Óleo",
-      action: () =>
-        navigate("/products?category=Perfumaria&subcategory=Óleo"),
-      emoji: "✨",
-      active:
-        normalizeText(category) === "perfumaria" &&
-        normalizeText(subcategory) === "oleo",
-    },
-    {
-      label: "Roupas",
-      action: () => navigate("/products?category=Roupas"),
-      emoji: "👗",
-      active: normalizeText(category) === "roupas",
-    },
-    {
-      label: "Calçados",
-      action: () => navigate("/products?category=Calçados"),
-      emoji: "👟",
-      active: ["calcados", "calçados", "calcado", "calçado"].includes(
-        normalizeText(category)
-      ),
-    },
-    {
-      label: "Praia",
-      action: () => navigate("/products?category=Praia"),
-      emoji: "🏖️",
-      active: normalizeText(category) === "praia",
-    },
-    {
-      label: "Outros",
-      action: () => navigate("/products?category=Outros"),
-      emoji: "✨",
-      active: normalizeText(category) === "outros",
-    },
+  const mainCategories = [
+    { label: "Todos", value: "" },
+    { label: "Roupas", value: "Roupas" },
+    { label: "Perfumaria", value: "Perfumaria" },
+    { label: "Calçados", value: "Calçados" },
+    { label: "Praia", value: "Praia" },
+    { label: "Outros", value: "Outros" },
   ];
+
+  const subcategoryOptions = useMemo(() => {
+    const normalizedCategory = normalizeText(category);
+
+    if (normalizedCategory === "perfumaria") {
+      return ["Óleo", "Hidratante", "Perfume", "Kit"];
+    }
+
+    if (normalizedCategory === "roupas") {
+      return ["Feminino", "Masculino", "Infantil"];
+    }
+
+    if (
+      normalizedCategory === "calcados" ||
+      normalizedCategory === "calçados" ||
+      normalizedCategory === "calcado" ||
+      normalizedCategory === "calçado"
+    ) {
+      return ["Feminino", "Masculino", "Infantil"];
+    }
+
+    if (normalizedCategory === "praia") {
+      return ["Biquíni", "Saída de Praia", "Chinelo", "Acessórios"];
+    }
+
+    if (normalizedCategory === "outros") {
+      return ["Diversos"];
+    }
+
+    return [];
+  }, [category]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -183,6 +159,53 @@ export default function Products() {
     fetchProducts();
   }, [apiFilters]);
 
+  useEffect(() => {
+    setShowMobileFilters(false);
+  }, [location.search]);
+
+  const updateFilter = (updates = {}) => {
+    const next = new URLSearchParams(location.search);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      const stringValue = value == null ? "" : String(value).trim();
+
+      if (!stringValue) {
+        next.delete(key);
+      } else {
+        next.set(key, stringValue);
+      }
+    });
+
+    navigate(`/products${next.toString() ? `?${next.toString()}` : ""}`);
+  };
+
+  const handleCategoryChange = (value) => {
+    if (!value) {
+      const next = new URLSearchParams(location.search);
+      next.delete("category");
+      next.delete("subcategory");
+      navigate(`/products${next.toString() ? `?${next.toString()}` : ""}`);
+      return;
+    }
+
+    updateFilter({
+      category: value,
+      subcategory: "",
+    });
+  };
+
+  const handleSubcategoryChange = (value) => {
+    updateFilter({ subcategory: value });
+  };
+
+  const handleWholesaleChange = () => {
+    updateFilter({ is_wholesale: isWholesale ? "" : "true" });
+  };
+
+  const handleKitChange = () => {
+    updateFilter({ is_kit: isKit ? "" : "true" });
+  };
+
   const clearFilters = () => navigate("/products");
 
   const title = useMemo(() => {
@@ -194,123 +217,201 @@ export default function Products() {
     return "Todos os Produtos";
   }, [q, isWholesale, isKit, subcategory, category]);
 
-  const isAllActive =
-    !category &&
-    !subcategory &&
-    !isWholesale &&
-    !isKit &&
-    (!q || isGenericSearchTerm(q));
+  const hasActiveFilters =
+    !!category || !!subcategory || isWholesale || isKit || (!!q && !isGenericSearchTerm(q));
 
   return (
     <div className={styles.page}>
-      <section className={styles.categoriesSection}>
-        <div className={styles.categoriesHeader}>
-          <div>
-            <h2>Categorias</h2>
-            <p className={styles.subtitle}>
-              Navegue por setor e encontre o produto ideal
-            </p>
-          </div>
+      <div className={styles.layout}>
+        <aside
+          className={`${styles.sidebar} ${
+            showMobileFilters ? styles.sidebarOpen : ""
+          }`}
+        >
+          <div className={styles.sidebarHeader}>
+            <div>
+              <h2>Filtros</h2>
+              <p>Refine sua busca com facilidade</p>
+            </div>
 
-          {(category || subcategory || isWholesale || isKit || q) && (
-            <button onClick={clearFilters} className={styles.clearBtn}>
-              Limpar filtros
-            </button>
-          )}
-        </div>
-
-        <div className={styles.categoriesRow}>
-          {categories.map((item) => {
-            const isActive = item.label === "Todos" ? isAllActive : !!item.active;
-
-            return (
-              <button
-                key={item.label}
-                type="button"
-                onClick={item.action}
-                className={`${styles.categoryCard} ${isActive ? styles.active : ""}`}
-              >
-                <div className={styles.icon}>{item.emoji}</div>
-                <span>{item.label}</span>
+            {hasActiveFilters && (
+              <button type="button" className={styles.clearBtn} onClick={clearFilters}>
+                Limpar filtros
               </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className={styles.productsSection}>
-        <div className={styles.productsHeader}>
-          <div>
-            <h2 className={styles.productsTitle}>{title}</h2>
-            <p className={styles.resultsCount}>
-              {products.length} produto(s) encontrado(s)
-            </p>
+            )}
           </div>
-        </div>
 
-        {loading && <p className={styles.center}>Carregando...</p>}
-        {error && <p className={styles.error}>{error}</p>}
+          <div className={styles.filterGroup}>
+            <h3>Categorias</h3>
 
-        {!loading && !error && products.length === 0 && (
-          <div className={styles.emptyState}>
-            <h3>Nenhum produto encontrado</h3>
-            <p>
-              Tente mudar a categoria, remover filtros ou buscar outro termo.
-            </p>
-            <button type="button" className={styles.clearBtn} onClick={clearFilters}>
-              Ver todos os produtos
+            <div className={styles.filterOptions}>
+              {mainCategories.map((item) => {
+                const active = item.value
+                  ? normalizeText(category) === normalizeText(item.value)
+                  : !category;
+
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => handleCategoryChange(item.value)}
+                    className={`${styles.filterOptionBtn} ${
+                      active ? styles.filterOptionActive : ""
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {subcategoryOptions.length > 0 && (
+            <div className={styles.filterGroup}>
+              <h3>Subcategorias</h3>
+
+              <div className={styles.filterOptions}>
+                <button
+                  type="button"
+                  onClick={() => handleSubcategoryChange("")}
+                  className={`${styles.filterOptionBtn} ${
+                    !subcategory ? styles.filterOptionActive : ""
+                  }`}
+                >
+                  Todas
+                </button>
+
+                {subcategoryOptions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => handleSubcategoryChange(item)}
+                    className={`${styles.filterOptionBtn} ${
+                      normalizeText(subcategory) === normalizeText(item)
+                        ? styles.filterOptionActive
+                        : ""
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.filterGroup}>
+            <h3>Especiais</h3>
+
+            <label className={styles.checkboxRow}>
+              <input
+                type="checkbox"
+                checked={isWholesale}
+                onChange={handleWholesaleChange}
+              />
+              <span>Somente atacado</span>
+            </label>
+
+            <label className={styles.checkboxRow}>
+              <input type="checkbox" checked={isKit} onChange={handleKitChange} />
+              <span>Somente kits</span>
+            </label>
+          </div>
+        </aside>
+
+        <section className={styles.content}>
+          <div className={styles.mobileActions}>
+            <button
+              type="button"
+              className={styles.mobileFilterBtn}
+              onClick={() => setShowMobileFilters((prev) => !prev)}
+            >
+              {showMobileFilters ? "Fechar filtros" : "Mostrar filtros"}
             </button>
-          </div>
-        )}
 
-        {!loading && !error && products.length > 0 && (
-          <div className={styles.grid}>
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                to={`/products/${product.id}`}
-                className={styles.card}
+            {hasActiveFilters && (
+              <button type="button" className={styles.clearBtn} onClick={clearFilters}>
+                Limpar filtros
+              </button>
+            )}
+          </div>
+
+          <div className={styles.productsHeader}>
+            <div>
+              <h2 className={styles.productsTitle}>{title}</h2>
+              <p className={styles.resultsCount}>
+                {products.length} produto(s) encontrado(s)
+              </p>
+            </div>
+          </div>
+
+          {loading && <p className={styles.center}>Carregando...</p>}
+          {error && <p className={styles.error}>{error}</p>}
+
+          {!loading && !error && products.length === 0 && (
+            <div className={styles.emptyState}>
+              <h3>Nenhum produto encontrado</h3>
+              <p>
+                Tente mudar a categoria, remover filtros ou buscar outro termo.
+              </p>
+              <button
+                type="button"
+                className={styles.clearBtn}
+                onClick={clearFilters}
               >
-                <div className={styles.imageContainer}>
-                  <img
-                    src={formatMedia(product.images?.[0]) || "/placeholder.png"}
-                    alt={product.name}
-                  />
+                Ver todos os produtos
+              </button>
+            </div>
+          )}
 
-                  <div className={styles.badges}>
-                    {product.is_kit && <span className={styles.badge}>KIT</span>}
-                    {product.is_wholesale && (
-                      <span className={styles.badgeSecondary}>ATACADO</span>
-                    )}
+          {!loading && !error && products.length > 0 && (
+            <div className={styles.grid}>
+              {products.map((product) => (
+                <Link
+                  key={product.id}
+                  to={`/products/${product.id}`}
+                  className={styles.card}
+                >
+                  <div className={styles.imageContainer}>
+                    <img
+                      src={formatMedia(product.images?.[0]) || "/placeholder.png"}
+                      alt={product.name}
+                    />
+
+                    <div className={styles.badges}>
+                      {product.is_kit && <span className={styles.badge}>KIT</span>}
+                      {product.is_wholesale && (
+                        <span className={styles.badgeSecondary}>ATACADO</span>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className={styles.info}>
-                  <div className={styles.meta}>
-                    {product.category && (
-                      <span className={styles.metaTag}>{product.category}</span>
-                    )}
-                    {product.subcategory && (
-                      <span className={styles.metaTag}>{product.subcategory}</span>
-                    )}
+                  <div className={styles.info}>
+                    <div className={styles.meta}>
+                      {product.category && (
+                        <span className={styles.metaTag}>{product.category}</span>
+                      )}
+                      {product.subcategory && (
+                        <span className={styles.metaTag}>{product.subcategory}</span>
+                      )}
+                    </div>
+
+                    <h3>{product.name}</h3>
+
+                    <Stars
+                      value={product.rating_avg ?? product.rating ?? product.stars}
+                      count={product.rating_count ?? product.reviews_count ?? 0}
+                    />
+
+                    <p className={styles.price}>
+                      R$ {Number(product.price || 0).toFixed(2)}
+                    </p>
                   </div>
-
-                  <h3>{product.name}</h3>
-
-                  <Stars
-                    value={product.rating_avg ?? product.rating ?? product.stars}
-                    count={product.rating_count ?? product.reviews_count ?? 0}
-                  />
-
-                  <p className={styles.price}>
-                    R$ {Number(product.price || 0).toFixed(2)}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
