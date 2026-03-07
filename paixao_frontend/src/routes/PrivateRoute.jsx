@@ -5,15 +5,31 @@ export default function PrivateRoute({ children, role }) {
   const { isAuthenticated, loading, user } = useAuth();
   const location = useLocation();
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) {
+    return (
+      <div
+        style={{
+          minHeight: "40vh",
+          display: "grid",
+          placeItems: "center",
+          fontSize: "16px",
+          color: "#6b7280",
+        }}
+      >
+        Carregando...
+      </div>
+    );
+  }
 
   // 🔒 Não autenticado
   if (!isAuthenticated) {
+    const redirectPath = `${location.pathname}${location.search}${location.hash}`;
+
     if (role === "admin") {
       return (
         <Navigate
           to="/admin/login"
-          state={{ from: location.pathname }}
+          state={{ from: redirectPath }}
           replace
         />
       );
@@ -22,7 +38,7 @@ export default function PrivateRoute({ children, role }) {
     return (
       <Navigate
         to="/login"
-        state={{ from: location.pathname }}
+        state={{ from: redirectPath }}
         replace
       />
     );

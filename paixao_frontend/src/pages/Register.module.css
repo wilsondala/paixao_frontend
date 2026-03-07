@@ -1,8 +1,8 @@
 .container {
   display: flex;
-  min-height: 100dvh; /* melhor que 100vh no mobile */
+  min-height: 100dvh;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f3f4f6;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 45%, #475569 100%);
 }
 
 /* =========================
@@ -10,8 +10,16 @@
 ========================= */
 .leftSide {
   flex: 1;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: white;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(rgba(8, 15, 30, 0.62), rgba(8, 15, 30, 0.72)),
+    url("/imagem/logo.png");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;
 
   display: flex;
   flex-direction: column;
@@ -20,19 +28,49 @@
 
   text-align: center;
   padding: 48px;
+
+  color: #f5ede0;
+}
+
+.leftSide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at top right, rgba(232,185,35,0.12), transparent 22%),
+    radial-gradient(circle at bottom left, rgba(155,28,44,0.18), transparent 28%);
 }
 
 .leftSide h1 {
-  font-size: 42px;
-  margin-bottom: 12px;
-  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 14px;
+
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.02;
+
+  font-weight: 900;
+  letter-spacing: 0.04em;
+
+  color: #f8f1e7;
+
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 .leftSide p {
-  font-size: 16px;
-  opacity: 0.85;
-  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+
+  margin: 0;
+
   max-width: 520px;
+
+  font-size: 18px;
+  line-height: 1.5;
+
+  color: rgba(245,237,224,0.94);
 }
 
 /* =========================
@@ -40,30 +78,46 @@
 ========================= */
 .rightSide {
   flex: 1;
-  background: #f3f4f6;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
   padding: 32px;
+
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 22%),
+    radial-gradient(circle at bottom left, rgba(232,185,35,0.06), transparent 18%),
+    linear-gradient(135deg, #2b3a4d 0%, #3b4c63 50%, #4b5f79 100%);
 }
 
 /* =========================
    CARD
 ========================= */
 .box {
-  background: white;
-  padding: 40px;
-  width: min(420px, 100%);
+  width: min(460px, 100%);
 
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+  background: rgba(241,245,249,0.96);
+
+  border: 1px solid rgba(226,232,240,0.55);
+  border-radius: 24px;
+
+  padding: 40px;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.22),
+    0 10px 28px rgba(15,23,42,0.18);
+
+  backdrop-filter: blur(10px);
 }
 
 .box h2 {
-  margin-bottom: 18px;
-  font-size: 20px;
+  margin: 0 0 18px;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  color: #0f172a;
 }
 
 /* =========================
@@ -76,44 +130,124 @@
 }
 
 .box input {
-  padding: 12px;
-  font-size: 14px;
+  width: 100%;
+
+  padding: 14px 14px;
 
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
+  border-radius: 14px;
+
   outline: none;
 
-  background: #fff;
+  font-size: 14px;
+
+  color: #0f172a;
+
+  background: #e2e8f0;
+
+  transition: 0.25s ease;
+}
+
+.box input::placeholder {
+  color: #64748b;
 }
 
 .box input:focus {
-  border-color: #0f172a;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
+  border-color: rgba(155,28,44,0.48);
+
+  background: #f8fafc;
+
+  box-shadow: 0 0 0 4px rgba(155,28,44,0.10);
 }
 
 .box button {
-  margin-top: 6px;
-  padding: 12px;
+  margin-top: 12px;
 
-  background-color: #0f172a;
-  color: white;
+  min-height: 52px;
+
+  padding: 12px 18px;
+
+  background: linear-gradient(135deg, #9b1c2c 0%, #7f1623 100%);
+  color: #ffffff;
 
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+
   cursor: pointer;
 
   font-size: 14px;
   font-weight: 800;
+  letter-spacing: 0.03em;
+
+  box-shadow: 0 16px 30px rgba(155,28,44,0.25);
+
+  transition: 0.25s ease;
 }
 
-.box button:hover {
-  background-color: #020617;
+.box button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 34px rgba(155,28,44,0.3);
 }
 
+.box button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =========================
+   ERROR
+========================= */
 .error {
-  color: #dc2626;
+  margin-bottom: 10px;
+
+  padding: 10px 12px;
+
+  background: rgba(220,38,38,0.08);
+  border: 1px solid rgba(220,38,38,0.16);
+
+  border-radius: 10px;
+
   font-size: 13px;
-  margin-bottom: 6px;
+
+  color: #b91c1c;
+}
+
+/* =========================
+   LINK LOGIN
+========================= */
+.switchAuth {
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid rgba(203,213,225,0.9);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  align-items: center;
+  text-align: center;
+
+  color: #475569;
+
+  font-size: 14px;
+}
+
+.switchLink {
+  color: #9b1c2c;
+
+  font-weight: 800;
+
+  text-decoration: none;
+
+  transition: 0.2s ease;
+}
+
+.switchLink:hover {
+  color: #7f1623;
+  text-decoration: underline;
 }
 
 /* =========================
@@ -122,14 +256,7 @@
 @media (max-width: 1024px) {
   .leftSide {
     padding: 36px;
-  }
-
-  .leftSide h1 {
-    font-size: 34px;
-  }
-
-  .leftSide p {
-    font-size: 15px;
+    background-size: 78%;
   }
 
   .rightSide {
@@ -142,7 +269,7 @@
 }
 
 /* =========================
-   MOBILE (vira 1 coluna)
+   MOBILE
 ========================= */
 @media (max-width: 768px) {
   .container {
@@ -151,11 +278,16 @@
 
   .leftSide {
     flex: none;
+
+    min-height: 260px;
+
     padding: 28px 18px;
+
+    background-size: 220px;
   }
 
   .leftSide h1 {
-    font-size: 28px;
+    font-size: 30px;
   }
 
   .leftSide p {
@@ -169,7 +301,11 @@
 
   .box {
     padding: 22px;
-    border-radius: 14px;
+    border-radius: 20px;
+  }
+
+  .box h2 {
+    font-size: 24px;
   }
 }
 
@@ -177,8 +313,17 @@
    MOBILE PEQUENO
 ========================= */
 @media (max-width: 420px) {
+
+  .leftSide {
+    min-height: 220px;
+
+    padding: 24px 16px;
+
+    background-size: 180px;
+  }
+
   .leftSide h1 {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .box {
@@ -186,6 +331,12 @@
   }
 
   .box h2 {
-    font-size: 18px;
+    font-size: 22px;
   }
+
+  .box input,
+  .box button {
+    min-height: 48px;
+  }
+
 }

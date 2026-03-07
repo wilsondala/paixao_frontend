@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Navigate, useLocation } from "react-router-dom";
+import { useNavigate, Navigate, useLocation, Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { login as loginRequest } from "../api/auth";
 import styles from "./Login.module.css";
@@ -13,7 +13,8 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Redirecionamento automático corrigido
+  const redirectTo = location.state?.from || "/products";
+
   const token = localStorage.getItem("token");
 
   if (token) {
@@ -22,11 +23,9 @@ export default function Login() {
 
       if (decoded.role?.toLowerCase() === "admin") {
         return <Navigate to="/admin/dashboard" replace />;
-      } else {
-        const redirectTo = location.state?.from || "/products";
-        return <Navigate to={redirectTo} replace />;
       }
 
+      return <Navigate to={redirectTo} replace />;
     } catch {
       localStorage.removeItem("token");
     }
@@ -51,9 +50,8 @@ export default function Login() {
       if (decoded.role?.toLowerCase() === "admin") {
         navigate("/admin/dashboard", { replace: true });
       } else {
-        navigate("/products", { replace: true });
+        navigate(redirectTo, { replace: true });
       }
-
     } catch (err) {
       setError(err.message || "Erro ao logar.");
     } finally {
@@ -63,8 +61,6 @@ export default function Login() {
 
   return (
     <div className={styles.container}>
-      
-      {/* LADO ESQUERDO */}
       <div className={styles.left}>
         <div className={styles.bannerContent}>
           <h1>PAIXÃO ANGOLA</h1>
@@ -72,7 +68,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* LADO DIREITO */}
       <div className={styles.right}>
         <div className={styles.box}>
           <h2>Login</h2>
@@ -104,9 +99,19 @@ export default function Login() {
               {loading ? "Entrando..." : "ENTRAR"}
             </button>
           </form>
+
+          <div className={styles.switchAuth}>
+            <span>Ainda não tem cadastro?</span>
+            <Link
+              to="/register"
+              state={{ from: redirectTo }}
+              className={styles.switchLink}
+            >
+              Criar minha conta
+            </Link>
+          </div>
         </div>
       </div>
-
     </div>
   );
 }

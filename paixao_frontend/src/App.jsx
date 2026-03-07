@@ -27,6 +27,7 @@ import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
 import ProductsAdmin from "./components/ProductsAdmin";
 import AdminNewsletter from "./pages/AdminNewsletter";
+
 export default function App() {
   return (
     <>
@@ -71,23 +72,22 @@ export default function App() {
           }
         />
 
+        {/* ✅ CARRINHO AGORA É PÚBLICO */}
+        <Route
+          path="/cart"
+          element={
+            <Layout>
+              <Cart />
+            </Layout>
+          }
+        />
+
         {/* ================= LOGIN / REGISTER ================= */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* ================= ROTAS PRIVADAS USUÁRIO ================= */}
-        <Route
-          path="/cart"
-          element={
-            <PrivateRoute>
-              <Layout>
-                <Cart />
-              </Layout>
-            </PrivateRoute>
-          }
-        />
-
         <Route
           path="/checkout"
           element={
@@ -135,7 +135,7 @@ export default function App() {
           <Route path="create-product" element={<CreateProduct />} />
           <Route path="products" element={<ProductsAdmin />} />
           <Route path="edit-product/:id" element={<EditProduct />} />
-          <Route path="newsletter" element={<AdminNewsletter />} /> 
+          <Route path="newsletter" element={<AdminNewsletter />} />
         </Route>
 
         {/* ================= FALLBACK ================= */}
