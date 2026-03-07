@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createOrder } from "../api/orders";
 import AddressMap from "../components/AddressMap";
 import styles from "./Checkout.module.css";
-import { formatMedia } from "../utils/media"; // ✅ ADICIONADO
+import { formatMedia } from "../utils/media";
 
 export default function Checkout() {
   const { cart, total, clearCart } = useCart();
@@ -59,6 +59,11 @@ export default function Checkout() {
         )
         .join("\n");
 
+      const paymentLabel =
+        paymentMethod === "entrega"
+          ? "Pagamento na Entrega"
+          : "Transferência via Express";
+
       const message = `
 🛍️ *Novo Pedido - Paixão Angola*
 
@@ -71,9 +76,7 @@ ${itemsText}
 
 📍 Endereço: ${address}
 
-💳 Pagamento: ${
-        paymentMethod === "entrega" ? "Pagamento na Entrega" : "Transferência"
-      }
+💳 Pagamento: ${paymentLabel}
 `;
 
       const phone = "5511967864913";
@@ -103,100 +106,164 @@ ${itemsText}
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
-        <button onClick={() => navigate(-1)} className={styles.backButton}>
-          ← Voltar
-        </button>
+      <div className={styles.wrapper}>
+        <div className={styles.card}>
+          <button onClick={() => navigate(-1)} className={styles.backButton}>
+            ← Voltar
+          </button>
 
-        <h1 className={styles.title}>Finalizar Pedido</h1>
-
-        {/* ================= RESUMO ================= */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Resumo do Pedido</h3>
-
-          <div className={styles.summaryBox}>
-            {cart.map((item) => {
-              // ✅ pega imagem de vários formatos possíveis e normaliza para /imagem/produtos/...
-              const cover =
-                formatMedia(
-                  item.image_url ||
-                    item.images?.[0] ||
-                    item.image ||
-                    item.photo ||
-                    item.thumbnail
-                ) || "/placeholder.png";
-
-              return (
-                <div key={item.id} className={styles.item}>
-                  <img
-                    src={cover}
-                    alt={item.name}
-                    className={styles.itemImage}
-                    onError={(e) => {
-                      e.currentTarget.src = "/placeholder.png";
-                    }}
-                  />
-
-                  <div className={styles.itemInfo}>
-                    {item.name} ×{item.quantity}
-                  </div>
-
-                  <div className={styles.itemPrice}>
-                    {(item.price * item.quantity).toLocaleString("pt-AO")} Kz
-                  </div>
-                </div>
-              );
-            })}
-
-            <div className={styles.total}>
-              Total: {total.toLocaleString("pt-AO")} Kz
+          <div className={styles.header}>
+            <div>
+              <span className={styles.badge}>Checkout seguro</span>
+              <h1 className={styles.title}>Finalizar Pedido</h1>
+              <p className={styles.subtitle}>
+                Revise seus produtos, confirme o endereço e escolha a forma de
+                pagamento.
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* ================= ENDEREÇO ================= */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Endereço de Entrega</h3>
+          {/* ================= RESUMO ================= */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Resumo do Pedido</h3>
 
-          <div className={styles.addressWrapper}>
-            <AddressMap
-              onSelect={(data) => {
-                setAddress(data.address);
-                setLat(data.lat);
-                setLon(data.lon);
-              }}
-            />
+            <div className={styles.summaryBox}>
+              {cart.map((item) => {
+                const cover =
+                  formatMedia(
+                    item.image_url ||
+                      item.images?.[0] ||
+                      item.image ||
+                      item.photo ||
+                      item.thumbnail
+                  ) || "/placeholder.png";
+
+                return (
+                  <div key={item.id} className={styles.item}>
+                    <img
+                      src={cover}
+                      alt={item.name}
+                      className={styles.itemImage}
+                      onError={(e) => {
+                        e.currentTarget.src = "/placeholder.png";
+                      }}
+                    />
+
+                    <div className={styles.itemInfo}>
+                      <div className={styles.itemName}>{item.name}</div>
+                      <div className={styles.itemMeta}>
+                        Quantidade: {item.quantity}
+                      </div>
+                    </div>
+
+                    <div className={styles.itemPrice}>
+                      {(item.price * item.quantity).toLocaleString("pt-AO")} Kz
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div className={styles.total}>
+                <span>Total</span>
+                <strong>{total.toLocaleString("pt-AO")} Kz</strong>
+              </div>
+            </div>
           </div>
 
-          <p className={styles.selectedText}>
-            <strong>Selecionado:</strong>{" "}
-            {address || "Nenhum endereço selecionado"}
-          </p>
-        </div>
+          {/* ================= ENDEREÇO ================= */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Endereço de Entrega</h3>
 
-        {/* ================= PAGAMENTO ================= */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Método de Pagamento</h3>
+            <div className={styles.addressWrapper}>
+              <AddressMap
+                onSelect={(data) => {
+                  setAddress(data.address);
+                  setLat(data.lat);
+                  setLon(data.lon);
+                }}
+              />
+            </div>
 
-          <select
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            className={styles.select}
+            <p className={styles.selectedText}>
+              <strong>Selecionado:</strong>{" "}
+              {address || "Nenhum endereço selecionado"}
+            </p>
+          </div>
+
+          {/* ================= PAGAMENTO ================= */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Forma de Pagamento</h3>
+
+            <div className={styles.paymentGrid}>
+              <label
+                className={`${styles.paymentCard} ${
+                  paymentMethod === "entrega" ? styles.paymentCardActive : ""
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="entrega"
+                  checked={paymentMethod === "entrega"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <div className={styles.paymentIcon}>💵</div>
+                <div className={styles.paymentContent}>
+                  <h4>Pagamento na Entrega</h4>
+                  <p>
+                    O cliente paga no momento em que receber a encomenda.
+                  </p>
+                  <span className={styles.paymentTag}>Disponível agora</span>
+                </div>
+              </label>
+
+              <label
+                className={`${styles.paymentCard} ${
+                  paymentMethod === "transferencia"
+                    ? styles.paymentCardActive
+                    : ""
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="transferencia"
+                  checked={paymentMethod === "transferencia"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <div className={styles.paymentIcon}>📲</div>
+                <div className={styles.paymentContent}>
+                  <h4>Transferência via Express</h4>
+                  <p>
+                    Após o pedido, o pagamento pode ser confirmado por
+                    transferência.
+                  </p>
+                  <span className={styles.paymentTag}>Disponível agora</span>
+                </div>
+              </label>
+            </div>
+
+            <div className={styles.paymentFooter}>
+              <h4>Em breve</h4>
+              <div className={styles.comingSoonList}>
+                <span className={styles.comingSoonItem}>Multicaixa</span>
+                <span className={styles.comingSoonItem}>Cartão</span>
+                <span className={styles.comingSoonItem}>Unitel Money</span>
+                <span className={styles.comingSoonItem}>Afrimoney</span>
+              </div>
+            </div>
+          </div>
+
+          {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+
+          <button
+            onClick={handleConfirmOrder}
+            disabled={loading}
+            className={styles.confirmButton}
           >
-            <option value="entrega">Pagamento na Entrega</option>
-            <option value="transferencia">Transferência</option>
-          </select>
+            {loading ? "Processando..." : "Confirmar Pedido"}
+          </button>
         </div>
-
-        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
-
-        <button
-          onClick={handleConfirmOrder}
-          disabled={loading}
-          className={styles.confirmButton}
-        >
-          {loading ? "Processando..." : "Confirmar Pedido"}
-        </button>
       </div>
     </div>
   );
